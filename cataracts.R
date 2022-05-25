@@ -3,7 +3,7 @@ library(tidyverse)
 library(lmerTest)
 library(broom.mixed)
 
-cataracts <- read_excel("C:/Users/allso/Documents/Grad School/STAA 556 Statistical Consulting/GRSD.cataract.xlsx")
+cataracts <- read_excel("GRSD.cataract.xlsx")
 cataracts$groups <- as.factor(cataracts$groups)
 cataracts$cataract_score <- cataracts$`Cataract Score`
 cataracts$coat_color <- cataracts$`coat color`
@@ -12,11 +12,11 @@ cataracts$myeloid_leukemia <- cataracts$`Myeloid Leukemia`
 cataracts$harderian_tumor <- cataracts$`Harderian Tumor`
 cataracts$pret_lymphoma <- cataracts$`PreT Lymphoma`
 
-nrow(cataracts %>% 
+nrow(cataracts %>%
        filter(groups == "HZE"))
-nrow(cataracts %>% 
+nrow(cataracts %>%
        filter(groups == "Gamma"))
-nrow(cataracts %>% 
+nrow(cataracts %>%
        filter(groups == "Unirradiated"))
 
 # boxplot of cataract score by group -------
@@ -36,7 +36,7 @@ summary(full_mod)
 # check model assumptions ------------
 
 diagd <- augment(full_mod)
-str(daigd)
+str(diagd)
 ggplot(diagd, aes(sample = .resid)) + stat_qq() + facet_grid(~groups)
 ggplot(diagd, aes(sample = .resid)) + stat_qq() + facet_grid(~coat_color)
 ggplot(diagd, aes(x = .fitted, y = .resid)) + geom_point() + geom_hline(yintercept = 0)
