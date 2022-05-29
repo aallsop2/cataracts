@@ -1,13 +1,17 @@
+### Cataracts Project
+### STAA556
+
+#-- Data wrangling
 library(readxl)
 library(tidyverse)
 library(kableExtra)
+library(ggsci)
 
 # -- Read in the data
 cats <- read_excel("GRSD.cataract.xlsx", sheet = "Sheet1")
 head(cats)
 str(cats)
 
-#-- Data cleaning
 
 # remove spaces from column and value names
 names(cats) <- str_replace_all(names(cats), " ", "_")
@@ -21,7 +25,7 @@ cats <- cats %>%
   mutate(sex = as.factor(sex),
          coat_color = as.factor(coat_color),
          fam = as.factor(family), # should this stay a factor? Yes?
-         BCS = as.factor(BCS),
+         BCS = as.ordered(BCS),
          group = as.factor(group),
          groups = as.factor(groups),
          myeloid_leuk = as.factor(Myeloid_Leukemia),
@@ -116,8 +120,25 @@ fam_scores <- cats %>% group_by(family, groups) %>%
   kbl(caption = "Mean Cataract Score by Group within Family", digits = 2) %>%
   kable_classic(full_width = F, html_font = "Cambria")
 
+# counts of score by group
+grs_ct <- cats %>% group_by(cat_score) %>%
+  count(groups) %>%
+  pivot_wider(names_from = cat_score, values_from = n) %>%
+  group_by(groups) %>%
+  mutate(total = sum(c(`1`, `2`, `3`, `4`))) %>%
+  kbl(caption = "Counts of Score by Treatment") %>%
+  add_header_above(c( " " = 1, "Cataract Score" = 4, " " = 1)) %>%
+  kable_classic(full_width = F, html_font = "Cambria", font_size = 14)
 
-
+# plot of score by group faceted by family
+ggplot(cats, aes(x = groups, y = cat_score, color = groups)) + geom_jitter(width = 0.2) +
+  facet_wrap(vars(family)) +
+  scale_color_startrek() +
+  scale_x_discrete(labels = c("Gam", "HZE", "none")) +
+  theme_light() +
+  theme(axis.text.x = element_text(angle = 45)) +
+  labs(x = "Treatment Group", y = "Cataract Score", color = "Group",
+       title = "Cataract Score by Treatment, faceted by Family")
 
 #-- Analysis
 
