@@ -262,8 +262,3 @@ plot(mod0, pch = 20, col = "black", lty = "dotted",
 # why do the diagnostics look so strange?
 # explore influence.ME package to review glmm model diagnostics?
 
-# Other approaches to explore
-# -- Nonparametric Bootstrap
-# -- MC simulation
-# -- Bayesian model
-# -- Marginal Model
