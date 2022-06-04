@@ -1,0 +1,93 @@
+---
+title: "Final Report (Need to come up with a better title)"
+author: "Alyssa Allsop and Amira Burns"
+date: "6/2/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+** data prep to allow this to be a stand alone script**
+```{r}
+library(readxl)
+library(tidyverse)
+library(lmerTest)
+library(broom.mixed)
+library(kableExtra)
+library(ggsci)
+
+cats <- read_excel("GRSD.cataract.xlsx", sheet = "Sheet1")
+# remove spaces from column and value names
+names(cats) <- str_replace_all(names(cats), " ", "_")
+cats <- cats %>%
+  mutate(coat_color = str_replace_all(coat_color, " ", "_"))
+str(cats)
+
+# turn categorical vars into factor
+cats <- cats %>%
+  rename(age = `age_(days)`) %>%
+  mutate(sex = as.factor(sex),
+         coat_color = as.factor(coat_color),
+         fam = as.factor(family), # should this stay a factor? Yes?
+         BCS = as.ordered(BCS),
+         group = as.factor(group),
+         groups = as.factor(groups),
+         myeloid_leuk = as.factor(Myeloid_Leukemia),
+         harderian_tumor = as.factor(Harderian_Tumor),
+         preT_lymph = as.factor(PreT_Lymphoma),
+         cat_score = as.ordered(Cataract_Score))
+# add column for binary response
+cats <- cats %>%
+  mutate(cataract_status = ifelse(Cataract_Score >= 2, 1, 0))
+```
+
+
+## Abstract
+
+## Introduction
+
+## Summary Statistics
+
+```{r}
+#table showing proportions of cataracts (>=2) for groups and sex
+xtabs(cataract_status ~ groups + sex, cats)/1169 #divide to get proportions
+
+#barplot also showing proportions of cataracts(>= 2) for groups and sex
+barplot(xtabs(cataract_status ~ groups + sex, cats)/1169, beside = TRUE, legend.text = TRUE)
+
+```
+
+## Statistical Methods
+
+```{r}
+# full mod mixed model binomial logistic regression using adaptive Gauss-Hermite quadrature (nAGQ = 25)
+
+binary_mod_full <- glmer(cataract_status ~ sex + weight + BCS +
+                     groups + Myeloid_Leukemia + Harderian_Tumor +
+                     PreT_Lymphoma + coat_color + (1|family), nAGQ = 25,
+                    family = binomial, data = cats)
+summary(binary_mod_full)
+
+
+#reduced model (removing variables that aren't highly significant)
+binary_mod_red <- glmer(cataract_status ~ sex + weight + groups + 
+                          (1|family), nAGQ = 25, family = binomial, data = cats)
+summary(binary_mod_red)
+
+# use ANOVA to compare the two models
+anova(binary_mod_full, binary_mod_red) 
+#high p value indicates the reduced model is better. The reduced model also has a smaller AIC
+```
+
+## Limitations and Alternatives
+
+Using an ANOVA to compare glmer models uses standard likelihood-based methods to construct a chi-squared test so we must view those results with caution.
+
+## Results and Conclusions
+
+## Authors' Statements
+
+## References
+
+## Appendix
