@@ -1,7 +1,8 @@
 ---
-title: "Cataracts Presentation (Also needs a better title)"
+title: "Three (Groups of) Blind Mice" 
+subtitle: "Familial Clusters of Cataract Development in Irradiated Mice"
 author: "Alyssa Allsop and Amira Burns"
-date: "6/1/2022"
+date: "`r Sys.Date()`"
 output: ioslides_presentation
 ---
 
