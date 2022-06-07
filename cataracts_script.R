@@ -8,7 +8,7 @@ library(kableExtra)
 library(DescTools)
 library(ggsci)
 library(lme4)
-library(lmerTest)
+library(sjPlot)
 library(broom.mixed)
 library(influence.ME)
 
@@ -74,7 +74,9 @@ cats %>% count(BCS)
 # age
 range(cats$Age)
 hist(cats$Age, br = 20)
-# spike ~ 800 days old, otherwise fairly even
+ggplot(cats, aes(x = Age)) +
+  geom_histogram(binwidth = 10) +
+  facet_grid(vars(Treatment))
 
 # group / groups
 cats %>% count(Treatment)
@@ -103,7 +105,7 @@ cats %>% group_by(Score) %>% count(PreTLymphoma)
 
 #-- Exploratory Plots - add group sample sizes to these plots
 # Score by age
-ggplot(cats, aes(x = Score, y = Age)) + geom_boxplot()
+ggplot(cats, aes(x = Score, y = Age, fill = Score)) + geom_boxplot()
 
 # Score by age and sex
 # Point plot with jitter
@@ -155,7 +157,6 @@ ggplot(cats, aes(x = Treatment, y = Score, color = Treatment)) + geom_jitter(wid
        title = "Cataract Score by Treatment, faceted by Family")
 
 # -- Predictor Correlation
-
 
 # Numeric Variable Correlations
 cor(cats$Weight, cats$Age)
@@ -248,16 +249,24 @@ kruskal.test(Age ~ PreTLymphoma, data = cats)
 #-- Logistic Regression
 
 # fit initial model, look at model diagnostics
-mod0 <- glmer(cataracts ~ groups + (1|fam), data = cats, family = binomial,
+mod0 <- glmer(Cataracts ~ Treatment + (1|Family), data = cats, family = binomial,
               control = glmerControl(optimizer = "bobyqa"))
 summary(mod0)
-isSingular(mod0)
-tidy(mod0, effects = c("ran_pars", "fixed"),
-     component = c("cond"),
-     conf.int = TRUE, data = cats)
-mod0_diag <- augment(mod0)
-str(mod0_diag)
-plot(mod0, pch = 20, col = "black", lty = "dotted",
-     main = "Base Model : Residuals by Fitted Values")
-# why do the diagnostics look so strange?
-# explore influence.ME package to review glmm model diagnostics?
+plot_model(mod0, sort.est = TRUE, show.values = TRUE,
+           color = "Dark2", vline.color = "darkorchid3",
+           width = 0.1, title = "Model 0: Cataracts Odds Ratios by Treatment Group")
+tab_model(mod0, show.re.var = TRUE,
+          pred.labels = c("Unirradiated", "Gamma", "HZE"),
+          dv.labels = "Model 0 Effects of Treatment on Cataracts")
+
+# what about a model with a random slope for family?
+mod1 <- glmer(Cataracts ~ Treatment + (Treatment|Family),
+              data = cats, family = binomial,
+              control = glmerControl(optimizer = "bobyqa"))
+summary(mod1)
+plot_model(mod1, sort.est = TRUE, show.values = TRUE,
+           color = "Dark2", vline.color = "darkorchid3",
+           width = 0.1, title = "Model 1: Cataracts Odds Ratios by Treatment Group")
+tab_model(mod1, show.re.var = TRUE,
+          pred.labels = c("Unirradiated", "Gamma", "HZE"),
+          dv.labels = "Model 1 Effects of Treatment on Cataracts")
