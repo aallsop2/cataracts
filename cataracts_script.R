@@ -286,7 +286,7 @@ library(coda)
 library(rjags)
 library(R2jags)
 
-# --  Specify the model
+# Specify the model
 cat("model{
   for(i in 1:N){
     CAT[i] ~ dbern(p[i])     # Bernoulli-distributed response
@@ -302,28 +302,27 @@ cat("model{
   sigma2 <- 1/tau
 }", file = "cat.jag")
 
-# -- Setup
+# Prepare the data for JAGS
 # break Treatment into dummy variables for each group
 treatment <- model.matrix(~ Treatment - 1, cats)
 colnames(treatment) <- c("Unirradiated", "Gamma", "HZE")
 cats <- data.frame(cats, treatment)
 
 # format relevant data as a list
-data <- list(Gamma = cats$Gamma, HZE = cats$HZE,
+data <- list(CAT = cats$Cataracts, Gamma = cats$Gamma, HZE = cats$HZE,
              Family = cats$Family, nFam = length(unique(cats$Family)), N = nrow(cats))
 
-# setup for the algorithm
-nIter <- 10000
+# Setup
+nIter <- 50000
 nChains <- 3
 nThin <- 1
-BurnIn <- 1000
+BurnIn <- 10000
 nAdapt <- 1000
-# pull starting values from frequentist model
-ests <- summary(mod0)$coef[,1]
+ests <- summary(mod0)$coef[,1] # pull starting values from frequentist model
 var <- as.numeric(as.data.frame(VarCorr(mod0))$vcov)
-inits <- list(list(tau = var+0.1, b0 = ests[1]+0.5, b1 = ests[2]+0.1, b2 = ests[3]+0.1),
-              list(tau = var-0.1, b0 = ests[1]-0.5, b1 = ests[2]-0.1, b2 = ests[3]-0.1),
-              list(tau = var, b0 = ests[1], b1 = ests[2], b2 = ests[3]))
+inits <- list(list("tau" = var+0.1, "b0" = ests[1]+0.5, "b1" = ests[2]+0.1, "b2" = ests[3]+0.1),
+              list("tau" = var-0.1, "b0" = ests[1]-0.5, "b1" = ests[2]-0.1, "b2" = ests[3]-0.1),
+              list("tau" = var, "b0" = ests[1], "b1" = ests[2], "b2" = ests[3]))
 
 # -- Compile and run the model
 params <- c("b0", "b1", "b2", "tau")
@@ -336,7 +335,22 @@ model.fit <- jags(data = data,
                   n.iter = nIter,
                   n.burnin = BurnIn,
                   n.thin = nThin)
-model.fit
-plot(as.mcmc(model.fit))
 
+# Model Diagnostics, Plots
+library(superdiag)
+library(mcmcplots)
+library(ggmcmc)
 
+mcmc.model <- as.mcmc(model.fit)
+summary(mcmc.model)
+plot(mcmc.model)
+gelman.plot(mcmc.model)
+
+denplot(mcmc.model, parms = params)
+traplot(mcmc.model, parms = params)
+caterplot(mcmc.model, parms = c("b0", "b1", "b2", "tau"))
+
+ggmcmc.model <- ggs(mcmc.model)
+ggs_density(ggmcmc.model)
+
+# need to manually extract vectors for tau and calculate inverse to plot density of var for RE
