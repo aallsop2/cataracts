@@ -287,22 +287,20 @@ library(rjags)
 library(R2jags)
 
 # --  Specify the model
-cat(
-  "model {
+cat("model{
   for(i in 1:N){
     CAT[i] ~ dbern(p[i])     # Bernoulli-distributed response
-    logit(p[i]) <- b0 + a[Family[i]] + b1*Gamma[i] + b2*HZE[i] # likelihood function
+    logit(p[i])<-b0 + a[Family[i]] + b1*Gamma[i] + b2*HZE[i] # likelihood function
   }
   for(j in 1:nFam){
     a[j] ~ dnorm(0, tau)
   }
-  b0 ~ dnorm(0.0, 1.0E-6)   # vaguely informative priors
-  b1 ~ dnorm(0.0, 1.0E-6)
-  b2 ~ dnorm(0.0, 1.0E-6)
-  tau ~ dgamma(1.0E-3,1.0E-3)    # convert precision to variance 1/sigma^2
-  sigma  <- 1.0/sqrt(tau)
-}", file = "cat.jag"
-)
+  b0 ~ dnorm(0.0, 1.0E-4)   # vaguely informative priors
+  b1 ~ dnorm(0.0, 1.0E-4)
+  b2 ~ dnorm(0.0, 1.0E-4)
+  tau ~ dgamma(1.0E-3,1.0E-3)   # convert precision to variance 1/sigma^2
+  sigma2 <- 1/tau
+}", file = "cat.jag")
 
 # -- Setup
 # break Treatment into dummy variables for each group
@@ -319,25 +317,26 @@ nIter <- 10000
 nChains <- 3
 nThin <- 1
 BurnIn <- 1000
+nAdapt <- 1000
 # pull starting values from frequentist model
 ests <- summary(mod0)$coef[,1]
 var <- as.numeric(as.data.frame(VarCorr(mod0))$vcov)
-inits <- list(list(tau = ((1/var)+.1), b0 = ests[1]+0.5, b1 = ests[2]+0.1, b2 = ests[3]+0.1),
-              list(tau = ((1/var)-.1), b0 = ests[1]-0.5, b1 = ests[2]-0.1, b2 = ests[3]-0.1),
-              list(tau = (1/var), b0 = ests[1], b1 = ests[2], b2 = ests[3]))
+inits <- list(list(tau = var+0.1, b0 = ests[1]+0.5, b1 = ests[2]+0.1, b2 = ests[3]+0.1),
+              list(tau = var-0.1, b0 = ests[1]-0.5, b1 = ests[2]-0.1, b2 = ests[3]-0.1),
+              list(tau = var, b0 = ests[1], b1 = ests[2], b2 = ests[3]))
 
 # -- Compile and run the model
-params <- c("b0", "b1", "b2", "sigma")
-mod.jags <- jags(data = data, inits = inits,
-                 parameters.to.save = params,
-                 model.file = "cat.jag",
-                 n.chains = nChains,
-                 n.iter = nIter,
-                 n.burnin = BurnIn,
-                 n.thin = nThin)
-
-
-#head(bayes.coda[[1]])
-#summary(window(bayes.coda[[1]]))
+params <- c("b0", "b1", "b2", "tau")
+set.seed(556)
+model.fit <- jags(data = data,
+                  inits = inits,
+                  parameters.to.save = params,
+                  model.file = "cat.jag",
+                  n.chains = nChains,
+                  n.iter = nIter,
+                  n.burnin = BurnIn,
+                  n.thin = nThin)
+model.fit
+plot(as.mcmc(model.fit))
 
 
