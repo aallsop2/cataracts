@@ -270,6 +270,7 @@ plot_model(mod1, sort.est = TRUE, show.values = TRUE,
 tab_model(mod1, show.re.var = TRUE,
           pred.labels = c("Unirradiated", "Gamma", "HZE"),
           dv.labels = "Model 1 Effects of Treatment on Cataracts")
+<<<<<<< HEAD
 
 modfull <- glmer(Cataracts ~ Treatment + scale(Age) + scale(Weight) +
                    Sex + MyeloidLeukemia + BCS + CoatColor +
@@ -341,3 +342,5 @@ mod.jags <- jags(data = data, inits = inits,
 #summary(window(bayes.coda[[1]]))
 
 
+=======
+>>>>>>> acd03f1629a7352c9a724384785305f60b1ca87f
