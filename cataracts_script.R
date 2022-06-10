@@ -132,6 +132,59 @@ ggplot(cats, aes(x = Treatment, y = Age, fill = Score)) + geom_boxplot() + facet
 # Plot of average score of sex-group-family
 # treatment on x, score on y, line for each family
 # facet or color by sex
+grsex_score <- cats %>%
+  group_by(Sex, Treatment, Family) %>%
+  summarize(mean_score = mean(as.numeric(Score)), med_score = median(as.numeric(Score)))
+
+
+ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
+  geom_line(aes(group = interaction(Family, Sex))) +
+  scale_color_startrek() +
+  scale_x_discrete(expand = c(0, .1)) +
+  theme_light() +
+  labs(y = "mean score",
+       title = "Mean Cataract Score by Family, Sex, Treatment Group")
+
+ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
+  geom_line(aes(group = Family)) + facet_grid(vars(Sex)) +
+  scale_color_startrek() +
+  scale_x_discrete(expand = c(0, .1)) +
+  theme_light() +
+  labs(y = "mean score",
+       title = "Mean Cataract Score by Family, Sex, Treatment Group")
+
+ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
+  geom_line(aes(group = Family)) + facet_wrap(vars(Sex)) +
+  scale_color_startrek() +
+  scale_x_discrete(expand = c(0, .1)) +
+  theme_light() +
+  labs(y = "mean score",
+       title = "Mean Cataract Score by Family, Sex, Treatment Group")
+
+# barplot of proportion of each group with cataracts
+sex_prop <- cats %>%
+  group_by(Treatment, Sex, Cataracts) %>%
+  summarise(n = n()) %>%
+  ungroup() %>%
+  group_by(Treatment, Sex) %>%
+  mutate(prop = round(n/sum(n), digits = 2))
+ggplot(sex_prop, aes(x = Sex, y = prop, fill = Treatment)) +
+  geom_col(position = "dodge") +
+  scale_fill_startrek() +
+  theme_minimal() +
+  ggtitle("Sample Proportion with Cataracts by Sex and Treatment Group")
+# table with total counts and proportions by group
+sum_tab <- sex_prop %>%
+  pivot_wider(names_from = Sex, values_from = c(n, prop)) %>%
+  mutate(Cataracts = ifelse(Cataracts == 0, "No", "Yes"),
+         Treatment = rep(" ", 1)) %>%
+  relocate(prop_F, .after = n_F)
+kbl(sum_tab,
+    caption = "Mice Counts and Percentages by Sex, Treatment Group, Cataracts",
+    col.names = c("Treatment", "Cataracts", "n", "prop", "n", "prop")) %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  add_header_above(c(" " = 2, "Female" = 2, "Male" = 2)) %>%
+  pack_rows(index = c("Control" = 2, "Gamma" = 2, "HZE" = 2))
 
 # score by group, family - too long
 fam_scores <- cats %>% group_by(Family, Treatment) %>%
