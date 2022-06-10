@@ -84,6 +84,9 @@ anova(binary_mod_full, binary_mod_red)
 
 Using an ANOVA to compare glmer models uses standard likelihood-based methods to construct a chi-squared test so we must view those results with caution.
 
+Ordinal regression (small sample sizes)
+We only have a snapshot of the data instead of the development over time
+
 ## Results and Conclusions
 
 ## Authors' Statements
