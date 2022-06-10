@@ -129,6 +129,10 @@ ggplot(cats, aes(x = Treatment, y = Age, fill = Score)) + geom_boxplot() + facet
 
 #-- Summary table ideas
 
+# Plot of average score of sex-group-family
+# treatment on x, score on y, line for each family
+# facet or color by sex
+
 # score by group, family - too long
 fam_scores <- cats %>% group_by(Family, Treatment) %>%
   summarise(mean_score = mean(as.numeric(Score))) %>%
@@ -277,6 +281,23 @@ modfull <- glmer(Cataracts ~ Treatment + scale(Age) + scale(Weight) +
                  data = cats, family = binomial,
                  control = glmerControl(optimizer = "bobyqa"))
 summary(modfull)
+
+# Final model
+# add exploratory plot showing differences by sex
+modsex <- glmer(Cataracts ~ 0 + Treatment + Sex + (1|Family), data = cats, family = binomial)
+modsex_int <- glmer(Cataracts ~ 0 + Treatment*Sex + (1|Family), data = cats, family = binomial)
+summary(modsex)
+summary(modsex_int)
+
+plot_model(modsex, sort.est = TRUE, show.values = TRUE,
+           color = "Dark2", vline.color = "darkorchid3",
+           width = 0.1, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
+plot_model(modsex_int, sort.est = TRUE, show.values = TRUE,
+           color = "Dark2", vline.color = "darkorchid3",
+           width = 0.1, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
+tab_model(modsex_int, show.re.var = TRUE,
+          pred.labels = c("Unirradiated", "Gamma", "HZE"),
+          dv.labels = "Final Model Effects of Treatment on Cataracts")
 
 # None of the covariates look significant
 
