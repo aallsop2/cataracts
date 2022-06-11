@@ -134,7 +134,7 @@ ggplot(cats, aes(x = Treatment, y = Age, fill = Score)) + geom_boxplot() + facet
 # facet or color by sex
 grsex_score <- cats %>%
   group_by(Sex, Treatment, Family) %>%
-  summarize(mean_score = mean(as.numeric(Score)), med_score = median(as.numeric(Score)))
+  summarize(mean_score = mean(Cataracts))
 
 
 ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
@@ -143,7 +143,7 @@ ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
   scale_x_discrete(expand = c(0, .1)) +
   theme_light() +
   labs(y = "mean score",
-       title = "Mean Cataract Score by Family, Sex, Treatment Group")
+       title = "Catarats by Family, Sex, Treatment Group")
 
 ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
   geom_line(aes(group = Family)) + facet_grid(vars(Sex)) +
@@ -151,7 +151,7 @@ ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
   scale_x_discrete(expand = c(0, .1)) +
   theme_light() +
   labs(y = "mean score",
-       title = "Mean Cataract Score by Family, Sex, Treatment Group")
+       title = "Cataracts by Family, Sex, Treatment Group")
 
 ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
   geom_line(aes(group = Family)) + facet_wrap(vars(Sex)) +
@@ -159,7 +159,7 @@ ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
   scale_x_discrete(expand = c(0, .1)) +
   theme_light() +
   labs(y = "mean score",
-       title = "Mean Cataract Score by Family, Sex, Treatment Group")
+       title = "Cataracts by Family, Sex, Treatment Group")
 
 # barplot of proportion of each group with cataracts
 sex_trt <- cats %>%
@@ -193,20 +193,35 @@ sex <- cats %>%
   mutate(prop = round(n/sum(n), digits = 2),
          Treatment = "Combined") %>%
   relocate(Treatment)
-sex_trt <- sex_trt %>%
-  add_row(Treatment = "Combined", Cataracts = " ", n_F = 258, n_M = 238, prop_F = " ", prop_M = " ")
 
 sum_tab <- sex_trt %>%
   pivot_wider(names_from = Sex, values_from = c(n, prop)) %>%
   mutate(Cataracts = ifelse(Cataracts == 0, "No", "Yes"),
          Treatment = rep(" ", 1)) %>%
   relocate(prop_F, .after = n_F)
+n_C <- c(438, 58, 214, 63, 281, 115)
+prop_C <- c(0.88, 0.12, 0.77, 0.23, 0.71, 0.29)
+
+sum_tab <- sum_tab %>%
+  ungroup() %>%
+  mutate(n_C = n_C, prop_C = prop_C) %>%
+  add_row(Treatment = " ", Cataracts = "$\\sum$", n_F = 258, prop_F = NA,
+          n_M = 238, prop_M = NA, n_C = 496, prop_C = NA, .after = 2) %>%
+  add_row(Treatment = " ", Cataracts = "$\\sum$", n_F = 145, prop_F = NA,
+          n_M = 132, prop_M = NA, n_C = 277, prop_C = NA, .after = 5) %>%
+  add_row(Treatment = " ", Cataracts = "$\\sum$", n_F = 205, prop_F = NA,
+          n_M = 191, prop_M = NA, n_C = 396, prop_C = NA, .after = 8) %>%
+  add_row(Treatment = " ", Cataracts = "$\\sum$", n_F = 608, prop_F = NA,
+          n_M = 561, prop_M = NA, n_C = 1169, prop_C = NA, .after = 9)
+
+options(knitr.kable.NA = '')
 kbl(sum_tab,
     caption = "Mice Counts and Percentages by Sex, Treatment Group, Cataracts",
-    col.names = c("Treatment", "Cataracts", "n", "prop", "n", "prop")) %>%
-  kable_classic(full_width = F, html_font = "Cambria") %>%
-  add_header_above(c(" " = 2, "Female" = 2, "Male" = 2)) %>%
-  pack_rows(index = c("Control" = 2, "Gamma" = 2, "HZE" = 2))
+    col.names = c("Treatment", "Cataracts", "n", "prop", "n", "prop", "n", "prop")) %>%
+  kable_styling(latex_options = "hold_position") %>%
+  kable_classic_2(full_width = F) %>%
+  add_header_above(c(" " = 2, "Female" = 2, "Male" = 2, "$\\sum$" = 2)) %>%
+  pack_rows(index = c("Control" = 3, "Gamma" = 3, "HZE" = 3, "$\\sum$" = 1))
 
 # score by group, family - too long
 fam_scores <- cats %>% group_by(Family, Treatment) %>%
@@ -356,25 +371,24 @@ modfull <- glmer(Cataracts ~ Treatment + scale(Age) + scale(Weight) +
                  data = cats, family = binomial,
                  control = glmerControl(optimizer = "bobyqa"))
 summary(modfull)
+# Of covariates, only Sex looks significant
+
 
 # Final model
 # add exploratory plot showing differences by sex
 modsex <- glmer(Cataracts ~ 0 + Treatment + Sex + (1|Family), data = cats, family = binomial)
-modsex_int <- glmer(Cataracts ~ 0 + Treatment*Sex + (1|Family), data = cats, family = binomial)
+mod <- glmer(Cataracts ~ 0 + Treatment*Sex + (1|Family), data = cats, family = binomial)
 summary(modsex)
-summary(modsex_int)
+summary(mod)
 
-plot_model(modsex, sort.est = TRUE, show.values = TRUE,
+plot_model(mod, sort.est = TRUE, show.values = TRUE, type = "int",
            color = "Dark2", vline.color = "darkorchid3",
            width = 0.1, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
-plot_model(modsex_int, sort.est = TRUE, show.values = TRUE,
-           color = "Dark2", vline.color = "darkorchid3",
-           width = 0.1, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
-tab_model(modsex_int, show.re.var = TRUE,
-          pred.labels = c("Unirradiated", "Gamma", "HZE"),
+tab_model(mod, show.re.var = TRUE,
+          pred.labels = c("Control(Female)", "Gamma(Female)", "HZE(Female)",
+                          "Control(Male)", "Gamma(Male)", "HZE(Male)"),
           dv.labels = "Final Model Effects of Treatment on Cataracts")
 
-# None of the covariates look significant
 
 # -- Bayesian Logistic Regression
 # note: when moving to rmarkdown, make sure to specify/compile model in separate chunks!
@@ -386,7 +400,8 @@ library(R2jags)
 cat("model{
   for(i in 1:N){
     CAT[i] ~ dbern(p[i])     # Bernoulli-distributed response
-    logit(p[i])<-b0 + a[Family[i]] + b1*Gamma[i] + b2*HZE[i] # likelihood function
+    logit(p[i])<- b0*Unirradiated[i] + b1*Gamma[i] + b2*HZE[i] + b3*Male[i] +
+    b4*Male[i]*Gamma[i] + b5*Male[i]*HZE[i] + a[Family[i]]   # likelihood function
   }
   for(j in 1:nFam){
     a[j] ~ dnorm(0, tau)
@@ -394,18 +409,22 @@ cat("model{
   b0 ~ dnorm(0.0, 1.0E-4)   # vaguely informative priors
   b1 ~ dnorm(0.0, 1.0E-4)
   b2 ~ dnorm(0.0, 1.0E-4)
-  tau ~ dgamma(1.0E-3,1.0E-3)   # convert precision to variance 1/sigma^2
-  sigma2 <- 1/tau
+  b3 ~ dnorm(0.0, 1.0E-4)
+  b4 ~ dnorm(0.0, 1.0E-4)
+  b5 ~ dnorm(0.0, 1.0E-4)
+  tau ~ dgamma(1.0E-3,1.0E-3)
+  sigma2 <- 1/tau     # convert precision 'tau' to variance 'sigma2'
 }", file = "cat.jag")
 
 # Prepare the data for JAGS
 # break Treatment into dummy variables for each group
 treatment <- model.matrix(~ Treatment - 1, cats)
+sex <- model.matrix(~Sex -1, cats)
 colnames(treatment) <- c("Unirradiated", "Gamma", "HZE")
-cats <- data.frame(cats, treatment)
+cats <- data.frame(cats, treatment, sex)
 
 # format relevant data as a list
-data <- list(CAT = cats$Cataracts, Gamma = cats$Gamma, HZE = cats$HZE,
+data <- list(CAT = cats$Cataracts, Unirradiated = cats$Unirradiated, Gamma = cats$Gamma, HZE = cats$HZE, Male = cats$SexM,
              Family = cats$Family, nFam = length(unique(cats$Family)), N = nrow(cats))
 
 # Setup
@@ -414,14 +433,17 @@ nChains <- 3
 nThin <- 1
 BurnIn <- 10000
 nAdapt <- 1000
-ests <- summary(mod0)$coef[,1] # pull starting values from frequentist model
-var <- as.numeric(as.data.frame(VarCorr(mod0))$vcov)
-inits <- list(list("tau" = var+0.1, "b0" = ests[1]+0.5, "b1" = ests[2]+0.1, "b2" = ests[3]+0.1),
-              list("tau" = var-0.1, "b0" = ests[1]-0.5, "b1" = ests[2]-0.1, "b2" = ests[3]-0.1),
-              list("tau" = var, "b0" = ests[1], "b1" = ests[2], "b2" = ests[3]))
+ests <- summary(mod)$coef[,1] # pull starting values from frequentist model
+var <- as.numeric(as.data.frame(VarCorr(mod))$vcov)
+inits <- list(list("tau" = var+0.2, "b0" = ests[1]+0.5, "b1" = ests[2]+0.5, "b2" = ests[3]+0.5,
+                   "b3" = ests[4]+0.2, "b4" = ests[5]+0.2, "b5" = ests[6]+0.2),
+              list("tau" = var-0.2, "b0" = ests[1]-0.5, "b1" = ests[2]-0.5, "b2" = ests[3]-0.5,
+                   "b3" = ests[4]-0.2, "b4" = ests[5]-0.2, "b5" = ests[6]-0.2),
+              list("tau" = var, "b0" = ests[1], "b1" = ests[2], "b2" = ests[3],
+                   "b3" = ests[4], "b4" = ests[5], "b5" = ests[6]))
 
 # -- Compile and run the model
-params <- c("b0", "b1", "b2", "sigma2")
+params <- c("b0", "b1", "b2", "b3", "b4", "b5", "sigma2")
 set.seed(556)
 model.fit <- jags(data = data,
                   inits = inits,
@@ -444,17 +466,16 @@ gelman.plot(mcmc.model)
 
 denplot(mcmc.model, parms = params)
 traplot(mcmc.model, parms = params)
-caterplot(mcmc.model, parms = c("b0", "b1", "b2", "tau"))
-
+caterplot(mcmc.model, parms = c("b0", "b1", "b2", "b3", "b4", "b5", "sigma2")) # plot of cred intervals
 ggmcmc.model <- ggs(mcmc.model)
 ggs_density(ggmcmc.model)
-HPDinterval(mcmc.model[[1]][,c(1:3,5)])
+hpds <- HPDinterval(mcmc.model[[3]])
 
 # extract estimates, invert tau to get sigma2, and create manual plots with HPD intervals
 # go through STAA575 HW6 pdf for review
 
 # use this plot but spiff it up
-posts <- as_tibble(mcmc.model[[1]])
+posts <- as_tibble(mcmc.model[[3]])
 ggplot(posts, aes(x = sigma2)) + geom_density()
 
 # work on interpretation!!!
