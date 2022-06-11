@@ -409,7 +409,7 @@ data <- list(CAT = cats$Cataracts, Gamma = cats$Gamma, HZE = cats$HZE,
              Family = cats$Family, nFam = length(unique(cats$Family)), N = nrow(cats))
 
 # Setup
-nIter <- 50000
+nIter <- 60000
 nChains <- 3
 nThin <- 1
 BurnIn <- 10000
@@ -421,7 +421,7 @@ inits <- list(list("tau" = var+0.1, "b0" = ests[1]+0.5, "b1" = ests[2]+0.1, "b2"
               list("tau" = var, "b0" = ests[1], "b1" = ests[2], "b2" = ests[3]))
 
 # -- Compile and run the model
-params <- c("b0", "b1", "b2", "tau")
+params <- c("b0", "b1", "b2", "sigma2")
 set.seed(556)
 model.fit <- jags(data = data,
                   inits = inits,
@@ -448,5 +448,15 @@ caterplot(mcmc.model, parms = c("b0", "b1", "b2", "tau"))
 
 ggmcmc.model <- ggs(mcmc.model)
 ggs_density(ggmcmc.model)
+HPDinterval(mcmc.model[[1]][,c(1:3,5)])
 
-# need to manually extract vectors for tau and calculate inverse to plot density of var for RE
+# extract estimates, invert tau to get sigma2, and create manual plots with HPD intervals
+# go through STAA575 HW6 pdf for review
+
+# use this plot but spiff it up
+posts <- as_tibble(mcmc.model[[1]])
+ggplot(posts, aes(x = sigma2)) + geom_density()
+
+# work on interpretation!!!
+
+
