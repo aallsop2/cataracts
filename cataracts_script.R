@@ -381,13 +381,16 @@ mod <- glmer(Cataracts ~ 0 + Treatment*Sex + (1|Family), data = cats, family = b
 summary(modsex)
 summary(mod)
 
-plot_model(mod, sort.est = TRUE, show.values = TRUE, type = "int",
+plot_model(mod, sort.est = TRUE, show.values = TRUE, type = "int", pred.type = c("fe", "re"),
            color = "Dark2", vline.color = "darkorchid3",
            width = 0.1, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
+
 tab_model(mod, show.re.var = TRUE,
           pred.labels = c("Control(Female)", "Gamma(Female)", "HZE(Female)",
                           "Control(Male)", "Gamma(Male)", "HZE(Male)"),
           dv.labels = "Final Model Effects of Treatment on Cataracts")
+
+sjp.glmer
 
 
 # -- Bayesian Logistic Regression
@@ -462,22 +465,53 @@ library(ggmcmc)
 mcmc.model <- as.mcmc(model.fit)
 summary(mcmc.model)
 plot(mcmc.model)
+gelman.diag(mcmc.model)
 gelman.plot(mcmc.model)
 
-denplot(mcmc.model, parms = params)
 traplot(mcmc.model, parms = params)
+denplot(mcmc.model, parms = params)
+
 caterplot(mcmc.model, parms = c("b0", "b1", "b2", "b3", "b4", "b5", "sigma2")) # plot of cred intervals
 ggmcmc.model <- ggs(mcmc.model)
 ggs_density(ggmcmc.model)
 hpds <- HPDinterval(mcmc.model[[3]])
 
-# extract estimates, invert tau to get sigma2, and create manual plots with HPD intervals
-# go through STAA575 HW6 pdf for review
+# Convert posterior distributions to odd ratios
+ors <- exp(mcmc.model[[3]][,-7])
+or_hpds <- round(HPDinterval(ors), 3)
+posts <- data.frame(ors)
 
-# use this plot but spiff it up
-posts <- as_tibble(mcmc.model[[3]])
-ggplot(posts, aes(x = sigma2)) + geom_density()
+# Create table of posterior estimates
+means <- apply(posts, 2, mean)
+medians <- apply(posts, 2, median)
+mode_fun <- function(x) {
+  ux <- round(unique(x), digits = 3)
+  return(ux[which.max(tabulate(match(x, ux)))])
+}
+modes <- apply(round(posts, 4), 2, mode_fun)
+sds <- apply(posts, 2, sd)
+bayes_tab <- round(data.frame(means, medians, modes, sds, or_hpds), digits = 3)
+rownames(bayes_tab) <- c("b0", "b1", "b2", "b3", "b4", "b5", "$\\sigma^2$")
+kbl(bayes_tab,
+    caption = "Bayes Model: Posterior Distribution Statistics",
+    col.names = c("Mean", "Median", "Mode", "SD", "HPD Lower", "HPD Upper")) %>%
+  kable_styling(latex_options = "hold_position") %>%
+  kable_classic_2(full_width = F, html_font = "Cambria")
 
-# work on interpretation!!!
+# Posterior density plots with HPD intervals
+ggplot(posts, aes(x = sigma2)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[7,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[7,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[7,3]), color = "red") + # calculate mode and replot
+  scale_x_continuous(limits = c(0, 3), expand = c(0, 0)) +
+  theme_minimal() +
+  labs(title = "Posterior Density of Random Family Effect with 95% HPD Interval")
+
+# parameterize the random effect using the mode = 1.41 and the sd = 0.31:
+# Family ~ Gamma(shape = mode^2/sd^2, rate = mode/sd^2)
+
+
+
 
 
