@@ -9,8 +9,6 @@ library(DescTools)
 library(ggsci)
 library(lme4)
 library(sjPlot)
-library(broom.mixed)
-library(tidymodels)
 
 # -- Read in the data
 cats <- read_excel("GRSD.cataract.xlsx", sheet = "Sheet1")
