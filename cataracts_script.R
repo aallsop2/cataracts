@@ -9,8 +9,6 @@ library(DescTools)
 library(ggsci)
 library(lme4)
 library(sjPlot)
-library(broom.mixed)
-library(tidymodels)
 
 # -- Read in the data
 cats <- read_excel("GRSD.cataract.xlsx", sheet = "Sheet1")
@@ -128,6 +126,100 @@ ggplot(cats, aes(x = Treatment, y = Age, fill = Score)) + geom_boxplot() + facet
 # Make some plots with the binomial response!
 
 #-- Summary table ideas
+
+# Plot of average score of sex-group-family
+# treatment on x, score on y, line for each family
+# facet or color by sex
+grsex_score <- cats %>%
+  group_by(Sex, Treatment, Family) %>%
+  summarize(mean_score = mean(Cataracts))
+
+
+ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
+  geom_line(aes(group = interaction(Family, Sex))) +
+  scale_color_startrek() +
+  scale_x_discrete(expand = c(0, .1)) +
+  theme_light() +
+  labs(y = "mean score",
+       title = "Catarats by Family, Sex, Treatment Group")
+
+ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
+  geom_line(aes(group = Family)) + facet_grid(vars(Sex)) +
+  scale_color_startrek() +
+  scale_x_discrete(expand = c(0, .1)) +
+  theme_light() +
+  labs(y = "mean score",
+       title = "Cataracts by Family, Sex, Treatment Group")
+
+ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
+  geom_line(aes(group = Family)) + facet_wrap(vars(Sex)) +
+  scale_color_startrek() +
+  scale_x_discrete(expand = c(0, .1)) +
+  theme_light() +
+  labs(y = "mean score",
+       title = "Cataracts by Family, Sex, Treatment Group")
+
+# barplot of proportion of each group with cataracts
+sex_trt <- cats %>%
+  group_by(Treatment, Sex, Cataracts) %>%
+  summarise(n = n()) %>%
+  ungroup() %>%
+  group_by(Treatment, Sex) %>%
+  mutate(prop = round(n/sum(n), digits = 2))
+cats_grp <- sex_trt %>%
+  filter(Cataracts == 1)
+ggplot(cats_grp, aes(x = Sex, y = prop, fill = Treatment)) +
+  geom_col(position = "dodge") +
+  scale_fill_startrek() +
+  theme_minimal() +
+  ggtitle("Sample Proportion with Cataracts by Sex and Treatment Group")
+
+# table with total counts and proportions by group, with aggregates
+trt <- cats %>%
+  group_by(Treatment, Cataracts) %>%
+  summarise(n = n()) %>%
+  ungroup() %>%
+  group_by(Treatment) %>%
+  mutate(prop = round(n/sum(n), digits = 2),
+         Sex = "Combined") %>%
+  relocate(Sex, .after = Treatment)
+sex <- cats %>%
+  group_by(Sex, Cataracts) %>%
+  summarise(n = n()) %>%
+  ungroup() %>%
+  group_by(Sex) %>%
+  mutate(prop = round(n/sum(n), digits = 2),
+         Treatment = "Combined") %>%
+  relocate(Treatment)
+
+sum_tab <- sex_trt %>%
+  pivot_wider(names_from = Sex, values_from = c(n, prop)) %>%
+  mutate(Cataracts = ifelse(Cataracts == 0, "No", "Yes"),
+         Treatment = rep(" ", 1)) %>%
+  relocate(prop_F, .after = n_F)
+n_C <- c(438, 58, 214, 63, 281, 115)
+prop_C <- c(0.88, 0.12, 0.77, 0.23, 0.71, 0.29)
+
+sum_tab <- sum_tab %>%
+  ungroup() %>%
+  mutate(n_C = n_C, prop_C = prop_C) %>%
+  add_row(Treatment = " ", Cataracts = "$\\sum$", n_F = 258, prop_F = NA,
+          n_M = 238, prop_M = NA, n_C = 496, prop_C = NA, .after = 2) %>%
+  add_row(Treatment = " ", Cataracts = "$\\sum$", n_F = 145, prop_F = NA,
+          n_M = 132, prop_M = NA, n_C = 277, prop_C = NA, .after = 5) %>%
+  add_row(Treatment = " ", Cataracts = "$\\sum$", n_F = 205, prop_F = NA,
+          n_M = 191, prop_M = NA, n_C = 396, prop_C = NA, .after = 8) %>%
+  add_row(Treatment = " ", Cataracts = "$\\sum$", n_F = 608, prop_F = NA,
+          n_M = 561, prop_M = NA, n_C = 1169, prop_C = NA, .after = 9)
+
+options(knitr.kable.NA = '')
+kbl(sum_tab,
+    caption = "Mice Counts and Percentages by Sex, Treatment Group, Cataracts",
+    col.names = c("Treatment", "Cataracts", "n", "prop", "n", "prop", "n", "prop")) %>%
+  kable_styling(latex_options = "hold_position") %>%
+  kable_classic_2(full_width = F) %>%
+  add_header_above(c(" " = 2, "Female" = 2, "Male" = 2, "$\\sum$" = 2)) %>%
+  pack_rows(index = c("Control" = 3, "Gamma" = 3, "HZE" = 3, "$\\sum$" = 1))
 
 # score by group, family - too long
 fam_scores <- cats %>% group_by(Family, Treatment) %>%
@@ -270,7 +362,6 @@ plot_model(mod1, sort.est = TRUE, show.values = TRUE,
 tab_model(mod1, show.re.var = TRUE,
           pred.labels = c("Unirradiated", "Gamma", "HZE"),
           dv.labels = "Model 1 Effects of Treatment on Cataracts")
-<<<<<<< HEAD
 
 modfull <- glmer(Cataracts ~ Treatment + scale(Age) + scale(Weight) +
                    Sex + MyeloidLeukemia + BCS + CoatColor +
@@ -278,8 +369,28 @@ modfull <- glmer(Cataracts ~ Treatment + scale(Age) + scale(Weight) +
                  data = cats, family = binomial,
                  control = glmerControl(optimizer = "bobyqa"))
 summary(modfull)
+# Of covariates, only Sex looks significant
 
-# None of the covariates look significant
+
+# Final model
+# add exploratory plot showing differences by sex
+modsex <- glmer(Cataracts ~ 0 + Treatment + Sex + (1|Family), data = cats, family = binomial)
+mod <- glmer(Cataracts ~ Treatment*Sex + (1|Family), data = cats,
+             family = binomial, glmerControl(optimizer = "Nelder_Mead"))
+summary(modsex)
+summary(mod)
+
+plot_model(mod, sort.est = TRUE, show.values = TRUE, type = "int", pred.type = c("fe", "re"),
+           color = "Dark2", vline.color = "darkorchid3",
+           width = 0.1, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
+
+tab_model(mod, show.re.var = TRUE,
+          pred.labels = c("Control(Female)", "Gamma(Female)", "HZE(Female)",
+                          "Control(Male)", "Gamma(Male)", "HZE(Male)"),
+          dv.labels = "Final Model Effects of Treatment on Cataracts")
+
+sjp.glmer
+
 
 # -- Bayesian Logistic Regression
 # note: when moving to rmarkdown, make sure to specify/compile model in separate chunks!
@@ -287,60 +398,119 @@ library(coda)
 library(rjags)
 library(R2jags)
 
-# --  Specify the model
-cat(
-  "model {
+# Specify the model
+cat("model{
   for(i in 1:N){
     CAT[i] ~ dbern(p[i])     # Bernoulli-distributed response
-    logit(p[i]) <- b0 + a[Family[i]] + b1*Gamma[i] + b2*HZE[i] # likelihood function
+    logit(p[i])<- b0*Unirradiated[i] + b1*Gamma[i] + b2*HZE[i] + b3*Male[i] +
+    b4*Male[i]*Gamma[i] + b5*Male[i]*HZE[i] + a[Family[i]]   # likelihood function
   }
   for(j in 1:nFam){
     a[j] ~ dnorm(0, tau)
   }
-  b0 ~ dnorm(0.0, 1.0E-6)   # vaguely informative priors
-  b1 ~ dnorm(0.0, 1.0E-6)
-  b2 ~ dnorm(0.0, 1.0E-6)
-  tau ~ dgamma(1.0E-3,1.0E-3)    # convert precision to variance 1/sigma^2
-  sigma  <- 1.0/sqrt(tau)
-}", file = "cat.jag"
-)
+  b0 ~ dnorm(0.0, 1.0E-4)   # vaguely informative priors
+  b1 ~ dnorm(0.0, 1.0E-4)
+  b2 ~ dnorm(0.0, 1.0E-4)
+  b3 ~ dnorm(0.0, 1.0E-4)
+  b4 ~ dnorm(0.0, 1.0E-4)
+  b5 ~ dnorm(0.0, 1.0E-4)
+  tau ~ dgamma(1.0E-3,1.0E-3)
+  sigma2 <- 1/tau     # convert precision 'tau' to variance 'sigma2'
+}", file = "cat.jag")
 
-# -- Setup
+# Prepare the data for JAGS
 # break Treatment into dummy variables for each group
 treatment <- model.matrix(~ Treatment - 1, cats)
+sex <- model.matrix(~Sex -1, cats)
 colnames(treatment) <- c("Unirradiated", "Gamma", "HZE")
-cats <- data.frame(cats, treatment)
+cats <- data.frame(cats, treatment, sex)
 
 # format relevant data as a list
-data <- list(Gamma = cats$Gamma, HZE = cats$HZE,
+data <- list(CAT = cats$Cataracts, Unirradiated = cats$Unirradiated, Gamma = cats$Gamma, HZE = cats$HZE, Male = cats$SexM,
              Family = cats$Family, nFam = length(unique(cats$Family)), N = nrow(cats))
 
-# setup for the algorithm
-nIter <- 10000
+# Setup
+nIter <- 60000
 nChains <- 3
 nThin <- 1
-BurnIn <- 1000
-# pull starting values from frequentist model
-ests <- summary(mod0)$coef[,1]
-var <- as.numeric(as.data.frame(VarCorr(mod0))$vcov)
-inits <- list(list(tau = ((1/var)+.1), b0 = ests[1]+0.5, b1 = ests[2]+0.1, b2 = ests[3]+0.1),
-              list(tau = ((1/var)-.1), b0 = ests[1]-0.5, b1 = ests[2]-0.1, b2 = ests[3]-0.1),
-              list(tau = (1/var), b0 = ests[1], b1 = ests[2], b2 = ests[3]))
+BurnIn <- 10000
+nAdapt <- 1000
+ests <- summary(mod)$coef[,1] # pull starting values from frequentist model
+var <- as.numeric(as.data.frame(VarCorr(mod))$vcov)
+inits <- list(list("tau" = var+0.2, "b0" = ests[1]+0.5, "b1" = ests[2]+0.5, "b2" = ests[3]+0.5,
+                   "b3" = ests[4]+0.2, "b4" = ests[5]+0.2, "b5" = ests[6]+0.2),
+              list("tau" = var-0.2, "b0" = ests[1]-0.5, "b1" = ests[2]-0.5, "b2" = ests[3]-0.5,
+                   "b3" = ests[4]-0.2, "b4" = ests[5]-0.2, "b5" = ests[6]-0.2),
+              list("tau" = var, "b0" = ests[1], "b1" = ests[2], "b2" = ests[3],
+                   "b3" = ests[4], "b4" = ests[5], "b5" = ests[6]))
 
 # -- Compile and run the model
-params <- c("b0", "b1", "b2", "sigma")
-mod.jags <- jags(data = data, inits = inits,
-                 parameters.to.save = params,
-                 model.file = "cat.jag",
-                 n.chains = nChains,
-                 n.iter = nIter,
-                 n.burnin = BurnIn,
-                 n.thin = nThin)
+params <- c("b0", "b1", "b2", "b3", "b4", "b5", "sigma2")
+set.seed(556)
+model.fit <- jags(data = data,
+                  inits = inits,
+                  parameters.to.save = params,
+                  model.file = "cat.jag",
+                  n.chains = nChains,
+                  n.iter = nIter,
+                  n.burnin = BurnIn,
+                  n.thin = nThin)
+
+# Model Diagnostics, Plots
+library(superdiag)
+library(mcmcplots)
+library(ggmcmc)
+
+mcmc.model <- as.mcmc(model.fit)
+summary(mcmc.model)
+plot(mcmc.model)
+gelman.diag(mcmc.model)
+gelman.plot(mcmc.model)
+
+traplot(mcmc.model, parms = params)
+denplot(mcmc.model, parms = params)
+
+caterplot(mcmc.model, parms = c("b0", "b1", "b2", "b3", "b4", "b5", "sigma2")) # plot of cred intervals
+ggmcmc.model <- ggs(mcmc.model)
+ggs_density(ggmcmc.model)
+hpds <- HPDinterval(mcmc.model[[3]])
+
+# Convert posterior distributions to odd ratios
+ors <- exp(mcmc.model[[3]][,-7])
+or_hpds <- round(HPDinterval(ors), 3)
+posts <- data.frame(ors)
+
+# Create table of posterior estimates
+means <- apply(posts, 2, mean)
+medians <- apply(posts, 2, median)
+mode_fun <- function(x) {
+  ux <- round(unique(x), digits = 3)
+  return(ux[which.max(tabulate(match(x, ux)))])
+}
+modes <- apply(round(posts, 4), 2, mode_fun)
+sds <- apply(posts, 2, sd)
+bayes_tab <- round(data.frame(means, medians, modes, sds, or_hpds), digits = 3)
+rownames(bayes_tab) <- c("b0", "b1", "b2", "b3", "b4", "b5", "$\\sigma^2$")
+kbl(bayes_tab,
+    caption = "Bayes Model: Posterior Distribution Statistics",
+    col.names = c("Mean", "Median", "Mode", "SD", "HPD Lower", "HPD Upper")) %>%
+  kable_styling(latex_options = "hold_position") %>%
+  kable_classic_2(full_width = F, html_font = "Cambria")
+
+# Posterior density plots with HPD intervals
+ggplot(posts, aes(x = sigma2)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[7,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[7,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[7,3]), color = "red") + # calculate mode and replot
+  scale_x_continuous(limits = c(0, 3), expand = c(0, 0)) +
+  theme_minimal() +
+  labs(title = "Posterior Density of Random Family Effect with 95% HPD Interval")
+
+# parameterize the random effect using the mode = 1.41 and the sd = 0.31:
+# Family ~ Gamma(shape = mode^2/sd^2, rate = mode/sd^2)
 
 
-#head(bayes.coda[[1]])
-#summary(window(bayes.coda[[1]]))
 
 
-=======
->>>>>>> acd03f1629a7352c9a724384785305f60b1ca87f
+
