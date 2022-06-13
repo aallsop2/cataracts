@@ -8,29 +8,35 @@ output: ioslides_presentation
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-```
+```  
 
-## R Markdown
+## Background
+  
+- Intro  
+- Experimental Design  
+- Methods Overview
 
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Summary Tables & Plots
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+Do we want to put code in the presentation, or just save outputs from report as .png and load them? I think the second option would be preferable
 
-## Slide with Bullets
+## Mixed Logistic Regression
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+- Write out final model in math notation  
+- Provide table/graph of relevant outputs  
 
-## Slide with R Output
+## Bayesian Mixed Logistic Regression
 
-```{r cars, echo = TRUE}
-summary(cars)
-```
+- Write out final model in math notation - priors, likelihood
+- Provide table/graph of relevant outputs
+  
+  
+## Results & Conclusions  
 
-## Slide with Plot
-
-```{r pressure}
-plot(pressure)
-```
-
+- What can we infer about fixed and random effects from the models?
+- Limitations?  
+- What questions does this raise for future studies?  
+  
+## References  
+  
+## Any Questions?  
