@@ -1,4 +1,8 @@
 .Rproj.user
 .Rhistory
+<<<<<<< HEAD
 .Rproj.use/shared/notebooks/paths
+=======
+.Rlibrary
+>>>>>>> f7363bbb24faa8c6a352f386ff35eb2cd35927fa
 .Rproj.user/shared/notebooks/paths
