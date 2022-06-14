@@ -508,7 +508,58 @@ ggplot(posts, aes(x = b0)) +
   geom_vline(aes(xintercept = bayes_tab[1,1]), color = "red") +
   scale_x_continuous(expand = c(0, 0)) +
   theme_minimal() +
-  labs(title = "Posterior Density of Random Family Effect with 95% HPD Interval")
+  labs(x = "Odds Ratio",
+       title = "Female Control: Posterior Density with 95% HPD Interval")
+
+ggplot(posts, aes(x = b1)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[2,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[2,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[2,1]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Female Gamma: Posterior Density with 95% HPD Interval")
+
+ggplot(posts, aes(x = b2)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[3,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[3,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[3,1]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Female HZE: Posterior Density with 95% HPD Interval")
+
+ggplot(posts, aes(x = b3)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[4,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[4,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[4,1]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Male Control: Posterior Density with 95% HPD Interval")
+
+ggplot(posts, aes(x = b4)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[5,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[5,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[5,1]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Male Gamma: Posterior Density with 95% HPD Interval")
+
+ggplot(posts, aes(x = b5)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[6,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[6,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[6,1]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Male HZE: Posterior Density with 95% HPD Interval")
 
 
 ggplot(posts, aes(x = sigma2)) +
