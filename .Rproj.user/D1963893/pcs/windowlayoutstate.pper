@@ -1,12 +1,20 @@
 {
     "left": {
+<<<<<<< HEAD
         "splitterpos": 227,
+=======
+        "splitterpos": 349,
+>>>>>>> ALB_analysis
         "topwindowstate": "NORMAL",
         "panelheight": 692,
         "windowheight": 730
     },
     "right": {
+<<<<<<< HEAD
         "splitterpos": 517,
+=======
+        "splitterpos": 352,
+>>>>>>> ALB_analysis
         "topwindowstate": "NORMAL",
         "panelheight": 692,
         "windowheight": 730

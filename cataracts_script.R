@@ -377,6 +377,8 @@ summary(modfull)
 modsex <- glmer(Cataracts ~ 0 + Treatment + Sex + (1|Family), data = cats, family = binomial)
 mod <- glmer(Cataracts ~ Treatment*Sex + (1|Family), data = cats,
              family = binomial, glmerControl(optimizer = "Nelder_Mead"))
+
+mod <- glmer(Cataracts ~ 0 + Treatment*Sex + (1|Family), data = cats, family = binomial)
 summary(modsex)
 summary(mod)
 
@@ -388,8 +390,6 @@ tab_model(mod, show.re.var = TRUE,
           pred.labels = c("Control(Female)", "Gamma(Female)", "HZE(Female)",
                           "Control(Male)", "Gamma(Male)", "HZE(Male)"),
           dv.labels = "Final Model Effects of Treatment on Cataracts")
-
-sjp.glmer
 
 
 # -- Bayesian Logistic Regression
