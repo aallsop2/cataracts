@@ -478,9 +478,9 @@ ggs_density(ggmcmc.model)
 hpds <- HPDinterval(mcmc.model[[3]])
 
 # Convert posterior distributions to odd ratios
-ors <- exp(mcmc.model[[3]][,-7])
-or_hpds <- round(HPDinterval(ors), 3)
-posts <- data.frame(ors)
+posts <- exp(mcmc.model[[3]][,-7])
+phpds <- HPDinterval(posts)
+posts <- data.frame(posts)
 
 # Create table of posterior estimates
 means <- apply(posts, 2, mean)
@@ -491,8 +491,9 @@ mode_fun <- function(x) {
 }
 modes <- apply(round(posts, 4), 2, mode_fun)
 sds <- apply(posts, 2, sd)
-bayes_tab <- round(data.frame(means, medians, modes, sds, or_hpds), digits = 3)
+bayes_tab <- round(data.frame(means, medians, modes, sds, phpds), digits = 3)
 rownames(bayes_tab) <- c("$\\beta_0$", "$\\beta_1$", "$\\beta_2$", "$\\beta_3$", "$\\beta_4$", "$\\beta_5$", "$\\sigma^2$")
+
 kbl(bayes_tab,
     caption = "Bayes Model: Posterior Distribution Statistics",
     col.names = c("Mean", "Median", "Mode", "SD", "HPD Lower", "HPD Upper")) %>%
@@ -505,10 +506,61 @@ ggplot(posts, aes(x = b0)) +
   geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
   geom_vline(aes(xintercept = bayes_tab[1,5]), color = "darkorchid", linetype = "dashed") +
   geom_vline(aes(xintercept = bayes_tab[1,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[1,1]), color = "red") +
+  geom_vline(aes(xintercept = bayes_tab[1,3]), color = "red") +
   scale_x_continuous(expand = c(0, 0)) +
   theme_minimal() +
-  labs(title = "Posterior Density of Random Family Effect with 95% HPD Interval")
+  labs(x = "Odds Ratio",
+       title = "Female Control: Posterior Density with 95% HPD Interval")
+
+ggplot(posts, aes(x = b1)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[2,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[2,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[2,3]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Female Gamma: Posterior Density with 95% HPD Interval")
+
+ggplot(posts, aes(x = b2)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[3,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[3,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[3,3]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Female HZE: Posterior Density with 95% HPD Interval")
+
+ggplot(posts, aes(x = b3)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[4,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[4,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[4,3]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Male Control: Posterior Density with 95% HPD Interval")
+
+ggplot(posts, aes(x = b4)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[5,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[5,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[5,3]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Male Gamma: Posterior Density with 95% HPD Interval")
+
+ggplot(posts, aes(x = b5)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[6,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[6,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[6,3]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Male HZE: Posterior Density with 95% HPD Interval")
 
 
 ggplot(posts, aes(x = sigma2)) +
