@@ -22,14 +22,14 @@ Do we want to put code in the presentation, or just save outputs from report as 
 
 ## Mixed Logistic Regression
 
-- Write out final model in math notation  
+The final model can be written as:  
 \[
 \begin{aligned}
 log(\frac{p}{1-p}) = &\beta_0*Control*F\ +\beta_1*Gamma*F\ + \beta_2*HZE*F\ + \\ &\beta_3*Control*M\ +\beta_4*Gamma*M\ + \beta_5*HZE*M\ + \\
 &u + \epsilon
 \end{aligned}
 \]
-- Provide table/graph of relevant outputs  
+
 
 ## Bayesian Mixed Logistic Regression
 
