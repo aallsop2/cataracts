@@ -255,6 +255,9 @@ hpds <- hpds <- HPDinterval(mcmc.model[[3]])
 Presence of competing risks in the experimental design obscure the presence of family clusters of cataracts. It is reasonable to assume that individuals in the irradiated Treatment groups were more likely to die due to more acute effects of irradiation before developing cataracts, compared to individuals in the control group. Simplifying the dataset by instituting a cutoff age attempts to address this limitation, but the issue persists even after excluding individuals deceased before Age = 552.  
 
 
+Ordinal regression (small sample sizes)
+We only have a snapshot of the data instead of the development over time
+
 ## Results and Conclusions
 
 ## Authors' Statements  
