@@ -6,7 +6,7 @@ date: "`r Sys.Date()`"
 output: 
   ioslides_presentation: 
     widescreen: true
-    fontsize: 12
+    fontsize: 10
 
 ---
 
@@ -16,11 +16,19 @@ knitr::opts_chunk$set(echo = FALSE)
 
 
 
-## Background
+## Introduction
   
-- Intro  
-- Experimental Design  
-- Methods Overview
+- Research Questions:   
+    + Is there a genetic susceptibility to cataracts caused by radiation?  
+    + Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation and gamma radiation? 
+- Experimental Design:  
+    + 1820 genetically heterogeneous mice from 48 unique families were randomly assigned, with equal family weights, to three treatment groups: Gamma radiation, HZE radiation, and unirradiated control. The simplified dataset records symptoms at time of death for mice of Age $\ge$ 552 days, for a total sample size of 1169.   
+    + **Response**: Cataracts score, ordinal categorical variable on a scale 0-5. Score $\ge$ 2 indicates presence of cataracts; because sample sizes in ordinal categories are small, we decided to convert the response into a binary variable indicating absence or presence of cataracts.  
+    + **Primary predictors under consideration**: Treatment, Family  
+    + **Covariates**: Sex, Weight, Coat Color, Body Condition Score, Age, Myeloid Leukemia, Harderian Tumor, PreT Lymphoma
+- Methods Overview:  
+    + Mixed Logistic Regression with Treatment as a fixed effect, Family as a random effect, and accounting for any practically significant covariates. Obtain estimates for odds ratios. 
+    + Bayesian Mixed Logistic Regression counterpart to Frequentist final model to obtain probability distributions for odds ratios.  
 
 ## Summary Tables & Plots
 
