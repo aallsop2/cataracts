@@ -157,9 +157,12 @@ ggplot(cats_grp, aes(x = Sex, y = prop, fill = Treatment)) +
 ```{r glmm}
 # mixed model binomial logistic regression using adaptive Gauss-Hermite quadrature (nAGQ = 25)
 
-mod <- glmer(Cataracts ~ 0 + Treatment*Sex + (1|Family), data = cats, family = binomial)
+mixed_mod <- glmer(Cataracts ~ Sex*Treatment + (1|Family), nAGQ = 25, data = cats, family = binomial)
+fixed_mod <- glm(Cataracts ~ Treatment*Sex, data = cats, family = binomial)
+summary(mixed_mod)
+summary(fixed_mod)
 
-summary(mod)
+
 ```
 
 ```{r glmm_ors}
@@ -263,6 +266,7 @@ We only have a snapshot of the data instead of the development over time
 
 
 ## Results and Conclusions
+
 
 ## Authors' Statements  
   
