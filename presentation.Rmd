@@ -4,31 +4,141 @@ subtitle: "Familial Clusters of Cataract Development in Irradiated Mice"
 author: "Alyssa Allsop and Amira Burns"
 date: "`r Sys.Date()`"
 output: ioslides_presentation
+widescreen: true
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, warning = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```  
 
-## Background
-  
-- Intro  
-- Experimental Design  
-- Methods Overview
+```{r, include=FALSE}
 
-## Summary Tables & Plots
+library(readxl)
+library(tidyverse)
+library(lme4)
+library(broom.mixed)
+library(kableExtra)
+library(ggsci)
+library(coda)
+library(rjags)
+library(R2jags)
+library(superdiag)
+library(mcmcplots)
+library(ggmcmc)
+```
+
+  
+# Introduction 
+
+## Background
+## Experimental Design  
+## Methods Overview
+
+# Analysis 
+
+## Summary Tables & Plots {.smaller}
+```{r load_data}
+cats <- read_excel("GRSD.cataract.xlsx", sheet = "Sheet1")
+```
+
+```{r format_data, include = FALSE}
+# remove spaces from column and value names
+names(cats) <- str_replace_all(names(cats), " ", "_")
+cats <- cats %>%
+  mutate(CoatColor = str_replace_all(coat_color, " ", "_"))
+str(cats)
+
+# turn categorical vars into factor
+cats <- cats %>%
+  rename(Age = `age_(days)`,
+         Weight = weight,
+         Animal = animal) %>%
+  mutate(Sex = as.factor(sex),
+         CoatColor = as.factor(CoatColor),
+         Family = as.factor(family), # should this stay a factor? Yes?
+         BCS = as.ordered(BCS),
+         Treatment = relevel(as.factor(groups), ref = "Unirradiated"),
+         MyeloidLeukemia = as.factor(Myeloid_Leukemia),
+         HarderianTumor = as.factor(Harderian_Tumor),
+         PreTLymphoma = as.factor(PreT_Lymphoma),
+         Score = as.ordered(Cataract_Score)) # ordinal cat; leave as numeric?
+
+# select vars, add binary conversion for score
+cats <- cats %>%
+  select(c(Animal, Sex, Weight, CoatColor, Family, BCS, Age, Treatment,
+           MyeloidLeukemia, HarderianTumor, PreTLymphoma, Score)) %>%
+  mutate(Cataracts = ifelse(Score < 2, 0, 1))
+
+# glance at the dataset
+# str(cats)
+
+sex_trt <- cats %>%
+  group_by(Treatment, Sex, Cataracts) %>%
+  summarise(n = n()) %>%
+  ungroup() %>%
+  group_by(Treatment, Sex) %>%
+  mutate(prop = round(n/sum(n), digits = 2))
+
+sum_tab <- sex_trt %>%
+  pivot_wider(names_from = Sex, values_from = c(n, prop)) %>%
+  mutate(Cataracts = ifelse(Cataracts == 0, "No", "Yes"),
+         Treatment = rep(" ", 1)) %>%
+  relocate(prop_F, .after = n_F)
+n_C <- c(438, 58, 214, 63, 281, 115)
+prop_C <- c(0.88, 0.12, 0.77, 0.23, 0.71, 0.29)
+
+sum_tab <- sum_tab %>%
+  ungroup() %>%
+  mutate(n_C = n_C, prop_C = prop_C) %>%
+  add_row(Treatment = " ", Cataracts = "$\\sum$", n_F = 258, prop_F = NA,
+          n_M = 238, prop_M = NA, n_C = 496, prop_C = NA, .after = 2) %>%
+  add_row(Treatment = " ", Cataracts = "$\\sum$", n_F = 145, prop_F = NA,
+          n_M = 132, prop_M = NA, n_C = 277, prop_C = NA, .after = 5) %>%
+  add_row(Treatment = " ", Cataracts = "$\\sum$", n_F = 205, prop_F = NA,
+          n_M = 191, prop_M = NA, n_C = 396, prop_C = NA, .after = 8) %>%
+  add_row(Treatment = " ", Cataracts = "$\\sum$", n_F = 608, prop_F = NA,
+          n_M = 561, prop_M = NA, n_C = 1169, prop_C = NA, .after = 9)
+
+grsex_score <- cats %>%
+  group_by(Sex, Treatment, Family) %>%
+  summarize(mean_score = mean(Cataracts))
+```
+
+```{r}
+ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
+  geom_line(aes(group = Family)) + facet_wrap(vars(Sex)) +
+  scale_color_startrek() +
+  scale_x_discrete(expand = c(0, .2)) +
+  theme_light() +
+  labs(y = "mean score",
+       title = "Cataracts by Family, Sex, Treatment Group")
+
+```
 
 Do we want to put code in the presentation, or just save outputs from report as .png and load them? I think the second option would be preferable
 
-## Mixed Logistic Regression
+## Mixed Logistic Regression {.smaller}
 
-The final model can be written as:  
-\[
-\begin{aligned}
-log(\frac{p}{1-p}) = &\beta_0*Control*F\ +\beta_1*Gamma*F\ + \beta_2*HZE*F\ + \\ &\beta_3*Control*M\ +\beta_4*Gamma*M\ + \beta_5*HZE*M\ + \\
-&u + \epsilon
+* Covariates Included in the Final Model:
+  + Sex
+  + Treatment group (Control, Gamma, or HZE)
+  + Random intercept for family
+* Other Covariates Considered:
+  + weight
+  + coat color
+  + BCS (body condition score)
+  + harderian tumor (bilateral, unilateral, none)
+  + Myeloid luekemia,
+  + PreT lymphoma
+
+* The final model can be written as:  
+ \[  
+\begin{aligned} 
+log(\frac{p}{1-p}) = \beta_0 + \beta_1*Control*F + \beta_2*Gamma*F + \beta_3*HZE*F + \\
+\beta_4*Control*M + \beta_5*Gamma*M + \beta_6*HZE*M + u + \epsilon
 \end{aligned}
 \]
+
 
 
 ## Bayesian Mixed Logistic Regression
@@ -40,9 +150,42 @@ log(\frac{p}{1-p}) = &\beta_0*Control*F\ +\beta_1*Gamma*F\ + \beta_2*HZE*F\ + \\
 ## Results & Conclusions  
 
 - What can we infer about fixed and random effects from the models?
+
+
+```{r}
+#female control
+#exp(-2.4865 -.2141)/(1 + exp(-2.4865 -.2141))
+#female HZE
+#exp(-2.4865 + .2879)/(1 + exp(-2.4865 + .2879))
+#female in the gamma group is:
+#exp(-2.4865)/(1 + exp(-2.4865))
+
+# Male control
+#exp(-2.4865 + 1.8647 -.2141 - .9753)/(1 + exp(-2.4865 + 1.8647 -.2141 - .9753))
+#Male in HZE
+#exp(-2.4865 + 1.8647 + .2879 + 0.2308)/(1 + exp(-2.4865 + 1.8647 + .2879 + 0.2308))
+#Male Gamma
+#exp(-2.4865 + 1.8647)/(1 + exp(-2.4865 + 1.8647))
+
+
+row1 <- c("Sex", "Unirradiated", "HZE", "Gamma")
+Male <- c( 0.14, 0.47, 0.35) ### need to update these with the new paramaterization of the model
+Female <- c( 0.06, 0.10, 0.08)
+dt <- rbind(Male, Female)
+colnames(dt) <- c("Unirradiated", "HZE", "Gamma")
+
+
+dt %>%
+  kbl(caption = "Probabilities of Developing Cataracts of Clincal Concern") %>%
+  kable_classic_2(full_width = T, html_font = "Cambria")
+
+# dt %>%
+#   kbl(caption = "Probabilities of Developing Cataracts of Clincal Concern") %>%
+#   kable_minimal()
+```
 - Limitations?  
 - What questions does this raise for future studies?  
   
 ## References  
   
-## Any Questions?  
+# Any Questions?  
