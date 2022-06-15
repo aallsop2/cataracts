@@ -117,19 +117,60 @@ ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
 
 Do we want to put code in the presentation, or just save outputs from report as .png and load them? I think the second option would be preferable
 
-## Mixed Logistic Regression {.smaller}
-
-* Covariates Included in the Final Model:
+## Mixed Logistic Regression
+<div style="float: left; width: 40%;">
+* Predictors Included in the Final Model:
   + Sex
   + Treatment group (Control, Gamma, or HZE)
   + Random intercept for family
-* Other Covariates Considered:
+</div>
+
+<div style="float: right; width: 60%;">
+* Other Predictors Considered:
   + weight
   + coat color
   + BCS (body condition score)
   + harderian tumor (bilateral, unilateral, none)
-  + Myeloid luekemia,
+  + Myeloid leukemia,
   + PreT lymphoma
+</div>
+
+```{r glmm, include = FALSE}
+# mixed model binomial logistic regression using adaptive Gauss-Hermite quadrature (nAGQ = 25)
+mix_mod_full <- glmer(Cataracts ~ Sex + Weight + CoatColor + BCS + HarderianTumor + 
+                        MyeloidLeukemia + PreTLymphoma + Treatment + (1|Family), nAGQ = 25, 
+                      data = cats, family = binomial)
+mixed_mod <- glmer(Cataracts ~ Sex*Treatment + (1|Family), nAGQ = 25, data = cats, family = binomial)
+fixed_mod_full <- glm(Cataracts ~ Sex + Weight + CoatColor + BCS + HarderianTumor + 
+                        MyeloidLeukemia + PreTLymphoma + Treatment, data = cats, family = binomial)
+fixed_mod <- glm(Cataracts ~ Treatment*Sex, data = cats, family = binomial)
+
+
+# test full vs reduced mixed models
+anova(mix_mod_full, mixed_mod)
+
+summary(mix_mod_full)
+summary(mixed_mod)
+summary(fixed_mod)
+```
+
+```{r}
+#table of AIC values
+
+
+aics <- c(AIC(mix_mod_full), AIC(mixed_mod), AIC(fixed_mod))
+bics <- c(BIC(mix_mod_full), BIC(mixed_mod), BIC(fixed_mod))
+dt <- rbind(aics, bics)
+colnames(dt) <- c("Full Mixed Model", "Reduced Mixed Model", "Fixed Effects Model")
+rownames(dt) <- c("AIC", "BIC")
+
+dt %>% 
+  kbl(caption = "AIC and BIC Comparisons Across Models", digits = 2) %>% 
+  kable_classic_2(full_width = T, html_font = "Cambria")
+
+```
+
+## Mixed Logistic Regression {.smaller}
 
 * The final model can be written as:  
  \[  
@@ -138,7 +179,6 @@ log(\frac{p}{1-p}) = \beta_0 + \beta_1*Control*F + \beta_2*Gamma*F + \beta_3*HZE
 \beta_4*Control*M + \beta_5*Gamma*M + \beta_6*HZE*M + u + \epsilon
 \end{aligned}
 \]
-
 
 
 ## Bayesian Mixed Logistic Regression
