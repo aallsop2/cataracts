@@ -173,12 +173,15 @@ dt %>%
 ## Mixed Logistic Regression {.smaller}
 
 * The final model can be written as:  
- \[  
-\begin{aligned} 
-log(\frac{p}{1-p}) = \beta_0 + \beta_1*Control*F + \beta_2*Gamma*F + \beta_3*HZE*F + \\
-\beta_4*Control*M + \beta_5*Gamma*M + \beta_6*HZE*M + u + \epsilon
+\[
+\begin{aligned}
+Y \sim\ &Binomial(1169, p)\ \ \mbox{or parameterized as   }\  Y_{ij} \sim Bernoulli(p) \\
+log(\frac{p}{1-p}) = &\ \beta_0*Control_i*F_i\ +\beta_1*Gamma_i*F_i\ + \beta_2*HZE_i*F_i\ + \\ &\beta_3*Control_i*M_i\ +\beta_4*Gamma*M\ + \beta_5*HZE*M\ + \\
+[&v_{j} + \epsilon_{ij}] \\
+&i = 1, ..., 1169\ \mbox{ mice} \\
+&j = 1,...,47\ \ \mbox{ families}
 \end{aligned}
-\]
+\] 
 
 
 ## Bayesian Mixed Logistic Regression
