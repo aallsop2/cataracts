@@ -1,33 +1,19 @@
-<<<<<<< HEAD
-model {
-  for(i in 1:N){
-    CAT[i] ~ dbern(p[i])     # Bernoulli-distributed response
-    logit(p[i]) <- b0 + a[Family[i]] + b1*Gamma[i] + b2*HZE[i] # likelihood function
-=======
 model{
   for(i in 1:N){
     CAT[i] ~ dbern(p[i])     # Bernoulli-distributed response
-    logit(p[i])<- b0*Unirradiated[i] + b1*Gamma[i] + b2*HZE[i] + b3*Male[i] +
+    logit(p[i]) <- b0*Unirradiated[i] + b1*Gamma[i] + b2*HZE[i] + b3*Male[i] +
     b4*Male[i]*Gamma[i] + b5*Male[i]*HZE[i] + a[Family[i]]   # likelihood function
->>>>>>> ALB_analysis
   }
   for(j in 1:nFam){
     a[j] ~ dnorm(0, tau)
   }
-<<<<<<< HEAD
-  b0 ~ dnorm(0.0, 1.0E-6)   # vaguely informative priors
-  b1 ~ dnorm(0.0, 1.0E-6)
-  b2 ~ dnorm(0.0, 1.0E-6)
-  tau ~ dgamma(1.0E-3,1.0E-3)    # convert precision to variance 1/sigma^2
-  sigma  <- 1.0/sqrt(tau)
-=======
-  b0 ~ dnorm(0.0, 1.0E-4)   # vaguely informative priors
-  b1 ~ dnorm(0.0, 1.0E-4)
-  b2 ~ dnorm(0.0, 1.0E-4)
-  b3 ~ dnorm(0.0, 1.0E-4)
-  b4 ~ dnorm(0.0, 1.0E-4)
-  b5 ~ dnorm(0.0, 1.0E-4)
+
+  b0 ~ dnorm(0.0, 1.0E-3)   # vaguely informative priors
+  b1 ~ dnorm(0.0, 1.0E-3)
+  b2 ~ dnorm(0.0, 1.0E-3)
+  b3 ~ dnorm(0.0, 1.0E-3)
+  b4 ~ dnorm(0.0, 1.0E-3)
+  b5 ~ dnorm(0.0, 1.0E-3)
   tau ~ dgamma(1.0E-3,1.0E-3)
   sigma2 <- 1/tau     # convert precision 'tau' to variance 'sigma2'
->>>>>>> ALB_analysis
 }

@@ -382,7 +382,10 @@ mod <- glmer(Cataracts ~ 0 + Treatment*Sex + (1|Family), data = cats, family = b
 summary(modsex)
 summary(mod)
 
-plot_model(mod, sort.est = TRUE, show.values = TRUE, type = "int", pred.type = c("fe", "re"),
+plot_model(mod, sort.est = TRUE, show.values = TRUE, type = "int", pred.type = "re",
+           color = "Dark2", vline.color = "darkorchid3",
+           width = 0.1, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
+plot_model(mod, sort.est = TRUE, show.values = TRUE, type = "est", pred.type = "re",
            color = "Dark2", vline.color = "darkorchid3",
            width = 0.1, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
 
@@ -402,18 +405,18 @@ library(R2jags)
 cat("model{
   for(i in 1:N){
     CAT[i] ~ dbern(p[i])     # Bernoulli-distributed response
-    logit(p[i])<- b0*Unirradiated[i] + b1*Gamma[i] + b2*HZE[i] + b3*Male[i] +
+    logit(p[i]) <- b0*Unirradiated[i] + b1*Gamma[i] + b2*HZE[i] + b3*Male[i] +
     b4*Male[i]*Gamma[i] + b5*Male[i]*HZE[i] + a[Family[i]]   # likelihood function
   }
   for(j in 1:nFam){
     a[j] ~ dnorm(0, tau)
   }
-  b0 ~ dnorm(0.0, 1.0E-4)   # vaguely informative priors
-  b1 ~ dnorm(0.0, 1.0E-4)
-  b2 ~ dnorm(0.0, 1.0E-4)
-  b3 ~ dnorm(0.0, 1.0E-4)
-  b4 ~ dnorm(0.0, 1.0E-4)
-  b5 ~ dnorm(0.0, 1.0E-4)
+  b0 ~ dnorm(0.0, 1.0E-3)   # vaguely informative priors
+  b1 ~ dnorm(0.0, 1.0E-3)
+  b2 ~ dnorm(0.0, 1.0E-3)
+  b3 ~ dnorm(0.0, 1.0E-3)
+  b4 ~ dnorm(0.0, 1.0E-3)
+  b5 ~ dnorm(0.0, 1.0E-3)
   tau ~ dgamma(1.0E-3,1.0E-3)
   sigma2 <- 1/tau     # convert precision 'tau' to variance 'sigma2'
 }", file = "cat.jag")
@@ -437,8 +440,8 @@ BurnIn <- 10000
 nAdapt <- 1000
 ests <- summary(mod)$coef[,1] # pull starting values from frequentist model
 var <- as.numeric(as.data.frame(VarCorr(mod))$vcov)
-inits <- list(list("tau" = var+0.2, "b0" = ests[1]+0.5, "b1" = ests[2]+0.5, "b2" = ests[3]+0.5,
-                   "b3" = ests[4]+0.2, "b4" = ests[5]+0.2, "b5" = ests[6]+0.2),
+inits <- list(list("tau" = var+2, "b0" = ests[1]+5, "b1" = ests[2]+5, "b2" = ests[3]+5,
+                   "b3" = ests[4]+2, "b4" = ests[5]+2, "b5" = ests[6]+2),
               list("tau" = var-0.2, "b0" = ests[1]-0.5, "b1" = ests[2]-0.5, "b2" = ests[3]-0.5,
                    "b3" = ests[4]-0.2, "b4" = ests[5]-0.2, "b5" = ests[6]-0.2),
               list("tau" = var, "b0" = ests[1], "b1" = ests[2], "b2" = ests[3],
@@ -476,9 +479,9 @@ ggs_density(ggmcmc.model)
 hpds <- HPDinterval(mcmc.model[[3]])
 
 # Convert posterior distributions to odd ratios
-ors <- exp(mcmc.model[[3]][,-7])
-or_hpds <- round(HPDinterval(ors), 3)
-posts <- data.frame(ors)
+posts <- exp(mcmc.model[[3]][,-7])
+phpds <- HPDinterval(posts)
+posts <- data.frame(posts)
 
 # Create table of posterior estimates
 means <- apply(posts, 2, mean)
@@ -489,8 +492,9 @@ mode_fun <- function(x) {
 }
 modes <- apply(round(posts, 4), 2, mode_fun)
 sds <- apply(posts, 2, sd)
-bayes_tab <- round(data.frame(means, medians, modes, sds, or_hpds), digits = 3)
-rownames(bayes_tab) <- c("b0", "b1", "b2", "b3", "b4", "b5", "$\\sigma^2$")
+bayes_tab <- round(data.frame(means, medians, modes, sds, phpds), digits = 3)
+rownames(bayes_tab) <- c("$\\beta_0$", "$\\beta_1$", "$\\beta_2$", "$\\beta_3$", "$\\beta_4$", "$\\beta_5$", "$\\sigma^2$")
+
 kbl(bayes_tab,
     caption = "Bayes Model: Posterior Distribution Statistics",
     col.names = c("Mean", "Median", "Mode", "SD", "HPD Lower", "HPD Upper")) %>%
@@ -498,6 +502,68 @@ kbl(bayes_tab,
   kable_classic_2(full_width = F, html_font = "Cambria")
 
 # Posterior density plots with HPD intervals
+
+ggplot(posts, aes(x = b0)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[1,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[1,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[1,3]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Female Control: Posterior Density with 95% HPD Interval")
+
+ggplot(posts, aes(x = b1)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[2,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[2,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[2,3]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Female Gamma: Posterior Density with 95% HPD Interval")
+
+ggplot(posts, aes(x = b2)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[3,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[3,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[3,3]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Female HZE: Posterior Density with 95% HPD Interval")
+
+ggplot(posts, aes(x = b3)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[4,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[4,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[4,3]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Male Control: Posterior Density with 95% HPD Interval")
+
+ggplot(posts, aes(x = b4)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[5,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[5,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[5,3]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Male Gamma: Posterior Density with 95% HPD Interval")
+
+ggplot(posts, aes(x = b5)) +
+  geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[6,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[6,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[6,3]), color = "red") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_minimal() +
+  labs(x = "Odds Ratio",
+       title = "Male HZE: Posterior Density with 95% HPD Interval")
+
+
 ggplot(posts, aes(x = sigma2)) +
   geom_density(color = "cornflowerblue", fill = "cornflowerblue", alpha = 0.5) +
   geom_vline(aes(xintercept = bayes_tab[7,5]), color = "darkorchid", linetype = "dashed") +

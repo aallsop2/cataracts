@@ -3085,6 +3085,7 @@ if (document.readyState !== "loading" &&
 
 
 </script>
+<<<<<<< HEAD
   <script>$(document).ready(function(){
     if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
         $('[data-toggle="tooltip"]').tooltip();
@@ -4114,6 +4115,8 @@ table{border-collapse:collapse;border-spacing:0}td,th{padding:0}*{-webkit-box-si
 
 }(jQuery);
 </script>
+=======
+>>>>>>> ALB_analysis
 
   <style type="text/css">
 
@@ -4179,6 +4182,7 @@ slide:not(.current) .plotly.html-widget{
           </hgroup>
   </slide>
 
+<<<<<<< HEAD
 <slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Introduction</h2></hgroup><article  id="introduction">
 
 </article></slide><slide class=""><hgroup><h2>Background</h2></hgroup><article  id="background">
@@ -4339,11 +4343,80 @@ log(\frac{p}{1-p}) = \beta_0 + \beta_1*Control*F + \beta_2*Gamma*F + \beta_3*HZE
 <li>Write out final model in math notation - priors, likelihood</li>
 <li>Provide table/graph of relevant outputs</li>
 </ul>
+=======
+<slide class=""><hgroup><h2>Introduction</h2></hgroup><article  id="introduction">
+
+<ul>
+<li>Research Questions:
+
+<ul>
+<li>Is there a genetic susceptibility to cataracts caused by radiation?<br/></li>
+<li>Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation and gamma radiation?</li>
+</ul></li>
+<li>Experimental Design:
+
+<ul>
+<li>1820 genetically heterogeneous mice from 48 unique families were randomly assigned, with equal family weights, to three treatment groups: Gamma radiation, HZE radiation, and unirradiated control. The simplified dataset records symptoms at time of death for mice of Age \(\ge\) 552 days.<br/></li>
+<li><strong>Response</strong>: Cataracts score, ordinal categorical variable on a scale 0-5. Score \(\ge\) 2 indicates presence of cataracts; because sample sizes in ordinal categories are small, we decided to convert the response into a binary variable indicating absence or presence of cataracts.<br/></li>
+<li><strong>Primary predictors under consideration</strong>: Treatment, Family<br/></li>
+<li><strong>Covariates</strong>: Sex, Weight, Coat Color, Body Condition Score, Age, Myeloid Leukemia, Harderian Tumor, PreT Lymphoma</li>
+</ul></li>
+<li>Methods Overview:
+
+<ul>
+<li></li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Summary Tables &amp; Plots</h2></hgroup><article  id="summary-tables-plots">
+
+</article></slide><slide class=""><hgroup><h2>Mixed Logistic Regression</h2></hgroup><article  id="mixed-logistic-regression">
+
+<p>The final model can be written as:<br/>\[
+\begin{aligned}
+Y \sim\ &amp;Binomial(1169, p)\ \ \mbox{or parameterized as   }\  Y_{ij} \sim Bernoulli(p) \\
+log(\frac{p}{1-p}) = &amp;\ \beta_0*Control_i*F_i\ +\beta_1*Gamma_i*F_i\ + \beta_2*HZE_i*F_i\ + \\ &amp;\beta_3*Control_i*M_i\ +\beta_4*Gamma*M\ + \beta_5*HZE*M\ + \\
+[&amp;v_{j} + \epsilon_{ij}] \\
+&amp;i = 1, ..., 1169\ \mbox{ mice} \\
+&amp;j = 1,...,47\ \ \mbox{ families}
+\end{aligned}
+\]</p>
+
+</article></slide><slide class=""><hgroup><h2>Bayesian Mixed Logistic Regression</h2></hgroup><article  id="bayesian-mixed-logistic-regression">
+
+<p>&lt;div class=’&ldquo;columns-2&rdquo;&gt;</p>
+
+<p>The final Bayesian model can be written as:<br/>\[
+\begin{aligned}
+Y \sim Binomial&amp;(1169, p) \ \mbox{   or parameterized as   }\ \ \  Y_{ij} \sim Bernoulli(p)\\
+log(\frac{p}{1-p}) = &amp;\ \beta_0*Control_i*F_i\ +\beta_1*Gamma_i*F_i\ + \beta_2*HZE_i*F_i\ + \\ &amp;\beta_3*Control_i*M_i\ +\beta_4*Gamma*M\ + \beta_5*HZE*M\ + \\
+&amp;v_{ij} + \epsilon_{ij}\\
+&amp;i = 1, ..., 1169\ \mbox{ mice} \\
+&amp;j = 1,...,47\ \ \mbox{ families, and} \\
+v_j \sim N(0, \tau)
+\end{aligned}
+\]</p>
+
+<p>With non-informative parameters:<br/>\[
+\begin{aligned}
+\beta_0 &amp;\sim N(0, 0.001)\\
+\beta_1 &amp;\sim N(0, 0.001)\\
+\beta_2 &amp;\sim N(0, 0.001)\\
+\beta_3 &amp;\sim N(0, 0.001)\\
+\beta_4 &amp;\sim N(0, 0.001)\\
+\beta_5 &amp;\sim N(0, 0.001)\\
+\tau &amp;\sim Gamma(0.001, 0.001) \mbox{ where}\ \sigma^2 = 1/\tau\\
+\end{aligned}
+\]</p>
+
+</div>
+>>>>>>> ALB_analysis
 
 </article></slide><slide class=""><hgroup><h2>Results &amp; Conclusions</h2></hgroup><article  id="results-conclusions">
 
 <ul>
 <li>What can we infer about fixed and random effects from the models?</li>
+<<<<<<< HEAD
 </ul>
 
 <table class=" lightable-classic-2" style="font-family: Cambria; margin-left: auto; margin-right: auto;">
@@ -4447,13 +4520,19 @@ Female
 </table>
 
 <ul>
+=======
+>>>>>>> ALB_analysis
 <li>Limitations?<br/></li>
 <li>What questions does this raise for future studies?</li>
 </ul>
 
 </article></slide><slide class=""><hgroup><h2>References</h2></hgroup><article  id="references">
 
+<<<<<<< HEAD
 </article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Any Questions?</h2></hgroup><article  id="any-questions"></article></slide>
+=======
+</article></slide><slide class=""><hgroup><h2>Any Questions?</h2></hgroup><article  id="any-questions"></article></slide>
+>>>>>>> ALB_analysis
 
 
   <slide class="backdrop"></slide>
