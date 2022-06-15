@@ -30,9 +30,9 @@ knitr::opts_chunk$set(echo = FALSE)
 The final model can be written as:  
 \[
 \begin{aligned}
-Y_{ij} \sim Binomial(1169, p) \\
+Y \sim\ &Binomial(1169, p)\ \ \mbox{or parameterized as   }\  Y_{ij} \sim Bernoulli(p) \\
 log(\frac{p}{1-p}) = &\ \beta_0*Control_i*F_i\ +\beta_1*Gamma_i*F_i\ + \beta_2*HZE_i*F_i\ + \\ &\beta_3*Control_i*M_i\ +\beta_4*Gamma*M\ + \beta_5*HZE*M\ + \\
-&u_{j} + \epsilon_{ij} \\
+[&v_{j} + \epsilon_{ij}] \\
 &i = 1, ..., 1169\ \mbox{ mice} \\
 &j = 1,...,47\ \ \mbox{ families}
 \end{aligned}
@@ -46,7 +46,7 @@ log(\frac{p}{1-p}) = &\ \beta_0*Control_i*F_i\ +\beta_1*Gamma_i*F_i\ + \beta_2*H
 The final Bayesian model can be written as:  
 \[
 \begin{aligned}
-Y \sim Binomial&(1169, p) \ \mbox{   or parameterized as   }\ \ \  Y_i \sim Bernoulli(p)\\
+Y \sim Binomial&(1169, p) \ \mbox{   or parameterized as   }\ \ \  Y_{ij} \sim Bernoulli(p)\\
 log(\frac{p}{1-p}) = &\ \beta_0*Control_i*F_i\ +\beta_1*Gamma_i*F_i\ + \beta_2*HZE_i*F_i\ + \\ &\beta_3*Control_i*M_i\ +\beta_4*Gamma*M\ + \beta_5*HZE*M\ + \\
 &v_{ij} + \epsilon_{ij}\\
 &i = 1, ..., 1169\ \mbox{ mice} \\
