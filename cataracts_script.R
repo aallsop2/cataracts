@@ -9,6 +9,7 @@ library(DescTools)
 library(ggsci)
 library(lme4)
 library(sjPlot)
+library(emmeans)
 
 # -- Read in the data
 cats <- read_excel("GRSD.cataract.xlsx", sheet = "Sheet1")
@@ -173,6 +174,15 @@ ggplot(cats_grp, aes(x = Sex, y = prop, fill = Treatment)) +
   scale_fill_startrek() +
   theme_minimal() +
   ggtitle("Sample Proportion with Cataracts by Sex and Treatment Group")
+logits <- sex_trt %>%
+  group_by(Treatment, Sex) %>%
+  summarise(odds_ratio = prop[Cataracts == 1]/prop[Cataracts == 0])
+ggplot(logits, aes(x = Sex, y = odds_ratio, fill = Treatment)) +
+  geom_col(position = "dodge") +
+  scale_fill_startrek() +
+  theme_minimal() +
+  labs(y = "Odds Ratio",
+       title = "Empirical Odds Ratios of Cataracts by Sex, Treatment")
 
 # table with total counts and proportions by group, with aggregates
 trt <- cats %>%
@@ -374,26 +384,64 @@ summary(modfull)
 
 # Final model
 # add exploratory plot showing differences by sex
+<<<<<<< HEAD
 modsex <- glmer(Cataracts ~ 0 + Treatment + Sex + (1|Family), data = cats, family = binomial)
 mod <- glmer(Cataracts ~ Treatment*Sex + (1|Family), data = cats,
              family = binomial, glmerControl(optimizer = "Nelder_Mead"))
 
 mod <- glmer(Cataracts ~ 0 + Treatment*Sex + (1|Family), data = cats, family = binomial)
+=======
+modsex <- glmer(Cataracts ~ Treatment + Sex + (1|Family), data = cats, family = binomial)
+>>>>>>> ALB_analysis
 summary(modsex)
+mod <- glmer(Cataracts ~ Treatment*Sex + (1|Family), data = cats, family = binomial)
 summary(mod)
+fixmod <- glm(Cataracts ~ Treatment*Sex, data = cats, family = binomial)
+summary(fixmod)
 
+AIC(mod0, modfull, modsex, mod, fixmod)
+
+# Final model contains fixed effects for Treatment, Sex, an interaction term, and a random effect for Family
 plot_model(mod, sort.est = TRUE, show.values = TRUE, type = "int", pred.type = "re",
-           color = "Dark2", vline.color = "darkorchid3",
-           width = 0.1, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
-plot_model(mod, sort.est = TRUE, show.values = TRUE, type = "est", pred.type = "re",
-           color = "Dark2", vline.color = "darkorchid3",
-           width = 0.1, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
-
+           color = "Dark2", show.p = TRUE,
+           width = 0.5, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
 tab_model(mod, show.re.var = TRUE,
           pred.labels = c("Control(Female)", "Gamma(Female)", "HZE(Female)",
                           "Control(Male)", "Gamma(Male)", "HZE(Male)"),
           dv.labels = "Final Model Effects of Treatment on Cataracts")
 
+<<<<<<< HEAD
+=======
+# Extract estimates for fixed and random effects
+coefs <- data.frame(coef(mod)$Family) %>%
+  rename(Intercept = X.Intercept.,
+         Gamma_F = TreatmentGamma,
+         HZE_F = TreatmentHZE,
+         M = SexM,
+         Gamma_M = TreatmentGamma.SexM,
+         HZE_M = TreatmentHZE.SexM) %>%
+  rownames_to_column("Family")
+pred_dat <- cats %>%
+  select(c(Treatment, Sex, Family, Cataracts)) %>%
+  left_join(coefs, by = "Family") %>%
+  mutate(Fits = fitted(mod))
+pred_dat <- pred_dat %>%
+  mutate(FixEff = ifelse(Treatment == "Unirradiated" & Sex == "F", 0,
+                         ifelse(Treatment == "Gamma" & Sex == "F", Gamma_F,
+                                ifelse(Treatment == "HZE" & Sex == "F", HZE_F,
+                                       ifelse(Treatment == "Unirradiated" & Sex == "M", M,
+                                              ifelse(Treatment == "Gamma" & Sex == "M",Gamma_M, HZE_M))))))
+# think about how to plot this!
+ggplot(pred_dat, aes(x = Treatment, y = Fits, group = Family)) +
+  geom_point() +
+  geom_abline(aes(intercept = Intercept,
+                  slope = FixEff*Cataracts))
+
+# -- Post-Hoc Fixed Effect Analysis
+cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
+cats_emms
+pairs(cats_emms, reverse = TRUE)
+>>>>>>> ALB_analysis
 
 # -- Bayesian Logistic Regression
 # note: when moving to rmarkdown, make sure to specify/compile model in separate chunks!
@@ -405,7 +453,7 @@ library(R2jags)
 cat("model{
   for(i in 1:N){
     CAT[i] ~ dbern(p[i])     # Bernoulli-distributed response
-    logit(p[i]) <- b0*Unirradiated[i] + b1*Gamma[i] + b2*HZE[i] + b3*Male[i] +
+    logit(p[i]) <- b0 + b1*Gamma[i] + b2*HZE[i] + b3*Male[i] +
     b4*Male[i]*Gamma[i] + b5*Male[i]*HZE[i] + a[Family[i]]   # likelihood function
   }
   for(j in 1:nFam){
@@ -429,7 +477,7 @@ colnames(treatment) <- c("Unirradiated", "Gamma", "HZE")
 cats <- data.frame(cats, treatment, sex)
 
 # format relevant data as a list
-data <- list(CAT = cats$Cataracts, Unirradiated = cats$Unirradiated, Gamma = cats$Gamma, HZE = cats$HZE, Male = cats$SexM,
+data <- list(CAT = cats$Cataracts, Gamma = cats$Gamma, HZE = cats$HZE, Male = cats$SexM,
              Family = cats$Family, nFam = length(unique(cats$Family)), N = nrow(cats))
 
 # Setup
@@ -440,7 +488,7 @@ BurnIn <- 10000
 nAdapt <- 1000
 ests <- summary(mod)$coef[,1] # pull starting values from frequentist model
 var <- as.numeric(as.data.frame(VarCorr(mod))$vcov)
-inits <- list(list("tau" = var+2, "b0" = ests[1]+5, "b1" = ests[2]+5, "b2" = ests[3]+5,
+inits <- list(list("tau" = var+0.2, "b0" = ests[1]+5, "b1" = ests[2]+5, "b2" = ests[3]+5,
                    "b3" = ests[4]+2, "b4" = ests[5]+2, "b5" = ests[6]+2),
               list("tau" = var-0.2, "b0" = ests[1]-0.5, "b1" = ests[2]-0.5, "b2" = ests[3]-0.5,
                    "b3" = ests[4]-0.2, "b4" = ests[5]-0.2, "b5" = ests[6]-0.2),
@@ -470,8 +518,16 @@ plot(mcmc.model)
 gelman.diag(mcmc.model)
 gelman.plot(mcmc.model)
 
-traplot(mcmc.model, parms = params)
+traplot(mcmc.model, parms = "sigma2")
 denplot(mcmc.model, parms = params)
+acf(mcmc.model[[3]][,1])
+acf(mcmc.model[[3]][,2])
+acf(mcmc.model[[3]][,3])
+acf(mcmc.model[[3]][,4])
+acf(mcmc.model[[3]][,5])
+acf(mcmc.model[[3]][,6])
+acf(mcmc.model[[3]][,8])
+
 
 caterplot(mcmc.model, parms = c("b0", "b1", "b2", "b3", "b4", "b5", "sigma2")) # plot of cred intervals
 ggmcmc.model <- ggs(mcmc.model)

@@ -165,6 +165,7 @@ ggplot(cats_grp, aes(x = Sex, y = prop, fill = Treatment)) +
 
 ### Frequentist Approach
 ```{r glmm}
+<<<<<<< HEAD
 # mixed model binomial logistic regression using adaptive Gauss-Hermite quadrature (nAGQ = 25)
 mix_mod_full <- glmer(Cataracts ~ Sex + Weight + CoatColor + BCS + HarderianTumor + 
                         MyeloidLeukemia + PreTLymphoma + Treatment + (1|Family), nAGQ = 25, 
@@ -195,6 +196,13 @@ dt %>%
   kbl(caption = "AIC and BIC Comparisons Across Models", digits = 2) %>% 
   kable_classic_2(full_width = T, html_font = "Cambria")
 
+=======
+# mixed model binomial logistic regression 
+# ???using adaptive Gauss-Hermite quadrature (nAGQ = 25)
+
+mod <- glmer(Cataracts ~ Treatment*Sex + (1|Family), data = cats, family = binomial)
+summary(mod)
+>>>>>>> ALB_analysis
 ```
 
 ```{r glmm_ors}
@@ -206,9 +214,22 @@ tab_model(mod, show.re.var = TRUE,
                           "Control(Male)", "Gamma(Male)", "HZE(Male)"),
           dv.labels = "Final Model Effects of Treatment on Cataracts")
 ```
+<<<<<<< HEAD
   
 
 
+=======
+
+```{r contr}
+cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
+cats_emms
+pairs(cats_emms, reverse = TRUE)
+emmip(cats_emms, Treatment ~ Sex)
+```
+
+***  
+  
+>>>>>>> ALB_analysis
 ### Bayesian Approach  
 ```{r spec_mod}
 # Specify the model
