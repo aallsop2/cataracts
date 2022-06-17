@@ -25,6 +25,8 @@ library(R2jags)
 library(superdiag)
 library(mcmcplots)
 library(ggmcmc)
+library(sjPlot)
+library(emmeans)
 library(gridExtra)
 ```
 
@@ -185,6 +187,37 @@ grid.arrange(b1, b2, ncol = 2, top = "Cataracts by Sex, Treatment")
 ### Frequentist Approach
 ```{r glmm}
 
+# mixed model binomial logistic regression using adaptive Gauss-Hermite quadrature (nAGQ = 25)
+mix_mod_full <- glmer(Cataracts ~ Sex + Weight + CoatColor + BCS + HarderianTumor + 
+                        MyeloidLeukemia + PreTLymphoma + Treatment + (1|Family), nAGQ = 25, 
+                      data = cats, family = binomial)
+mixed_mod <- glmer(Cataracts ~ Sex*Treatment + (1|Family), nAGQ = 25, data = cats, family = binomial)
+fixed_mod_full <- glm(Cataracts ~ Sex + Weight + CoatColor + BCS + HarderianTumor + 
+                        MyeloidLeukemia + PreTLymphoma + Treatment, data = cats, family = binomial)
+fixed_mod <- glm(Cataracts ~ Treatment*Sex, data = cats, family = binomial)
+
+
+# test full vs reduced mixed models
+anova(mix_mod_full, mixed_mod)
+
+summary(mix_mod_full)
+summary(mixed_mod)
+summary(fixed_mod)
+
+#table of AIC values
+
+
+aics <- c(AIC(mix_mod_full), AIC(mixed_mod), AIC(fixed_mod))
+bics <- c(BIC(mix_mod_full), BIC(mixed_mod), BIC(fixed_mod))
+dt <- rbind(aics, bics)
+colnames(dt) <- c("Full Mixed Model", "Reduced Mixed Model", "Fixed Effects Model")
+rownames(dt) <- c("AIC", "BIC")
+
+dt %>% 
+  kbl(caption = "AIC and BIC Comparisons Across Models", digits = 2) %>% 
+  kable_classic_2(full_width = T, html_font = "Cambria")
+
+
 # mixed model binomial logistic regression 
 
 mod <- glmer(Cataracts ~ Treatment*Sex + (1|Family), data = cats, family = binomial)
@@ -206,8 +239,10 @@ tab_model(mod, show.re.var = TRUE,
 cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
 cats_emms
 pairs(cats_emms, reverse = TRUE)
+
 emmip(cats_emms, Treatment ~ Sex) + theme_light() + 
-  ggtitle("Predicted Probabilities of Cataracts \nby Sex and Treatment Group") + scale_color_startrek()
+  ggtitle("Predicted Probabilities of Cataracts \nby Sex and Treatment Group") + scale_color_startrek() + ylab("Predicted Probabilities")
+
 ```
 
   
