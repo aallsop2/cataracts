@@ -3,24 +3,20 @@ title: "Three (Groups of) Blind Mice"
 subtitle: "Familial Clusters of Cataract Development in Irradiated Mice"
 author: "Alyssa Allsop and Amira Burns"
 date: "`r Sys.Date()`"
-output: 
-  html_document: 
-    fig_caption: true
-    
-  pdf_document: true
-  
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE) # change to echo = FALSE for final
 ```
 
-```{r load_libs}
+```{r load_libs, warning = FALSE, message = FALSE}
 library(readxl)
 library(tidyverse)
 library(lme4)
 library(broom.mixed)
 library(kableExtra)
+library(emmeans)
 library(ggsci)
 library(sjPlot)
 library(coda)
@@ -29,6 +25,7 @@ library(R2jags)
 library(superdiag)
 library(mcmcplots)
 library(ggmcmc)
+library(gridExtra)
 ```
 
 ```{r load_data}
@@ -40,7 +37,6 @@ cats <- read_excel("GRSD.cataract.xlsx", sheet = "Sheet1")
 names(cats) <- str_replace_all(names(cats), " ", "_")
 cats <- cats %>%
   mutate(CoatColor = str_replace_all(coat_color, " ", "_"))
-str(cats)
 
 # turn categorical vars into factor
 cats <- cats %>%
@@ -72,12 +68,31 @@ cats <- cats %>%
 ## Introduction  
 Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth’s magnetic field. In contrast, extensive research shows exposure to high doses of gamma radiation leads to acute radiation sickness. Effects include damage to the blood forming system, GI system, immune system, increased risk for cancer, cardiovascular disease, neurodegenerative disease, death, and cataracts.. The serious health implications from HZE radiation for astronauts who leave Earth’s magnetic field warrant further study. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families (Chernyavskiy, et. al., 2017). Accounting for potential family clustering allows for thorough examination of the primary research questions. Is there a genetic susceptibility to cataracts caused by radiation? Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation and gamma radiation?
 The full dataset includes 1820 unique mice from 48 unique families, with equal random assignments by family to each of three treatment groups. Mice are bred over several generations to create a genetically heterogeneous sample, the better to represent the diverse biology of the human population. The treatments are HZE irradiation, gamma irradiation, and non-irradiated control. The HZE group is irradiated with either silicon or iron nuclei HZE ions, which are considered as a single treatment group. The second group is subjected to 137 Cs gamma irradiation. Mice in both irradiated groups are exposed to radiation at 7-12 weeks of age. The third group is unirradiated control. All mice are monitored until 800 days of age –effectively a survival study. Mice are checked weekly for symptoms of cataracts, cataract risk factors, and other symptoms of radiation exposure such as tumors and carcinomas. Resources do not allow for weekly measurement of every mouse; previous measurements are carried forward if a mouse is not assessed on a particular week. 
-This analysis uses a simplified version of the data set - a snapshot of the 1169 mice that are alive at 552 days. This cutoff is chosen because it is the median survival time for the group with the shortest median survival. There are 47 unique families with n = 396 in the HZE group, n = 277 in the gamma radiation group, and n = 496 in the unirradiated control group. There are up to two generations of mice pups from each family in the dataset, but generation is not distinguished in the simplified data. Family size ranges from n = 11 to n = 48, with median family size of 24.
-
-
+This analysis uses a simplified version of the data set - a snapshot of the 1169 mice that are alive at 552 days. This cutoff is chosen because it is the median survival time for the group with the shortest median survival. There are 47 unique families with n = 396 in the HZE group, n = 277 in the gamma radiation group, and n = 496 in the unirradiated control group. There are up to two generations of mice pups from each family in the dataset, but generation is not distinguished in the simplified data. Family size ranges from n = 11 to n = 48, with median family size of 24.  
+```{r scoregrps}
+cats %>% group_by(Score) %>%
+  count(Treatment) %>%
+  pivot_wider(names_from = Score, values_from = n) %>%
+  group_by(Treatment) %>%
+  mutate(Total = sum(c(`1`, `2`, `3`, `4`))) %>%
+  kbl(caption = "Counts of Score by Treatment") %>%
+  add_header_above(c( " " = 1, "Cataract Score" = 4, " " = 1)) %>%
+  kable_classic(full_width = F, html_font = "Cambria", font_size = 12, position = "float_right") 
+```
+The response is Merriam-Focht cataract score (Merriam & Focht, 1957), an ordinal categorical variable corresponding to radiation-associated ocular changes in the eye. A score of 0 is associated with a completely clear lens, while a score of 5 is associated with a completely occluded lens. This dataset contains cataract score levels = [1, 2, 3, 4]. A score $\ge$ 2 indicates presence of cataracts, and the small sample sizes for score $>$ 2 across all treatment groups raise concerns about making inference on an ordinal analysis; consequently, the response is converted to binary *Cataracts* with score = 1 converted to 0, and score $\ge$ 2 converted to 1. The main experimental factor is *Treatment*, a categorical variable with three levels = [HZE radiation, gamma radiation, non-irradiated control]. A single random effect, genetic *Family*, is a categorical factor with 47 levels. Both Treatment and Family are central to the experimental design and will serve as the basis for all models considered. Additional covariates under consideration are:  
+ + Sex: categorical with two levels = [Male, Female].  
+ + Weight: numeric, in grams; range = [16.11, 59.85].  
+ + Coat color: categorical with six levels = [albino, black, creme brown, grey, light brown, light grey].  
+ + Body condition score (BCS): ordered categorical with 5 levels, representing a range from emaciated to obese. Levels = [BC1, BC2, BC3, BC4, BC5].  
+ + Age: numeric, in days; range = [552, 816].  
+ + Three categorical variables indicating presence of other cancers: Harderian Tumor: categorical with three levels = [bilateral, unilateral, none]. Myeloid Leukemia: binary categorical with two levels = [0, 1]. PreT Lymphoma: binary categorical with two levels = [0, 1].  
+  
+***  
+  
 ## Summary Statistics  
+Exploratory data analysis consist
 
-```{r table}
+```{r table, message = FALSE}
 sex_trt <- cats %>%
   group_by(Treatment, Sex, Cataracts) %>%
   summarise(n = n()) %>%
@@ -130,14 +145,6 @@ ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
   theme_light() +
   labs(y = "mean score",
        title = "Cataracts by Family, Sex, Treatment Group")
-
-ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
-  geom_line(aes(group = Family)) + facet_wrap(vars(Sex)) +
-  scale_color_startrek() +
-  scale_x_discrete(expand = c(0, .2)) +
-  theme_light() +
-  labs(y = "mean score",
-       title = "Cataracts by Family, Sex, Treatment Group")
 ```
 
 ```{r barplot}
@@ -152,12 +159,24 @@ sex_trt <- cats %>%
 cats_grp <- sex_trt %>%
   filter(Cataracts == 1)
 
-ggplot(cats_grp, aes(x = Sex, y = prop, fill = Treatment)) +
+b1 <- ggplot(cats_grp, aes(x = Sex, y = prop, fill = Treatment)) +
   geom_col(position = "dodge") +
   scale_fill_startrek() +
-  theme_minimal() +
-  ggtitle("Sample Proportion with Cataracts by Sex and Treatment Group")
+  theme_light() +
+  ggtitle("Sample Proportion")
 
+logits <- sex_trt %>%
+  group_by(Treatment, Sex) %>%
+  summarise(odds_ratio = prop[Cataracts == 1]/prop[Cataracts == 0])
+
+b2 <- ggplot(logits, aes(x = Sex, y = odds_ratio, fill = Treatment)) +
+  geom_col(position = "dodge") +
+  scale_fill_startrek() +
+  theme_light() +
+  labs(y = "Odds Ratio",
+       title = "Empirical Odds Ratios")
+
+grid.arrange(b1, b2, ncol = 2, top = "Cataracts by Sex, Treatment")
 ```
 
 
@@ -166,7 +185,6 @@ ggplot(cats_grp, aes(x = Sex, y = prop, fill = Treatment)) +
 ### Frequentist Approach
 ```{r glmm}
 # mixed model binomial logistic regression 
-# ???using adaptive Gauss-Hermite quadrature (nAGQ = 25)
 
 mod <- glmer(Cataracts ~ Treatment*Sex + (1|Family), data = cats, family = binomial)
 summary(mod)
@@ -175,40 +193,69 @@ summary(mod)
 ```{r glmm_ors}
 plot_model(mod, sort.est = TRUE, show.values = TRUE, type = "int",
            color = "Dark2", vline.color = "darkorchid3",
-           width = 0.1, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
+           width = 0.1, title = "Final Model: Probabilities of Cataracts by Sex, Treatment Group")
 tab_model(mod, show.re.var = TRUE,
           pred.labels = c("Control(Female)", "Gamma(Female)", "HZE(Female)",
                           "Control(Male)", "Gamma(Male)", "HZE(Male)"),
-          dv.labels = "Final Model Effects of Treatment on Cataracts")
+          dv.labels = "Final Model: Odds Ratios of Cataracts by Sex, Treatment Group")
 ```
 
 ```{r contr}
 cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
 cats_emms
 pairs(cats_emms, reverse = TRUE)
-emmip(cats_emms, Treatment ~ Sex)
+emmip(cats_emms, Treatment ~ Sex) + theme_light() + 
+  ggtitle("Predicted Probabilities of Cataracts \nby Sex and Treatment Group") + scale_color_startrek()
 ```
 
-***  
   
 ### Bayesian Approach  
+We fit a complementary Bayesian model to examine the distribution of the estimates from our final model, as well as test its robustness to alternative approaches. The Bayes model is parameterized as:
+
+\[
+\begin{aligned}
+Y_{ij} \sim &Bernoulli(p)\\
+log(\frac{p}{1-p}) = &\ \beta_0*Control_i*F_i\ +\beta_1*Gamma_i*F_i\ + \beta_2*HZE_i*F_i\ + \\ &\beta_3*Control_i*M_i\ +\beta_4*Gamma*M\ + \beta_5*HZE*M\ + \\
+&v_{j} + \epsilon_{ij}\\
+&i = 1, ..., 1169\ \mbox{ mice} \\
+&j = 1,...,47\ \ \mbox{ families, and} \\
+v_j \sim\ &N(0, \tau)
+\end{aligned}
+\]  
+
+
+With non-informative parameters:  
+\[
+\begin{aligned}
+\beta_0 &\sim N(0, 0.001)\\
+\beta_1 &\sim N(0, 0.001)\\
+\beta_2 &\sim N(0, 0.001)\\
+\beta_3 &\sim N(0, 0.001)\\
+\beta_4 &\sim N(0, 0.001)\\
+\beta_5 &\sim N(0, 0.001)\\
+\tau &\sim Gamma(0.001, 0.001) \mbox{ where}\ \sigma^2 = 1/\tau\\
+\end{aligned}
+\]  
+  
+The model was run through a Gibbs sampler Markov Chain Monte Carlo (MCMC) algorithm to approximate the posterior distribution of all fixed effects estimates and the variance of the random effect. 3 chains of 60000 total iterations with a 10000-iteration burn-in period; starting values were obtained from the estimates generated by the Frequentist model, with noise added to avoid false convergence.      
+
 ```{r spec_mod}
 # Specify the model
 cat("model{
   for(i in 1:N){
     CAT[i] ~ dbern(p[i])     # Bernoulli-distributed response
-    logit(p[i])<- b0*Unirradiated[i] + b1*Gamma[i] + b2*HZE[i] + b3*Male[i] +
+    logit(p[i])<- b0+ b1*Gamma[i] + b2*HZE[i] + b3*Male[i] +
     b4*Male[i]*Gamma[i] + b5*Male[i]*HZE[i] + a[Family[i]]   # likelihood function
   }
   for(j in 1:nFam){
     a[j] ~ dnorm(0, tau)
   }
-  b0 ~ dnorm(0.0, 1.0E-4)   # vaguely informative priors
-  b1 ~ dnorm(0.0, 1.0E-4)
-  b2 ~ dnorm(0.0, 1.0E-4)
-  b3 ~ dnorm(0.0, 1.0E-4)
-  b4 ~ dnorm(0.0, 1.0E-4)
-  b5 ~ dnorm(0.0, 1.0E-4)
+  b0 ~ dnorm(0.0, 1.0E-3)   # vaguely informative priors
+  b1 ~ dnorm(0.0, 1.0E-3)
+  b2 ~ dnorm(0.0, 1.0E-3)
+  b3 ~ dnorm(0.0, 1.0E-3)
+  b4 ~ dnorm(0.0, 1.0E-3)
+  b5 ~ dnorm(0.0, 1.0E-3)
   tau ~ dgamma(1.0E-3,1.0E-3)
   sigma2 <- 1/tau     # convert precision 'tau' to variance 'sigma2'
 }", file = "cat.jag")
@@ -223,7 +270,7 @@ colnames(treatment) <- c("Unirradiated", "Gamma", "HZE")
 cats <- data.frame(cats, treatment, sex)
 
 # format relevant data as a list
-data <- list(CAT = cats$Cataracts, Unirradiated = cats$Unirradiated, Gamma = cats$Gamma, 
+data <- list(CAT = cats$Cataracts, Gamma = cats$Gamma, 
              HZE = cats$HZE, Male = cats$SexM, Family = cats$Family, 
              nFam = length(unique(cats$Family)), N = nrow(cats))
 ```
@@ -244,7 +291,7 @@ inits <- list(list("tau" = var+0.2, "b0" = ests[1]+0.5, "b1" = ests[2]+0.5, "b2"
                    "b3" = ests[4], "b4" = ests[5], "b5" = ests[6]))
 ```
 
-```{r run_bayes}
+```{r run_bayes, message = FALSE}
 # -- Compile and run the model
 params <- c("b0", "b1", "b2", "b3", "b4", "b5", "sigma2")
 set.seed(556)
@@ -261,13 +308,116 @@ model.fit <- jags(data = data,
 
 ```{r bayes_summary}
 mcmc.model <- as.mcmc(model.fit)
-summary(mcmc.model)
+#summary(mcmc.model)
 
-# extract mean estimates
-est_means <- summary(mcmc.model)$statistics[,1]
+# Convert posterior distributions to odd ratios
+ors <- exp(mcmc.model[[3]][,-7])
+posts <- ors / (1 + ors)
+phpds <- HPDinterval(posts)
+posts <- data.frame(posts)
 
-# calculate highest posterior density (HPD) credible intervals
-hpds <- hpds <- HPDinterval(mcmc.model[[3]])
+# Create table of posterior estimates
+means <- apply(posts, 2, mean)
+medians <- apply(posts, 2, median)
+mode_fun <- function(x) {
+  ux <- round(unique(x), digits = 3)
+  return(ux[which.max(tabulate(match(x, ux)))])
+}
+modes <- apply(round(posts, 4), 2, mode_fun)
+sds <- apply(posts, 2, sd)
+bayes_tab <- round(data.frame(means, medians, modes, sds, phpds), digits = 3)
+rownames(bayes_tab) <- c("$\\beta_0$", "$\\beta_1$", "$\\beta_2$", "$\\beta_3$", "$\\beta_4$", "$\\beta_5$", "$\\sigma^2$")
+```
+
+```{r bayes_tab}
+kbl(bayes_tab,
+    caption = "Bayes Model: Posterior Distribution Statistics",
+    col.names = c("Mean", "Median", "Mode", "SD", "HPD Lower", "HPD Upper")) %>%
+  kable_styling(latex_options = "hold_position") %>%
+  kable_classic_2(full_width = F, html_font = "Cambria", position = "float_left")
+```
+
+```{r postdens}
+p0 <- ggplot(posts, aes(x = b0)) +
+  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[1,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[1,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[1,2]), color = "darkorange3") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_light() +
+  theme(plot.title = element_text(size= 12)) + 
+  labs(x = "Probability",
+       title = "Female Control")
+
+p1 <- ggplot(posts, aes(x = b1)) +
+  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[2,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[2,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[2,2]), color = "darkorange3") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_light() +
+  theme(plot.title = element_text(size= 12)) + 
+  labs(x = "Probability",
+       title = "Female Gamma")
+
+p2 <- ggplot(posts, aes(x = b2)) +
+  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[3,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[3,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[3,2]), color = "darkorange3") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_light() +
+  theme(plot.title = element_text(size= 12)) + 
+  labs(x = "Probability",
+       title = "Female HZE")
+
+p3 <- ggplot(posts, aes(x = b3)) +
+  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[4,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[4,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[4,2]), color = "darkorange3") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_light() +
+  theme(plot.title = element_text(size= 12)) + 
+  labs(x = "Probability",
+       title = "Male Contro")
+
+p4 <- ggplot(posts, aes(x = b4)) +
+  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[5,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[5,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[5,2]), color = "darkorange3") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_light() +
+  theme(plot.title = element_text(size= 12)) + 
+  labs(x = "Probability",
+       title = "Male Gamma")
+
+p5 <- ggplot(posts, aes(x = b5)) +
+  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[6,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[6,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[6,2]), color = "darkorange3") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_light() +
+  theme(plot.title = element_text(size= 12)) + 
+  labs(x = "Probability",
+       title = "Male HZE")
+
+
+p6 <- ggplot(posts, aes(x = sigma2)) +
+  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[7,5]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[7,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[7,3]), color = "darkorange3") + # calculate mode and replot
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_light() +
+  theme(plot.title = element_text(size= 12)) + 
+  labs(x = "Probability",
+       title = "Random Family Variance")
+
+grid.arrange(p0, p1, p2, p3, p4, p5, p6, 
+             ncol = 3, top = "Posterior Densities with 95% HPD Intervals")
 ```
 
 ## Limitations and Alternatives
