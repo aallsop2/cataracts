@@ -311,8 +311,7 @@ mcmc.model <- as.mcmc(model.fit)
 #summary(mcmc.model)
 
 # Convert posterior distributions to odd ratios
-ors <- exp(mcmc.model[[3]][,-7])
-posts <- ors / (1 + ors)
+posts <- mcmc.model[[3]][,-7]save 
 phpds <- HPDinterval(posts)
 posts <- data.frame(posts)
 

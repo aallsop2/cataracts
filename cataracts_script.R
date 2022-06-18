@@ -432,6 +432,12 @@ cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
 cats_emms
 pairs(cats_emms, reverse = TRUE)
 
+# save lineplot of probs for presentation
+png(filename = "est_probs_plot.png", units = "in", width = 5, height = 5, res = 300)
+emmip(cats_emms, Treatment ~ Sex) + theme_light() +
+  ggtitle("Estimated Marginal Probabilities of \nCataracts by Sex, Treatment Group") + scale_color_startrek()
+dev.off()
+
 # -- Bayesian Logistic Regression
 # note: when moving to rmarkdown, make sure to specify/compile model in separate chunks!
 library(coda)

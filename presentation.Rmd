@@ -6,7 +6,11 @@ date: "`r Sys.Date()`"
 output: 
   ioslides_presentation: 
     widescreen: true
-    fontsize: 10
+    fontsize: 12
+    css: slides > slide.backdrop{
+    background: none !important;
+    background-color: white !important;
+    }
 
 ---
 
@@ -30,10 +34,12 @@ knitr::opts_chunk$set(echo = FALSE)
     + Mixed Logistic Regression with Treatment as a fixed effect, Family as a random effect, and accounting for any practically significant covariates. Obtain estimates for odds ratios. 
     + Bayesian Mixed Logistic Regression counterpart to Frequentist final model to obtain probability distributions for odds ratios.  
 
-## Summary Tables & Plots
+## Summary Tables & Plots  
+ + add barplot of empirical proportions
+ + add lineplot of avg family score by sex, treatment (update title to proportion)
 
 
-## Mixed Logistic Regression
+## Final Model
 
 The final model can be written as:  
 \[
@@ -45,11 +51,6 @@ log(\frac{p}{1-p}) = &\ \beta_0*Control_i*F_i\ +\beta_1*Gamma_i*F_i\ + \beta_2*H
 &j = 1,...,47\ \ \mbox{ families}
 \end{aligned}
 \]  
-
-
-
-## Bayesian Mixed Logistic Regression
-<div class='"columns-2">
 
 The final Bayesian model can be written as:  
 \[
@@ -64,7 +65,7 @@ v_j \sim N(0, \tau)
 \]  
 
 
-With non-informative parameters:  
+With non-informative priors:  
 \[
 \begin{aligned}
 \beta_0 &\sim N(0, 0.001)\\
@@ -77,97 +78,18 @@ With non-informative parameters:
 \end{aligned}
 \]
  
-</div>  
+## Results
 
-```{r postdens}
-p0 <- ggplot(posts, aes(x = b0)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[1,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[1,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[1,2]), color = "darkorange3") +
-  scale_x_continuous(expand = c(0, 0)) +
-  theme_light() +
-  theme(plot.title = element_text(size= 12)) + 
-  labs(x = "Probability",
-       title = "Female Control")
-
-p1 <- ggplot(posts, aes(x = b1)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[2,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[2,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[2,2]), color = "darkorange3") +
-  scale_x_continuous(expand = c(0, 0)) +
-  theme_light() +
-  theme(plot.title = element_text(size= 12)) + 
-  labs(x = "Probability",
-       title = "Female Gamma")
-
-p2 <- ggplot(posts, aes(x = b2)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[3,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[3,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[3,2]), color = "darkorange3") +
-  scale_x_continuous(expand = c(0, 0)) +
-  theme_light() +
-  theme(plot.title = element_text(size= 12)) + 
-  labs(x = "Probability",
-       title = "Female HZE")
-
-p3 <- ggplot(posts, aes(x = b3)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[4,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[4,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[4,2]), color = "darkorange3") +
-  scale_x_continuous(expand = c(0, 0)) +
-  theme_light() +
-  theme(plot.title = element_text(size= 12)) + 
-  labs(x = "Probability",
-       title = "Male Contro")
-
-p4 <- ggplot(posts, aes(x = b4)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[5,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[5,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[5,2]), color = "darkorange3") +
-  scale_x_continuous(expand = c(0, 0)) +
-  theme_light() +
-  theme(plot.title = element_text(size= 12)) + 
-  labs(x = "Probability",
-       title = "Male Gamma")
-
-p5 <- ggplot(posts, aes(x = b5)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[6,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[6,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[6,2]), color = "darkorange3") +
-  scale_x_continuous(expand = c(0, 0)) +
-  theme_light() +
-  theme(plot.title = element_text(size= 12)) + 
-  labs(x = "Probability",
-       title = "Male HZE")
-
-
-p6 <- ggplot(posts, aes(x = sigma2)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[7,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[7,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[7,3]), color = "darkorange3") + # calculate mode and replot
-  scale_x_continuous(expand = c(0, 0)) +
-  theme_light() +
-  theme(plot.title = element_text(size= 12)) + 
-  labs(x = "Probability",
-       title = "Random Family Variance")
-
-grid.arrange(p0, p1, p2, p3, p4, p5, p6, 
-             ncol = 3, top = "Posterior Densities with 95% HPD Intervals")
-```
+## Results continued {.flexbox .vcenter}
+<div class="centered">
+![](est_probs_plot.png){width=70%, height=70%}
+</div>
   
-## Results & Conclusions  
-
-- What can we infer about fixed and random effects from the models?
-- Limitations?  
-- What questions does this raise for future studies?  
+## Conclusions
+ + Fixed effects conclusions
+ + RE conclusions based on model selection and HPD Interval
+ + Presence of competing risks complicates inference
+ 
+Any Questions? (applause!)
   
-## References  
-  
-## Any Questions?  
+## References
