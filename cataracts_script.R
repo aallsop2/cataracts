@@ -258,6 +258,23 @@ ggplot(cats, aes(x = Treatment, y = Score, color = Treatment)) + geom_jitter(wid
   labs(x = "Treatment Group", y = "Cataract Score", color = "Group",
        title = "Cataract Score by Treatment, faceted by Family")
 
+# save eda plots for presentation
+png(filename = "eda.png", units = "in", width = 12, height = 7, res = 300)
+l1 <- ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
+  geom_line(aes(group = Family)) + facet_grid(vars(Sex)) +
+  scale_color_startrek() +
+  scale_x_discrete(expand = c(0, .2)) +
+  theme_light() +
+  labs(y = "mean score",
+       title = "Cataract Score \nby Family, Sex, Treatment Group")
+b1 <- ggplot(cats_grp, aes(x = Sex, y = prop, fill = Treatment)) +
+  geom_col(position = "dodge") +
+  scale_fill_startrek() +
+  theme_light() +
+  ggtitle("Cataract Sample Proportion \nby Sex, Treatment Group")
+grid.arrange(b1, l1, ncol = 2)
+dev.off()
+
 # -- Predictor Correlation
 
 # Numeric Variable Correlations
@@ -443,6 +460,12 @@ cats_emms
 pairs(cats_emms, reverse = TRUE)
 >>>>>>> ALB_analysis
 
+# save lineplot of probs for presentation
+png(filename = "est_probs_plot.png", units = "in", width = 6, height = 6, res = 300)
+emmip(cats_emms, Treatment ~ Sex) + theme_light() +
+  ggtitle("Estimated Marginal Probabilities of \nCataracts by Sex, Treatment Group") + scale_color_startrek()
+dev.off()
+
 # -- Bayesian Logistic Regression
 # note: when moving to rmarkdown, make sure to specify/compile model in separate chunks!
 library(coda)
@@ -518,7 +541,7 @@ plot(mcmc.model)
 gelman.diag(mcmc.model)
 gelman.plot(mcmc.model)
 
-traplot(mcmc.model, parms = "sigma2")
+traplot(mcmc.model, parms = c("b0", "b1", "b2", "b3", "b4", "b5", "sigma2"))
 denplot(mcmc.model, parms = params)
 acf(mcmc.model[[3]][,1])
 acf(mcmc.model[[3]][,2])
@@ -535,8 +558,7 @@ ggs_density(ggmcmc.model)
 hpds <- HPDinterval(mcmc.model[[3]])
 
 # Convert posterior distributions to odd ratios
-ors <- exp(mcmc.model[[3]][,-7])
-posts <- ors / (1 + ors)
+posts <- mcmc.model[[3]][,-7]
 phpds <- HPDinterval(posts)
 posts <- data.frame(posts)
 
@@ -549,14 +571,24 @@ mode_fun <- function(x) {
 }
 modes <- apply(round(posts, 4), 2, mode_fun)
 sds <- apply(posts, 2, sd)
-bayes_tab <- round(data.frame(means, medians, modes, sds, phpds), digits = 3)
-rownames(bayes_tab) <- c("$\\beta_0$", "$\\beta_1$", "$\\beta_2$", "$\\beta_3$", "$\\beta_4$", "$\\beta_5$", "$\\sigma^2$")
+bayes_tab <- round(data.frame(c(ests, var), means, medians, modes, sds, phpds), digits = 3)
+rownames(bayes_tab) <- c("$\\hat{\\beta_0}$", "$\\hat{\\beta_1}$", "$\\hat{\\beta_2}$",
+                         "$\\hat{\\beta_3}$", "$\\hat{\\beta_4}$", "$\\hat{\\beta_5}$", "$\\hat{\\sigma^2}$")
 
 kbl(bayes_tab,
-    caption = "Bayes Model: Posterior Distribution Statistics",
-    col.names = c("Mean", "Median", "Mode", "SD", "HPD Lower", "HPD Upper")) %>%
+    caption = "Final Model  Statistics", row.names = TRUE,
+    col.names = c("GLMM Est", "MCMC Mean", "MCMC Median", "MCMC Mode", "MCMC SD", "HPD Lower", "HPD Upper")) %>%
   kable_styling(latex_options = "hold_position") %>%
   kable_classic_2(full_width = F, html_font = "Cambria")
+
+
+kbl(bayes_tab,
+    caption = "Final Model  Statistics", row.names = TRUE,
+    col.names = c("GLMM Est", "MCMC Mean", "MCMC Median", "MCMC Mode", "MCMC SD", "HPD Lower", "HPD Upper")) %>%
+  kable_styling(latex_options = "hold_position") %>%
+  kable_classic_2(full_width = F, html_font = "Cambria")
+
+
 
 # Posterior density plots with HPD intervals
 

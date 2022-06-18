@@ -65,10 +65,10 @@ cats <- cats %>%
 
 ## Abstract
 
-## Introduction  
-Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth’s magnetic field. In contrast, extensive research shows exposure to high doses of gamma radiation leads to acute radiation sickness. Effects include damage to the blood forming system, GI system, immune system, increased risk for cancer, cardiovascular disease, neurodegenerative disease, death, and cataracts.. The serious health implications from HZE radiation for astronauts who leave Earth’s magnetic field warrant further study. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families (Chernyavskiy, et. al., 2017). Accounting for potential family clustering allows for thorough examination of the primary research questions. Is there a genetic susceptibility to cataracts caused by radiation? Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation and gamma radiation?
-The full dataset includes 1820 unique mice from 48 unique families, with equal random assignments by family to each of three treatment groups. Mice are bred over several generations to create a genetically heterogeneous sample, the better to represent the diverse biology of the human population. The treatments are HZE irradiation, gamma irradiation, and non-irradiated control. The HZE group is irradiated with either silicon or iron nuclei HZE ions, which are considered as a single treatment group. The second group is subjected to 137 Cs gamma irradiation. Mice in both irradiated groups are exposed to radiation at 7-12 weeks of age. The third group is unirradiated control. All mice are monitored until 800 days of age –effectively a survival study. Mice are checked weekly for symptoms of cataracts, cataract risk factors, and other symptoms of radiation exposure such as tumors and carcinomas. Resources do not allow for weekly measurement of every mouse; previous measurements are carried forward if a mouse is not assessed on a particular week. 
-This analysis uses a simplified version of the data set - a snapshot of the 1169 mice that are alive at 552 days. This cutoff is chosen because it is the median survival time for the group with the shortest median survival. There are 47 unique families with n = 396 in the HZE group, n = 277 in the gamma radiation group, and n = 496 in the unirradiated control group. There are up to two generations of mice pups from each family in the dataset, but generation is not distinguished in the simplified data. Family size ranges from n = 11 to n = 48, with median family size of 24.  
+## Introduction
+
+Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth's magnetic field. In contrast, extensive research shows exposure to high doses of gamma radiation leads to acute radiation sickness. Effects include damage to the blood forming system, GI system, immune system, increased risk for cancer, cardiovascular disease, neurodegenerative disease, death, and cataracts.. The serious health implications from HZE radiation for astronauts who leave Earth's magnetic field warrant further study. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families (Chernyavskiy, et. al., 2017). Accounting for potential family clustering allows for thorough examination of the primary research questions. Is there a genetic susceptibility to cataracts caused by radiation? Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation and gamma radiation? The full dataset includes 1820 unique mice from 48 unique families, with equal random assignments by family to each of three treatment groups. Mice are bred over several generations to create a genetically heterogeneous sample, the better to represent the diverse biology of the human population. The treatments are HZE irradiation, gamma irradiation, and non-irradiated control. The HZE group is irradiated with either silicon or iron nuclei HZE ions, which are considered as a single treatment group. The second group is subjected to 137 Cs gamma irradiation. Mice in both irradiated groups are exposed to radiation at 7-12 weeks of age. The third group is unirradiated control. All mice are monitored until 800 days of age --effectively a survival study. Mice are checked weekly for symptoms of cataracts, cataract risk factors, and other symptoms of radiation exposure such as tumors and carcinomas. Resources do not allow for weekly measurement of every mouse; previous measurements are carried forward if a mouse is not assessed on a particular week. This analysis uses a simplified version of the data set - a snapshot of the 1169 mice that are alive at 552 days. This cutoff is chosen because it is the median survival time for the group with the shortest median survival. There are 47 unique families with n = 396 in the HZE group, n = 277 in the gamma radiation group, and n = 496 in the unirradiated control group. There are up to two generations of mice pups from each family in the dataset, but generation is not distinguished in the simplified data. Family size ranges from n = 11 to n = 48, with median family size of 24.
+
 ```{r scoregrps}
 cats %>% group_by(Score) %>%
   count(Treatment) %>%
@@ -79,17 +79,19 @@ cats %>% group_by(Score) %>%
   add_header_above(c( " " = 1, "Cataract Score" = 4, " " = 1)) %>%
   kable_classic(full_width = F, html_font = "Cambria", font_size = 12, position = "float_right") 
 ```
-The response is Merriam-Focht cataract score (Merriam & Focht, 1957), an ordinal categorical variable corresponding to radiation-associated ocular changes in the eye. A score of 0 is associated with a completely clear lens, while a score of 5 is associated with a completely occluded lens. This dataset contains cataract score levels = [1, 2, 3, 4]. A score $\ge$ 2 indicates presence of cataracts, and the small sample sizes for score $>$ 2 across all treatment groups raise concerns about making inference on an ordinal analysis; consequently, the response is converted to binary *Cataracts* with score = 1 converted to 0, and score $\ge$ 2 converted to 1. The main experimental factor is *Treatment*, a categorical variable with three levels = [HZE radiation, gamma radiation, non-irradiated control]. A single random effect, genetic *Family*, is a categorical factor with 47 levels. Both Treatment and Family are central to the experimental design and will serve as the basis for all models considered. Additional covariates under consideration are:  
- + Sex: categorical with two levels = [Male, Female].  
- + Weight: numeric, in grams; range = [16.11, 59.85].  
- + Coat color: categorical with six levels = [albino, black, creme brown, grey, light brown, light grey].  
- + Body condition score (BCS): ordered categorical with 5 levels, representing a range from emaciated to obese. Levels = [BC1, BC2, BC3, BC4, BC5].  
- + Age: numeric, in days; range = [552, 816].  
- + Three categorical variables indicating presence of other cancers: Harderian Tumor: categorical with three levels = [bilateral, unilateral, none]. Myeloid Leukemia: binary categorical with two levels = [0, 1]. PreT Lymphoma: binary categorical with two levels = [0, 1].  
-  
-***  
-  
-## Summary Statistics  
+
+The response is Merriam-Focht cataract score (Merriam & Focht, 1957), an ordinal categorical variable corresponding to radiation-associated ocular changes in the eye. A score of 0 is associated with a completely clear lens, while a score of 5 is associated with a completely occluded lens. This dataset contains cataract score levels = [1, 2, 3, 4]. A score $\ge$ 2 indicates presence of cataracts, and the small sample sizes for score $>$ 2 across all treatment groups raise concerns about making inference on an ordinal analysis; consequently, the response is converted to binary *Cataracts* with score = 1 converted to 0, and score $\ge$ 2 converted to 1. The main experimental factor is *Treatment*, a categorical variable with three levels = [HZE radiation, gamma radiation, non-irradiated control]. A single random effect, genetic *Family*, is a categorical factor with 47 levels. Both Treatment and Family are central to the experimental design and will serve as the basis for all models considered. Additional covariates under consideration are:\
++ Sex: categorical with two levels = [Male, Female].\
++ Weight: numeric, in grams; range = [16.11, 59.85].\
++ Coat color: categorical with six levels = [albino, black, creme brown, grey, light brown, light grey].\
++ Body condition score (BCS): ordered categorical with 5 levels, representing a range from emaciated to obese. Levels = [BC1, BC2, BC3, BC4, BC5].\
++ Age: numeric, in days; range = [552, 816].\
++ Three categorical variables indicating presence of other cancers: Harderian Tumor: categorical with three levels = [bilateral, unilateral, none]. Myeloid Leukemia: binary categorical with two levels = [0, 1]. PreT Lymphoma: binary categorical with two levels = [0, 1].
+
+------------------------------------------------------------------------
+
+## Summary Statistics
+
 Exploratory data analysis consist
 
 ```{r table, message = FALSE}
@@ -138,7 +140,7 @@ grsex_score <- cats %>%
   summarize(mean_score = mean(Cataracts))
 
 # choose facet direction and just show one
-ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
+l1 <- ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
   geom_line(aes(group = Family)) + facet_grid(vars(Sex)) +
   scale_color_startrek() +
   scale_x_discrete(expand = c(0, .2)) +
@@ -179,10 +181,10 @@ b2 <- ggplot(logits, aes(x = Sex, y = odds_ratio, fill = Treatment)) +
 grid.arrange(b1, b2, ncol = 2, top = "Cataracts by Sex, Treatment")
 ```
 
-
 ## Statistical Methods
 
 ### Frequentist Approach
+
 ```{r glmm}
 # mixed model binomial logistic regression 
 
@@ -208,11 +210,11 @@ emmip(cats_emms, Treatment ~ Sex) + theme_light() +
   ggtitle("Predicted Probabilities of Cataracts \nby Sex and Treatment Group") + scale_color_startrek()
 ```
 
-  
-### Bayesian Approach  
+### Bayesian Approach
+
 We fit a complementary Bayesian model to examine the distribution of the estimates from our final model, as well as test its robustness to alternative approaches. The Bayes model is parameterized as:
 
-\[
+$$
 \begin{aligned}
 Y_{ij} \sim &Bernoulli(p)\\
 log(\frac{p}{1-p}) = &\ \beta_0*Control_i*F_i\ +\beta_1*Gamma_i*F_i\ + \beta_2*HZE_i*F_i\ + \\ &\beta_3*Control_i*M_i\ +\beta_4*Gamma*M\ + \beta_5*HZE*M\ + \\
@@ -221,11 +223,10 @@ log(\frac{p}{1-p}) = &\ \beta_0*Control_i*F_i\ +\beta_1*Gamma_i*F_i\ + \beta_2*H
 &j = 1,...,47\ \ \mbox{ families, and} \\
 v_j \sim\ &N(0, \tau)
 \end{aligned}
-\]  
+$$
 
-
-With non-informative parameters:  
-\[
+With non-informative parameters:\
+$$
 \begin{aligned}
 \beta_0 &\sim N(0, 0.001)\\
 \beta_1 &\sim N(0, 0.001)\\
@@ -235,9 +236,9 @@ With non-informative parameters:
 \beta_5 &\sim N(0, 0.001)\\
 \tau &\sim Gamma(0.001, 0.001) \mbox{ where}\ \sigma^2 = 1/\tau\\
 \end{aligned}
-\]  
-  
-The model was run through a Gibbs sampler Markov Chain Monte Carlo (MCMC) algorithm to approximate the posterior distribution of all fixed effects estimates and the variance of the random effect. 3 chains of 60000 total iterations with a 10000-iteration burn-in period; starting values were obtained from the estimates generated by the Frequentist model, with noise added to avoid false convergence.      
+$$
+
+The model was run through a Gibbs sampler Markov Chain Monte Carlo (MCMC) algorithm to approximate the posterior distribution of all fixed effects estimates and the variance of the random effect. 3 chains of 60000 total iterations with a 10000-iteration burn-in period; starting values were obtained from the estimates generated by the Frequentist model, with noise added to avoid false convergence.
 
 ```{r spec_mod}
 # Specify the model
@@ -311,8 +312,7 @@ mcmc.model <- as.mcmc(model.fit)
 #summary(mcmc.model)
 
 # Convert posterior distributions to odd ratios
-ors <- exp(mcmc.model[[3]][,-7])
-posts <- ors / (1 + ors)
+posts <- mcmc.model[[3]][,-7] 
 phpds <- HPDinterval(posts)
 posts <- data.frame(posts)
 
@@ -325,15 +325,23 @@ mode_fun <- function(x) {
 }
 modes <- apply(round(posts, 4), 2, mode_fun)
 sds <- apply(posts, 2, sd)
+<<<<<<< HEAD
 glm_probs <- exp(ests) / (1 + exp(ests))
 bayes_tab <- round(data.frame(glm_probs, means, medians, modes, sds, phpds), digits = 3)
+=======
+bayes_tab <- round(data.frame(c(ests, var), means, medians, modes, sds, phpds), digits = 3)
+>>>>>>> ALB_analysis
 rownames(bayes_tab) <- c("$\\beta_0$", "$\\beta_1$", "$\\beta_2$", "$\\beta_3$", "$\\beta_4$", "$\\beta_5$", "$\\sigma^2$")
 ```
 
 ```{r bayes_tab}
 kbl(bayes_tab,
     caption = "Final Model Statistics",
+<<<<<<< HEAD
     col.names = c("GLMM Est", "Bayes Mean", "Bayes Median", "Bayes Mode", "Bayes SD", "Bayes HPD Lower", "Bayes HPD Upper")) %>%
+=======
+    col.names = c("GLMM Est", "MCMC Mean", "MCMC Median", "MCMC Mode", "MCMC SD", "HPD Lower", "HPD Upper")) %>%
+>>>>>>> ALB_analysis
   kable_styling(latex_options = "hold_position") %>%
   kable_classic_2(full_width = F, html_font = "Cambria", position = "float_left")
 ```
@@ -423,25 +431,24 @@ grid.arrange(p0, p1, p2, p3, p4, p5, p6,
 
 ## Limitations and Alternatives
 
-Presence of competing risks in the experimental design obscure the presence of family clusters of cataracts. It is reasonable to assume that individuals in the irradiated Treatment groups were more likely to die due to more acute effects of irradiation before developing cataracts, compared to individuals in the control group. Simplifying the dataset by instituting a cutoff age attempts to address this limitation, but the issue persists even after excluding individuals deceased before Age = 552.  
-
+Presence of competing risks in the experimental design obscure the presence of family clusters of cataracts. It is reasonable to assume that individuals in the irradiated Treatment groups were more likely to die due to more acute effects of irradiation before developing cataracts, compared to individuals in the control group. Simplifying the dataset by instituting a cutoff age attempts to address this limitation, but the issue persists even after excluding individuals deceased before Age = 552.
 
 ## Results and Conclusions
 
-## Authors' Statements  
-  
-Both authors contributed to statistical analysis and writing for this report. Both authors read and approved the final report. Both authors contributed equally to introduction, exploratory data analysis and summary statistics. Alyssa Allsop served as the primary statistician on Frequentist models; Amira Burns served as the primary statistician on Bayesian models. 
+## Authors' Statements
 
-## References  
+Both authors contributed to statistical analysis and writing for this report. Both authors read and approved the final report. Both authors contributed equally to introduction, exploratory data analysis and summary statistics. Alyssa Allsop served as the primary statistician on Frequentist models; Amira Burns served as the primary statistician on Bayesian models.
 
-Agresti, A (2013). *Categorical Data Analysis* (Third Edition). John Wiley & Sons.  
-  
-Chernyavskiy, P., Edmondson, E. F., Weil, M. M., & Little, M. P. (2017). *High-energy particle beam and gamma radiation exposure, familial relatedness and cancer in mice.* British journal of cancer, 117(1), 41–50. https://doi.org/10.1038/bjc.2017.141  
-  
-Gelman, A., Carlin, J., Stern, H., Dunson, D., Vehtari, A., Rubin, D. (2014). *Bayesian Data Analysis* (Third Edition). CRC Press.  
-  
-Roback, P., Legler, J. (2021). *Beyond Multiple Linear Regression. Applied Generalized Linear Models and Multilevel Models in R* (Second Edition). CRC Press. Online version: https://bookdown.org/roback/bookdown-BeyondMLR/  
-  
-DiMaggio, C., Albert, J., Spiegelhalter, D., Best, N., Gelman, A., Carstensen, B., Guerrin, L., Jensen, S. (2015) *Bayesian Analysis for Epidemiologists III: Regression Modeling.* Center for Injury Epidemiology and Prevention at Columbia University.  http://www.columbia.edu/~cjd11/charles_dimaggio/DIRE/styled-4/styled-11/code-8/#bayesian-regression-modeling-with-bugs-or-jags
+## References
+
+Agresti, A (2013). *Categorical Data Analysis* (Third Edition). John Wiley & Sons.
+
+Chernyavskiy, P., Edmondson, E. F., Weil, M. M., & Little, M. P. (2017). *High-energy particle beam and gamma radiation exposure, familial relatedness and cancer in mice.* British journal of cancer, 117(1), 41--50. <https://doi.org/10.1038/bjc.2017.141>
+
+Gelman, A., Carlin, J., Stern, H., Dunson, D., Vehtari, A., Rubin, D. (2014). *Bayesian Data Analysis* (Third Edition). CRC Press.
+
+Roback, P., Legler, J. (2021). *Beyond Multiple Linear Regression. Applied Generalized Linear Models and Multilevel Models in R* (Second Edition). CRC Press. Online version: <https://bookdown.org/roback/bookdown-BeyondMLR/>
+
+DiMaggio, C., Albert, J., Spiegelhalter, D., Best, N., Gelman, A., Carstensen, B., Guerrin, L., Jensen, S. (2015) *Bayesian Analysis for Epidemiologists III: Regression Modeling.* Center for Injury Epidemiology and Prevention at Columbia University. <http://www.columbia.edu/~cjd11/charles_dimaggio/DIRE/styled-4/styled-11/code-8/#bayesian-regression-modeling-with-bugs-or-jags>
 
 ## Appendix
