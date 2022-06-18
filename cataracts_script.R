@@ -10,6 +10,7 @@ library(ggsci)
 library(lme4)
 library(sjPlot)
 library(emmeans)
+library(broom.mixed)
 
 # -- Read in the data
 cats <- read_excel("GRSD.cataract.xlsx", sheet = "Sheet1")
@@ -410,50 +411,7 @@ summary(fixmod)
 
 AIC(mod0, modfull, modsex, mod, fixmod)
 
-# Final model contains fixed effects for Treatment, Sex, an interaction term, and a random effect for Family
-plot_model(mod, sort.est = TRUE, show.values = TRUE, type = "int", pred.type = "re",
-           color = "Dark2", show.p = TRUE,
-           width = 0.5, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
-tab_model(mod, show.re.var = TRUE,
-          pred.labels = c("Control(Female)", "Gamma(Female)", "HZE(Female)",
-                          "Control(Male)", "Gamma(Male)", "HZE(Male)"),
-          dv.labels = "Final Model Effects of Treatment on Cataracts")
 
-# Extract estimates for fixed and random effects
-coefs <- data.frame(coef(mod)$Family) %>%
-  rename(Intercept = X.Intercept.,
-         Gamma_F = TreatmentGamma,
-         HZE_F = TreatmentHZE,
-         M = SexM,
-         Gamma_M = TreatmentGamma.SexM,
-         HZE_M = TreatmentHZE.SexM) %>%
-  rownames_to_column("Family")
-pred_dat <- cats %>%
-  select(c(Treatment, Sex, Family, Cataracts)) %>%
-  left_join(coefs, by = "Family") %>%
-  mutate(Fits = fitted(mod))
-pred_dat <- pred_dat %>%
-  mutate(FixEff = ifelse(Treatment == "Unirradiated" & Sex == "F", 0,
-                         ifelse(Treatment == "Gamma" & Sex == "F", Gamma_F,
-                                ifelse(Treatment == "HZE" & Sex == "F", HZE_F,
-                                       ifelse(Treatment == "Unirradiated" & Sex == "M", M,
-                                              ifelse(Treatment == "Gamma" & Sex == "M",Gamma_M, HZE_M))))))
-# think about how to plot this!
-ggplot(pred_dat, aes(x = Treatment, y = Fits, group = Family)) +
-  geom_point() +
-  geom_abline(aes(intercept = Intercept,
-                  slope = FixEff*Cataracts))
-
-# -- Post-Hoc Fixed Effect Analysis
-cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
-cats_emms
-pairs(cats_emms, reverse = TRUE)
-
-# save lineplot of probs for presentation
-png(filename = "est_probs_plot.png", units = "in", width = 6, height = 6, res = 300)
-emmip(cats_emms, Treatment ~ Sex) + theme_light() +
-  ggtitle("Estimated Marginal Probabilities of \nCataracts by Sex, Treatment Group") + scale_color_startrek()
-dev.off()
 
 # -- Bayesian Logistic Regression
 # note: when moving to rmarkdown, make sure to specify/compile model in separate chunks!
@@ -571,12 +529,6 @@ kbl(bayes_tab,
   kable_classic_2(full_width = F, html_font = "Cambria")
 
 
-kbl(bayes_tab,
-    caption = "Final Model  Statistics", row.names = TRUE,
-    col.names = c("GLMM Est", "MCMC Mean", "MCMC Median", "MCMC Mode", "MCMC SD", "HPD Lower", "HPD Upper")) %>%
-  kable_styling(latex_options = "hold_position") %>%
-  kable_classic_2(full_width = F, html_font = "Cambria")
-
 
 
 # Posterior density plots with HPD intervals
@@ -644,10 +596,10 @@ ggplot(posts, aes(x = b5)) +
 
 ggplot(posts, aes(x = sigma2)) +
   geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[7,5]), color = "darkorchid", linetype = "dashed") +
   geom_vline(aes(xintercept = bayes_tab[7,6]), color = "darkorchid", linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[7,7]), color = "darkorchid", linetype = "dashed") +
   geom_vline(aes(xintercept = bayes_tab[7,3]), color = "darkorange3") + # calculate mode and replot
-  scale_x_continuous(expand = c(0, 0)) +
+  scale_x_continuous(limits = c(0, 1.0), expand = c(0, 0)) +
   theme_light() +
   labs(x = "Probability",
        title = "Random Family Variance: Posterior Density with 95% HPD Interval")
@@ -655,7 +607,71 @@ ggplot(posts, aes(x = sigma2)) +
 # parameterize the random effect using the mode = 1.41 and the sd = 0.31:
 # Family ~ Gamma(shape = mode^2/sd^2, rate = mode/sd^2)
 
+# Final model contains fixed effects for Treatment, Sex, an interaction term, and a random effect for Family
+plot_model(mod, sort.est = TRUE, show.values = TRUE, type = "int", pred.type = "re",
+           color = "Dark2", show.p = TRUE,
+           width = 0.5, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
+tab_model(mod, show.re.var = TRUE,
+          pred.labels = c("Control(Female)", "Gamma(Female)", "HZE(Female)",
+                          "Control(Male)", "Gamma(Male)", "HZE(Male)"),
+          dv.labels = "Final Model Effects of Treatment on Cataracts")
+
+# Extract estimates for fixed and random effects
+coefs <- data.frame(coef(mod)$Family)
+coefs <- coefs %>%
+  rename(Intercept = X.Intercept., B1 = TreatmentGamma, B2 = TreatmentHZE,
+         B3 = SexM, B4 = TreatmentGamma.SexM, B5 = TreatmentHZE.SexM) %>%
+  rownames_to_column(var = "Family") %>%
+  mutate(Family = as.factor(Family))
+preds <- cats %>%
+  select(c(Animal, Family, Cataracts, Gamma, HZE, SexM)) %>%
+  rename(Sex = SexM) %>%
+  left_join(coefs, by = "Family") %>%
+  mutate(LogOdds = Intercept + B1*Gamma + B2*HZE + B3*Sex +
+           B4*Gamma*Sex + B5*HZE*Sex)
+preds <- preds %>%
+  mutate(Odds = exp(LogOdds))
+preds <- preds %>%
+  mutate(Probs = Odds / (1 + Odds)) # fitted values!(
+
+cats <- cats %>%
+  mutate(Probs = fitted(mod))
+
+ggplot(cats, aes(x = Probs, y = Cataracts)) +
+  geom_point()
 
 
+# -- Post-Hoc Fixed Effect Analysis
+cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
+cats_emms
+pairs(cats_emms, reverse = TRUE)
 
+# save lineplot of probs for presentation
+png(filename = "est_probs_plot.png", units = "in", width = 6, height = 6, res = 300)
+emmip(cats_emms, Treatment ~ Sex) + theme_light() +
+  ggtitle("Estimated Marginal Probabilities of \nCataracts by Sex, Treatment Group") + scale_color_startrek()
+dev.off()
 
+p_var <- exp(var)/(1+exp(var))
+sigs <- bayes_tab[7,]
+p_sigs <- exp(sigs)/(1+exp(sigs))
+psig <- as.numeric(p_sigs[4])
+REs <- augment(ranef(mod,condVar = TRUE), ci.level = 0.95) %>%
+  select(c(level, estimate, lb, ub)) %>%
+  rename(Family = level) %>%
+  mutate(Prob = exp(estimate)/(1+exp(estimate)),
+         Lower = exp(lb)/(1+exp(lb)),
+         Upper = exp(ub)/(1+exp(ub)))
+colors <- c("Family Effect" = "#5C88DAFF", "GLMM Est" = "#CC0C00FF", "Bayes Mode" = "#84BD00FF")
+re_plot <- ggplot(REs, aes(x = Prob, y = Family, xmin = Lower, xmax = Upper)) +
+  geom_errorbarh(aes(height = 0, color = "Family Effect")) +
+  geom_point(aes(color = "Family Effect")) +
+  geom_vline(aes(xintercept = p_var, color = "GLMM Est"), lty = 2) +
+  geom_vline(aes(xintercept = psig, color = "Bayes Mode"), lty = 2) +
+  theme_light() +
+  scale_color_manual(values = colors) +
+  labs(color = "", title = "Random Effect by Family")
+
+png(filename = "re_plot.png", units = "in", width = 8, height = 6, res = 300)
+re_plot
+dev.off()

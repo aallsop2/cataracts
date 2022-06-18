@@ -12,7 +12,6 @@ output:
     nature:
       highlightStyle: github
       countIncrementalSlides: false
-      autoplay: 120000
 ---
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
@@ -45,21 +44,25 @@ class: top, left
 ## Introduction
   
 - Research Questions:  
-  
-    + Are mice in some families more likely to develop more severe cataracts?  
+    + Are mice in some families more likely to develop more severe cataracts?
     + Accounting for family clustering, are there differences in cataract development between treatment groups?  
+  
       
 --
-  
-- Experimental Design:  
-  
-    + 1820 genetically heterogeneous mice from 48 unique families were randomly assigned, with equal family weights, to three treatment groups: Gamma radiation, HZE radiation, and unirradiated control. The simplified dataset records symptoms at time of death for mice of Age $\ge$ 552 days, for a total sample size of 1169. --  
+- Variable Definitions:  
     + **Response**: Cataracts Status, either 0 or 1. Where 1 indicates the presence of cataracts that are of clinical concern.  
     + **Primary predictors**: Treatment, Family  
-    + **Covariates**: Sex, Weight, Coat Color, Body Condition Score, Age, Myeloid Leukemia, Harderian Tumor, PreT Lymphoma
+    + **Covariates**: Sex, Weight, Coat Color, Body Condition Score, Age, Myeloid Leukemia, Harderian Tumor, PreT Lymphoma  
+  
+        
+--
+- Experimental Design:  
+    + 1820 genetically heterogeneous mice from 48 unique families were randomly assigned, with equal family weights, to the three treatment groups. 
+    + Mice in the active treatment groups were irradiated at 7-12 weeks of age; all mice were monitored weekly for various symptoms. 
+    + The simplified dataset in this analysis records symptoms at time of death for mice of Age $\ge$ 552 days, for a total sample size of 1169. 
 
 ---
-class: top, left
+class: top, center
 background-image: url('eda.png')
 background-size: contain  
 ## Exploratory Data Analysis
@@ -73,8 +76,7 @@ class: top, left
 $Y_{ij} \sim Bernoulli(p)$  
 
 $$\begin{aligned}
-log(\frac{p}{1-p}) = &\ \beta_0\ +\beta_1*Gamma_i\ + \beta_2*HZE_i\ + \beta_3*Control_i*M_i\ + \\ &\beta_4*Gamma_i*M_i\ + \beta_5*HZE_i*M_i\ + \\
-&[v_{j} + \epsilon_{ij}] \\
+log(\frac{p}{1-p}) = &\ \beta_0\ +\beta_1*Gamma_i\ + \beta_2*HZE_i\ + \beta_3*Control_i*M_i\ + \\ &\beta_4*Gamma_i*M_i\ + \beta_5*HZE_i*M_i\ +\ [v_{j} + \epsilon_{ij}] \\
 &i = 1, ..., 1169\ \mbox{ mice} \\
 &j = 1,...,47\ \ \mbox{ families}
 \end{aligned}$$
@@ -92,19 +94,33 @@ v_j &\sim N(0, \tau)\\
 \tau &\sim Gamma(0.001, 0.001) \mbox{ where}\ \sigma^2 = 1/\tau\\
 \end{aligned}$$
 
-  
----
-class: top, left
-## Results
+???
+Our final model contains two main fixed effects for Treatment and Sex, and interaction terms for the levels of each factor. The model also contains a random intercept for Family. We selected this model using Aikike's Information Criterion (AIC), by comparing to mixed models with just Treatment, Treatment and Sex as additive effects, and all covariates included as additive effects, as well as a fixed model counterpart to this final model.
+We also fit a complementary Bayesian model with the same parameterization of the model, using non-informative priors for the fixed effects and the variance of the random effect. This allows us to obtain a posterior distribution for the random effect, as well as easily interpretable credible intervals for the fixed effects parameters.
 
 ---
 background-image: url('est_probs_plot.png')
-background-size: contain
+background-size: contain  
 
+---
+background-image: url('re_plot.png')
+background-size: contain 
 
 ---
 class: top, left
 ## Conclusions
+
+ + Female mice are less likely to develop cataracts than male mice across all treatment groups. Treatment is strongly associated with differences in the probability of male mice developing cataracts, but it is not strongly associated with differences in the probability of female mice developing cataracts.  
+  
+--
+  
+ + GLMM model selection and Bayesian HPD intervals indicate that Family is an important source of variation in predicting cataract development.  
+  
+--
+  
+ + The presence of competing risks in the experimental design complicate inferences about cataract development.   
+ 
+???
 
 ---
 background-image: url('mice_background.jpg')
@@ -114,10 +130,13 @@ class: top, left
 ## References
 Agresti, A (2013). *Categorical Data Analysis* (Third Edition). John Wiley & Sons.  
   
-Chernyavskiy, P., Edmondson, E. F., Weil, M. M., & Little, M. P. (2017). *High-energy particle beam and gamma radiation exposure, familial relatedness and cancer in mice.* British journal of cancer, 117(1), 41--50. <https://doi.org/10.1038/bjc.2017.141>  
   
+Chernyavskiy, P., Edmondson, E. F., Weil, M. M., & Little, M. P. (2017). *High-energy particle beam and gamma radiation exposure, familial relatedness and cancer in mice.* British journal of cancer, 117(1), 41--50. <https://doi.org/10.1038/bjc.2017.141>  
+
+    
 Gelman, A., Carlin, J., Stern, H., Dunson, D., Vehtari, A., Rubin, D. (2014). *Bayesian Data Analysis* (Third Edition). CRC Press.  
   
+    
 Roback, P., Legler, J. (2021). *Beyond Multiple Linear Regression. Applied Generalized Linear Models and Multilevel Models in R* (Second Edition). CRC Press. Online version: <https://bookdown.org/roback/bookdown-BeyondMLR/>  
 
 
