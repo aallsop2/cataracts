@@ -126,46 +126,9 @@ ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
 ## Mixed Logistic Regression
 ```{r glmm, include = FALSE}
 # mixed model binomial logistic regression using adaptive Gauss-Hermite quadrature (nAGQ = 25)
-mix_mod_full <- glmer(Cataracts ~ Sex + Weight + CoatColor + BCS + HarderianTumor + 
-                        MyeloidLeukemia + PreTLymphoma + Treatment + (1|Family), nAGQ = 25, 
-                      data = cats, family = binomial)
 mixed_mod <- glmer(Cataracts ~ Sex*Treatment + (1|Family), nAGQ = 25, data = cats, family = binomial)
-fixed_mod_full <- glm(Cataracts ~ Sex + Weight + CoatColor + BCS + HarderianTumor + 
-                        MyeloidLeukemia + PreTLymphoma + Treatment, data = cats, family = binomial)
-fixed_mod <- glm(Cataracts ~ Treatment*Sex, data = cats, family = binomial)
-
-
-# test full vs reduced mixed models
-anova(mix_mod_full, mixed_mod)
-
-summary(mix_mod_full)
-summary(mixed_mod)
-summary(fixed_mod)
 ```
 
-```{r}
-#table of AIC values
-
-
-aics <- c(AIC(mix_mod_full), AIC(mixed_mod), AIC(fixed_mod))
-bics <- c(BIC(mix_mod_full), BIC(mixed_mod), BIC(fixed_mod))
-dt <- rbind(aics, bics)
-colnames(dt) <- c("Full Mixed Model", "Reduced Mixed Model", "Fixed Effects Model")
-rownames(dt) <- c("AIC", "BIC")
-
-dt %>% 
-  kbl(caption = "AIC and BIC Comparisons Across Models", digits = 2) %>% 
-  kable_classic_2(full_width = T, html_font = "Cambria")
-
-```
-* Model Selection
-  + Full model including all predictors and covariates plus a random intercept for family
-  + Reduced model only including: sex, treatment group, and a random intercept for family
-  + Fixed effects model including only sex and treatment group
-* Final model includes:
-  + Sex, Treatment, and Random Intercept for Family
-  
-## Mixed Logistic Regression
 * The final model can be written as:  
 \[
 \begin{aligned}
