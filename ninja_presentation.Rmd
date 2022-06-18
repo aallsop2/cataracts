@@ -97,7 +97,6 @@ v_j &\sim N(0, \tau)\\
 class: top, left
 ## Results
 
-
 ---
 background-image: url('est_probs_plot.png')
 background-size: contain
