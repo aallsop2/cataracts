@@ -17,37 +17,37 @@ background-image: url('mice_background.jpg')
 background-position: center
 background-size: contain
 class: center, middle
-# Three (Groups of) Blind Mice  
-### Familial Clusters of Cataract Development in Irradiated Mice  
-  
-### Alyssa Allsop (allsop.alyssa@gmail.com)  
-### Amira Burns (amiraburns@gmail.com)  
-### Colorado State University: MAS Captstone  
+# Three (Groups of) Blind Mice
+### Familial Clusters of Cataract Development in Irradiated Mice
+
+### Alyssa Allsop (allsop.alyssa@gmail.com)
+### Amira Burns (amiraburns@gmail.com)
+### Colorado State University: MAS Captstone
 2022-06-18
 
 ---
 class: top, left
 
 ## Introduction
-  
-- Research Questions:  
-  
-    + Are mice in some families more likely to develop more severe cataracts?  
-    + Accounting for family clustering, are there differences in cataract development between treatment groups?  
-      
+
+- Research Questions:
+
+    + Are mice in some families more likely to develop more severe cataracts?
+    + Accounting for family clustering, are there differences in cataract development between treatment groups?
+
 --
-  
-- Experimental Design:  
-  
-    + 1820 genetically heterogeneous mice from 48 unique families were randomly assigned, with equal family weights, to three treatment groups: Gamma radiation, HZE radiation, and unirradiated control. The simplified dataset records symptoms at time of death for mice of Age `\(\ge\)` 552 days, for a total sample size of 1169. --  
-    + **Response**: Cataracts Status, either 0 or 1. Where 1 indicates the presence of cataracts that are of clinical concern.  
-    + **Primary predictors**: Treatment, Family  
+
+- Experimental Design:
+
+    + 1820 genetically heterogeneous mice from 48 unique families were randomly assigned, with equal family weights, to three treatment groups: Gamma radiation, HZE radiation, and unirradiated control. The simplified dataset records symptoms at time of death for mice of Age `\(\ge\)` 552 days, for a total sample size of 1169. --
+    + **Response**: Cataracts Status, either 0 or 1. Where 1 indicates the presence of cataracts that are of clinical concern.
+    + **Primary predictors**: Treatment, Family
     + **Covariates**: Sex, Weight, Coat Color, Body Condition Score, Age, Myeloid Leukemia, Harderian Tumor, PreT Lymphoma
 
 ---
 class: top, left
 background-image: url('eda.png')
-background-size: contain  
+background-size: contain
 ## Exploratory Data Analysis
 ???
 The experimental design led us to conclude that we would include both Treatment and Family in a final model; consequently, our exploratory data analysis focused on associations between these variables and the response, other covariates and the response, and potential correlations and interactions between the main predictors, covariates, and the response. The barplot on the left shows sample proportions with cataracts for groups split by Treatment and Sex. The differences between sexes indicated to us that this covariate may be of interest in our final model. We also performed an exploratory assessment of the random effect of family; the line plot shows averaged binary Cataract score for each family across sex and treatment group. This visualizes the different behaviors in different families, but presence of clustering is not obvious.
@@ -56,7 +56,7 @@ The experimental design led us to conclude that we would include both Treatment 
 class: top, left
 
 ## Final Model
-`\(Y_{ij} \sim Bernoulli(p)\)`  
+`\(Y_{ij} \sim Bernoulli(p)\)`
 
 `$$\begin{aligned}
 log(\frac{p}{1-p}) = &amp;\ \beta_0\ +\beta_1*Gamma_i\ + \beta_2*HZE_i\ + \beta_3*Control_i*M_i\ + \\ &amp;\beta_4*Gamma_i*M_i\ + \beta_5*HZE_i*M_i\ + \\
@@ -65,7 +65,7 @@ log(\frac{p}{1-p}) = &amp;\ \beta_0\ +\beta_1*Gamma_i\ + \beta_2*HZE_i\ + \beta_
 &amp;j = 1,...,47\ \ \mbox{ families}
 \end{aligned}$$`
 --
-with non-informative priors:  
+with non-informative priors:
 
 `$$\begin{aligned}
 \beta_0 &amp;\sim N(0, 0.001)\\
@@ -78,11 +78,11 @@ v_j &amp;\sim N(0, \tau)\\
 \tau &amp;\sim Gamma(0.001, 0.001) \mbox{ where}\ \sigma^2 = 1/\tau\\
 \end{aligned}$$`
 
-  
+
 ---
 class: top, left
 ## Results
-![]('ests_tab.png')
+
 
 ---
 background-image: url('est_probs_plot.png')
@@ -99,13 +99,13 @@ background-position: center
 background-size: contain
 class: top, left
 ## References
-Agresti, A (2013). *Categorical Data Analysis* (Third Edition). John Wiley &amp; Sons.  
-  
-Chernyavskiy, P., Edmondson, E. F., Weil, M. M., &amp; Little, M. P. (2017). *High-energy particle beam and gamma radiation exposure, familial relatedness and cancer in mice.* British journal of cancer, 117(1), 41--50. &lt;https://doi.org/10.1038/bjc.2017.141&gt;  
-  
-Gelman, A., Carlin, J., Stern, H., Dunson, D., Vehtari, A., Rubin, D. (2014). *Bayesian Data Analysis* (Third Edition). CRC Press.  
-  
-Roback, P., Legler, J. (2021). *Beyond Multiple Linear Regression. Applied Generalized Linear Models and Multilevel Models in R* (Second Edition). CRC Press. Online version: &lt;https://bookdown.org/roback/bookdown-BeyondMLR/&gt;  
+Agresti, A (2013). *Categorical Data Analysis* (Third Edition). John Wiley &amp; Sons.
+
+Chernyavskiy, P., Edmondson, E. F., Weil, M. M., &amp; Little, M. P. (2017). *High-energy particle beam and gamma radiation exposure, familial relatedness and cancer in mice.* British journal of cancer, 117(1), 41--50. &lt;https://doi.org/10.1038/bjc.2017.141&gt;
+
+Gelman, A., Carlin, J., Stern, H., Dunson, D., Vehtari, A., Rubin, D. (2014). *Bayesian Data Analysis* (Third Edition). CRC Press.
+
+Roback, P., Legler, J. (2021). *Beyond Multiple Linear Regression. Applied Generalized Linear Models and Multilevel Models in R* (Second Edition). CRC Press. Online version: &lt;https://bookdown.org/roback/bookdown-BeyondMLR/&gt;
 
 
 
