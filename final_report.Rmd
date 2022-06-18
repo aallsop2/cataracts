@@ -25,8 +25,6 @@ library(R2jags)
 library(superdiag)
 library(mcmcplots)
 library(ggmcmc)
-library(sjPlot)
-library(emmeans)
 library(gridExtra)
 ```
 
@@ -186,38 +184,6 @@ grid.arrange(b1, b2, ncol = 2, top = "Cataracts by Sex, Treatment")
 
 ### Frequentist Approach
 ```{r glmm}
-
-# mixed model binomial logistic regression using adaptive Gauss-Hermite quadrature (nAGQ = 25)
-mix_mod_full <- glmer(Cataracts ~ Sex + Weight + CoatColor + BCS + HarderianTumor + 
-                        MyeloidLeukemia + PreTLymphoma + Treatment + (1|Family), nAGQ = 25, 
-                      data = cats, family = binomial)
-mixed_mod <- glmer(Cataracts ~ Sex*Treatment + (1|Family), nAGQ = 25, data = cats, family = binomial)
-fixed_mod_full <- glm(Cataracts ~ Sex + Weight + CoatColor + BCS + HarderianTumor + 
-                        MyeloidLeukemia + PreTLymphoma + Treatment, data = cats, family = binomial)
-fixed_mod <- glm(Cataracts ~ Treatment*Sex, data = cats, family = binomial)
-
-
-# test full vs reduced mixed models
-anova(mix_mod_full, mixed_mod)
-
-summary(mix_mod_full)
-summary(mixed_mod)
-summary(fixed_mod)
-
-#table of AIC values
-
-
-aics <- c(AIC(mix_mod_full), AIC(mixed_mod), AIC(fixed_mod))
-bics <- c(BIC(mix_mod_full), BIC(mixed_mod), BIC(fixed_mod))
-dt <- rbind(aics, bics)
-colnames(dt) <- c("Full Mixed Model", "Reduced Mixed Model", "Fixed Effects Model")
-rownames(dt) <- c("AIC", "BIC")
-
-dt %>% 
-  kbl(caption = "AIC and BIC Comparisons Across Models", digits = 2) %>% 
-  kable_classic_2(full_width = T, html_font = "Cambria")
-
-
 # mixed model binomial logistic regression 
 
 mod <- glmer(Cataracts ~ Treatment*Sex + (1|Family), data = cats, family = binomial)
@@ -233,16 +199,13 @@ tab_model(mod, show.re.var = TRUE,
                           "Control(Male)", "Gamma(Male)", "HZE(Male)"),
           dv.labels = "Final Model: Odds Ratios of Cataracts by Sex, Treatment Group")
 ```
-  
 
 ```{r contr}
 cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
 cats_emms
 pairs(cats_emms, reverse = TRUE)
-
 emmip(cats_emms, Treatment ~ Sex) + theme_light() + 
-  ggtitle("Predicted Probabilities of Cataracts \nby Sex and Treatment Group") + scale_color_startrek() + ylab("Predicted Probabilities")
-
+  ggtitle("Predicted Probabilities of Cataracts \nby Sex and Treatment Group") + scale_color_startrek()
 ```
 
   
@@ -297,7 +260,6 @@ cat("model{
   sigma2 <- 1/tau     # convert precision 'tau' to variance 'sigma2'
 }", file = "cat.jag")
 ```
-
 
 ```{r prep_dat}
 # Prepare the data for JAGS
@@ -363,14 +325,15 @@ mode_fun <- function(x) {
 }
 modes <- apply(round(posts, 4), 2, mode_fun)
 sds <- apply(posts, 2, sd)
-bayes_tab <- round(data.frame(means, medians, modes, sds, phpds), digits = 3)
+glm_probs <- exp(ests) / (1 + exp(ests))
+bayes_tab <- round(data.frame(glm_probs, means, medians, modes, sds, phpds), digits = 3)
 rownames(bayes_tab) <- c("$\\beta_0$", "$\\beta_1$", "$\\beta_2$", "$\\beta_3$", "$\\beta_4$", "$\\beta_5$", "$\\sigma^2$")
 ```
 
 ```{r bayes_tab}
 kbl(bayes_tab,
-    caption = "Bayes Model: Posterior Distribution Statistics",
-    col.names = c("Mean", "Median", "Mode", "SD", "HPD Lower", "HPD Upper")) %>%
+    caption = "Final Model Statistics",
+    col.names = c("GLMM Est", "Bayes Mean", "Bayes Median", "Bayes Mode", "Bayes SD", "Bayes HPD Lower", "Bayes HPD Upper")) %>%
   kable_styling(latex_options = "hold_position") %>%
   kable_classic_2(full_width = F, html_font = "Cambria", position = "float_left")
 ```
@@ -462,12 +425,8 @@ grid.arrange(p0, p1, p2, p3, p4, p5, p6,
 
 Presence of competing risks in the experimental design obscure the presence of family clusters of cataracts. It is reasonable to assume that individuals in the irradiated Treatment groups were more likely to die due to more acute effects of irradiation before developing cataracts, compared to individuals in the control group. Simplifying the dataset by instituting a cutoff age attempts to address this limitation, but the issue persists even after excluding individuals deceased before Age = 552.  
 
-Ordinal regression (small sample sizes)
-We only have a snapshot of the data instead of the development over time
-
 
 ## Results and Conclusions
-
 
 ## Authors' Statements  
   
