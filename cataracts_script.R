@@ -258,6 +258,23 @@ ggplot(cats, aes(x = Treatment, y = Score, color = Treatment)) + geom_jitter(wid
   labs(x = "Treatment Group", y = "Cataract Score", color = "Group",
        title = "Cataract Score by Treatment, faceted by Family")
 
+# save eda plots for presentation
+png(filename = "eda.png", units = "in", width = 12, height = 7, res = 300)
+l1 <- ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
+  geom_line(aes(group = Family)) + facet_grid(vars(Sex)) +
+  scale_color_startrek() +
+  scale_x_discrete(expand = c(0, .2)) +
+  theme_light() +
+  labs(y = "mean score",
+       title = "Cataract Score \nby Family, Sex, Treatment Group")
+b1 <- ggplot(cats_grp, aes(x = Sex, y = prop, fill = Treatment)) +
+  geom_col(position = "dodge") +
+  scale_fill_startrek() +
+  theme_light() +
+  ggtitle("Cataract Sample Proportion \nby Sex, Treatment Group")
+grid.arrange(b1, l1, ncol = 2)
+dev.off()
+
 # -- Predictor Correlation
 
 # Numeric Variable Correlations
@@ -433,7 +450,7 @@ cats_emms
 pairs(cats_emms, reverse = TRUE)
 
 # save lineplot of probs for presentation
-png(filename = "est_probs_plot.png", units = "in", width = 5, height = 5, res = 300)
+png(filename = "est_probs_plot.png", units = "in", width = 6, height = 6, res = 300)
 emmip(cats_emms, Treatment ~ Sex) + theme_light() +
   ggtitle("Estimated Marginal Probabilities of \nCataracts by Sex, Treatment Group") + scale_color_startrek()
 dev.off()

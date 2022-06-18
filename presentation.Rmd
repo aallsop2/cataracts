@@ -20,19 +20,16 @@ knitr::opts_chunk$set(echo = FALSE)
 
 
 
+  
 ## Introduction
   
 - Research Questions:   
-    + Is there a genetic susceptibility to cataracts caused by radiation?  
-    + Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation and gamma radiation? 
+    + Are mice in some families more likely to develop more severe cataracts?
 - Experimental Design:  
     + 1820 genetically heterogeneous mice from 48 unique families were randomly assigned, with equal family weights, to three treatment groups: Gamma radiation, HZE radiation, and unirradiated control. The simplified dataset records symptoms at time of death for mice of Age $\ge$ 552 days, for a total sample size of 1169.   
-    + **Response**: Cataracts score, ordinal categorical variable on a scale 0-5. Score $\ge$ 2 indicates presence of cataracts; because sample sizes in ordinal categories are small, we decided to convert the response into a binary variable indicating absence or presence of cataracts.  
+    + **Response**: Cataracts Status, either 0 or 1. Where 1 indicates the presence of cataracts that are of clinical concern.  
     + **Primary predictors under consideration**: Treatment, Family  
     + **Covariates**: Sex, Weight, Coat Color, Body Condition Score, Age, Myeloid Leukemia, Harderian Tumor, PreT Lymphoma
-- Methods Overview:  
-    + Mixed Logistic Regression with Treatment as a fixed effect, Family as a random effect, and accounting for any practically significant covariates. Obtain estimates for odds ratios. 
-    + Bayesian Mixed Logistic Regression counterpart to Frequentist final model to obtain probability distributions for odds ratios.  
 
 ## Summary Tables & Plots  
  + add barplot of empirical proportions
@@ -45,8 +42,8 @@ The final model can be written as:
 \[
 \begin{aligned}
 Y \sim\ &Binomial(1169, p)\ \ \mbox{or parameterized as   }\  Y_{ij} \sim Bernoulli(p) \\
-log(\frac{p}{1-p}) = &\ \beta_0*Control_i*F_i\ +\beta_1*Gamma_i*F_i\ + \beta_2*HZE_i*F_i\ + \\ &\beta_3*Control_i*M_i\ +\beta_4*Gamma*M\ + \beta_5*HZE*M\ + \\
-[&v_{j} + \epsilon_{ij}] \\
+log(\frac{p}{1-p}) = &\ \beta_0\ +\beta_1*Gamma_i\ + \beta_2*HZE_i\ + \beta_3*Control_i*M_i\ + \\&\beta_4*Gamma_i*M_i\ + \beta_5*HZE_i*M_i\ + \\
+&[v_{j} + \epsilon_{ij}] \\
 &i = 1, ..., 1169\ \mbox{ mice} \\
 &j = 1,...,47\ \ \mbox{ families}
 \end{aligned}
