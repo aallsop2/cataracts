@@ -1,7 +1,7 @@
 model{
   for(i in 1:N){
     CAT[i] ~ dbern(p[i])     # Bernoulli-distributed response
-    logit(p[i])<- b0+ b1*Gamma[i] + b2*HZE[i] + b3*Male[i] +
+    logit(p[i]) <- b0 + b1*Gamma[i] + b2*HZE[i] + b3*Male[i] +
     b4*Male[i]*Gamma[i] + b5*Male[i]*HZE[i] + a[Family[i]]   # likelihood function
   }
   for(j in 1:nFam){

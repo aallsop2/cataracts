@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Three (Groups of) Blind Mice</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Amira Burns and Alyssa Allsop" />
+    <meta name="date" content="2022-06-18" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+background-image: url('mice_background.jpg')
+background-position: center
+background-size: contain
+class: center, middle
+# Three (Groups of) Blind Mice  
+### Familial Clusters of Cataract Development in Irradiated Mice  
+  
+### Alyssa Allsop (allsop.alyssa@gmail.com)  
+### Amira Burns (amiraburns@gmail.com)  
+### Colorado State University: MAS Captstone  
+2022-06-18
+
+---
+class: top, left
+
+## Introduction
+  
+- Research Questions:  
+  
+    + Are mice in some families more likely to develop more severe cataracts?  
+    + Accounting for family clustering, are there differences in cataract development between treatment groups?  
+      
+--
+  
+- Experimental Design:  
+  
+    + 1820 genetically heterogeneous mice from 48 unique families were randomly assigned, with equal family weights, to three treatment groups: Gamma radiation, HZE radiation, and unirradiated control. The simplified dataset records symptoms at time of death for mice of Age `\(\ge\)` 552 days, for a total sample size of 1169. --  
+    + **Response**: Cataracts Status, either 0 or 1. Where 1 indicates the presence of cataracts that are of clinical concern.  
+    + **Primary predictors**: Treatment, Family  
+    + **Covariates**: Sex, Weight, Coat Color, Body Condition Score, Age, Myeloid Leukemia, Harderian Tumor, PreT Lymphoma
+
+---
+class: top, left
+background-image: url('eda.png')
+background-size: contain  
+## Exploratory Data Analysis
+???
+The experimental design led us to conclude that we would include both Treatment and Family in a final model; consequently, our exploratory data analysis focused on associations between these variables and the response, other covariates and the response, and potential correlations and interactions between the main predictors, covariates, and the response. The barplot on the left shows sample proportions with cataracts for groups split by Treatment and Sex. The differences between sexes indicated to us that this covariate may be of interest in our final model. We also performed an exploratory assessment of the random effect of family; the line plot shows averaged binary Cataract score for each family across sex and treatment group. This visualizes the different behaviors in different families, but presence of clustering is not obvious.
+
+---
+class: top, left
+
+## Final Model
+`\(Y_{ij} \sim Bernoulli(p)\)`  
+
+`$$\begin{aligned}
+log(\frac{p}{1-p}) = &amp;\ \beta_0\ +\beta_1*Gamma_i\ + \beta_2*HZE_i\ + \beta_3*Control_i*M_i\ + \\ &amp;\beta_4*Gamma_i*M_i\ + \beta_5*HZE_i*M_i\ + \\
+&amp;[v_{j} + \epsilon_{ij}] \\
+&amp;i = 1, ..., 1169\ \mbox{ mice} \\
+&amp;j = 1,...,47\ \ \mbox{ families}
+\end{aligned}$$`
+--
+with non-informative priors:  
+
+`$$\begin{aligned}
+\beta_0 &amp;\sim N(0, 0.001)\\
+\beta_1 &amp;\sim N(0, 0.001)\\
+\beta_2 &amp;\sim N(0, 0.001)\\
+\beta_3 &amp;\sim N(0, 0.001)\\
+\beta_4 &amp;\sim N(0, 0.001)\\
+\beta_5 &amp;\sim N(0, 0.001)\\
+v_j &amp;\sim N(0, \tau)\\
+\tau &amp;\sim Gamma(0.001, 0.001) \mbox{ where}\ \sigma^2 = 1/\tau\\
+\end{aligned}$$`
+
+  
+---
+class: top, left
+## Results
+![]('ests_tab.png')
+
+---
+background-image: url('est_probs_plot.png')
+background-size: contain
+
+
+---
+class: top, left
+## Conclusions
+
+---
+background-image: url('mice_background.jpg')
+background-position: center
+background-size: contain
+class: top, left
+## References
+Agresti, A (2013). *Categorical Data Analysis* (Third Edition). John Wiley &amp; Sons.  
+  
+Chernyavskiy, P., Edmondson, E. F., Weil, M. M., &amp; Little, M. P. (2017). *High-energy particle beam and gamma radiation exposure, familial relatedness and cancer in mice.* British journal of cancer, 117(1), 41--50. &lt;https://doi.org/10.1038/bjc.2017.141&gt;  
+  
+Gelman, A., Carlin, J., Stern, H., Dunson, D., Vehtari, A., Rubin, D. (2014). *Bayesian Data Analysis* (Third Edition). CRC Press.  
+  
+Roback, P., Legler, J. (2021). *Beyond Multiple Linear Regression. Applied Generalized Linear Models and Multilevel Models in R* (Second Edition). CRC Press. Online version: &lt;https://bookdown.org/roback/bookdown-BeyondMLR/&gt;  
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+setInterval(function() {slideshow.gotoNextSlide();}, 120000);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

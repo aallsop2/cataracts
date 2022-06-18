@@ -1,0 +1,126 @@
+---
+title: "Three (Groups of) Blind Mice" 
+subtitle: "Familial Clusters of Cataract Development in Irradiated Mice"
+author: "Amira Burns and Alyssa Allsop"
+institute: "Colorado State University: MAS Capstone"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    seal: false
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      countIncrementalSlides: false
+      autoplay: 120000
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+```{r theme, include = FALSE, warning = FALSE}
+library(xaringanthemer)
+style_xaringan(
+  padding = "16px 64px 16px 64px",
+  header_h2_font_size = "1.80rem",
+  text_font_size = "100%",
+  text_font_family = "Droid Serif",
+  text_font_url = "https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic",
+  header_font_google = google_font("Yanone Kaffeesatz"))
+```
+background-image: url('mice_background.jpg')
+background-position: center
+background-size: contain
+class: center, middle
+# Three (Groups of) Blind Mice  
+### Familial Clusters of Cataract Development in Irradiated Mice  
+  
+### Alyssa Allsop (allsop.alyssa@gmail.com)  
+### Amira Burns (amiraburns@gmail.com)  
+### Colorado State University: MAS Captstone  
+`r Sys.Date()`
+
+---
+class: top, left
+
+## Introduction
+  
+- Research Questions:  
+  
+    + Are mice in some families more likely to develop more severe cataracts?  
+    + Accounting for family clustering, are there differences in cataract development between treatment groups?  
+      
+--
+  
+- Experimental Design:  
+  
+    + 1820 genetically heterogeneous mice from 48 unique families were randomly assigned, with equal family weights, to three treatment groups: Gamma radiation, HZE radiation, and unirradiated control. The simplified dataset records symptoms at time of death for mice of Age $\ge$ 552 days, for a total sample size of 1169. --  
+    + **Response**: Cataracts Status, either 0 or 1. Where 1 indicates the presence of cataracts that are of clinical concern.  
+    + **Primary predictors**: Treatment, Family  
+    + **Covariates**: Sex, Weight, Coat Color, Body Condition Score, Age, Myeloid Leukemia, Harderian Tumor, PreT Lymphoma
+
+---
+class: top, left
+background-image: url('eda.png')
+background-size: contain  
+## Exploratory Data Analysis
+???
+The experimental design led us to conclude that we would include both Treatment and Family in a final model; consequently, our exploratory data analysis focused on associations between these variables and the response, other covariates and the response, and potential correlations and interactions between the main predictors, covariates, and the response. The barplot on the left shows sample proportions with cataracts for groups split by Treatment and Sex. The differences between sexes indicated to us that this covariate may be of interest in our final model. We also performed an exploratory assessment of the random effect of family; the line plot shows averaged binary Cataract score for each family across sex and treatment group. This visualizes the different behaviors in different families, but presence of clustering is not obvious.
+
+---
+class: top, left
+
+## Final Model
+$Y_{ij} \sim Bernoulli(p)$  
+
+$$\begin{aligned}
+log(\frac{p}{1-p}) = &\ \beta_0\ +\beta_1*Gamma_i\ + \beta_2*HZE_i\ + \beta_3*Control_i*M_i\ + \\ &\beta_4*Gamma_i*M_i\ + \beta_5*HZE_i*M_i\ + \\
+&[v_{j} + \epsilon_{ij}] \\
+&i = 1, ..., 1169\ \mbox{ mice} \\
+&j = 1,...,47\ \ \mbox{ families}
+\end{aligned}$$
+--
+with non-informative priors:  
+
+$$\begin{aligned}
+\beta_0 &\sim N(0, 0.001)\\
+\beta_1 &\sim N(0, 0.001)\\
+\beta_2 &\sim N(0, 0.001)\\
+\beta_3 &\sim N(0, 0.001)\\
+\beta_4 &\sim N(0, 0.001)\\
+\beta_5 &\sim N(0, 0.001)\\
+v_j &\sim N(0, \tau)\\
+\tau &\sim Gamma(0.001, 0.001) \mbox{ where}\ \sigma^2 = 1/\tau\\
+\end{aligned}$$
+
+  
+---
+class: top, left
+## Results
+
+
+---
+background-image: url('est_probs_plot.png')
+background-size: contain
+
+
+---
+class: top, left
+## Conclusions
+
+---
+background-image: url('mice_background.jpg')
+background-position: center
+background-size: contain
+class: top, left
+## References
+Agresti, A (2013). *Categorical Data Analysis* (Third Edition). John Wiley & Sons.  
+  
+Chernyavskiy, P., Edmondson, E. F., Weil, M. M., & Little, M. P. (2017). *High-energy particle beam and gamma radiation exposure, familial relatedness and cancer in mice.* British journal of cancer, 117(1), 41--50. <https://doi.org/10.1038/bjc.2017.141>  
+  
+Gelman, A., Carlin, J., Stern, H., Dunson, D., Vehtari, A., Rubin, D. (2014). *Bayesian Data Analysis* (Third Edition). CRC Press.  
+  
+Roback, P., Legler, J. (2021). *Beyond Multiple Linear Regression. Applied Generalized Linear Models and Multilevel Models in R* (Second Edition). CRC Press. Online version: <https://bookdown.org/roback/bookdown-BeyondMLR/>  
+
+
+
+
