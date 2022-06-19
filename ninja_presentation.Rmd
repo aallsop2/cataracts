@@ -110,14 +110,18 @@ background-image: url('est_probs_plot.png')
 background-size: contain  
 
 ???
+
 This plot shows the probability of developing cataracts for each of the fixed effects in our final model. Differences between both sex and treatment group are clearly visible, and notably the differences betweeen treatment group across gender. 
+
 Interpretation: females in general face less probability of developing cataracts than males, regardless of treatment group. We could argue that the effect of treatment group is not of clinical significance for female mice in this dataset. In contrast, males see a higher probability of developing cataracts than females across all treatment groups, but within male mice the difference between treatment group has clinical importance.
 ---
 background-image: url('re_plot.png')
 background-size: contain 
 
 ??? 
-This plot visualizes the estimated probability of developing cataracts for each family in the dataset, along with their confidence intervals. The vertical lines plot the GLMM estimated variance and the MCMC mode for sigma^2. Interpretation: many of the probabilities shown are close to 0.5, with a smaller number (top 3, or maybe top 6) of families at the top of the graph that indicate some genetic clustering. Is that a large enough proportion of the families in the dataset to indicate clinical importance of genetic clustering?    
+This plot visualizes the estimated probability of developing cataracts for each family in the dataset, along with their confidence intervals. The vertical lines plot the GLMM estimated variance and the MCMC mode for sigma^2. 
+
+Interpretation: many of the probabilities shown are close to 0.5, with a smaller number (top 3, or maybe top 6) of families at the top of the graph that indicate some genetic clustering. Is that a large enough proportion of the families in the dataset to indicate clinical importance of genetic clustering?    
 
 ---
 class: top, left
