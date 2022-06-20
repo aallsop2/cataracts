@@ -452,3 +452,6 @@ Roback, P., Legler, J. (2021). *Beyond Multiple Linear Regression. Applied Gener
 DiMaggio, C., Albert, J., Spiegelhalter, D., Best, N., Gelman, A., Carstensen, B., Guerrin, L., Jensen, S. (2015) *Bayesian Analysis for Epidemiologists III: Regression Modeling.* Center for Injury Epidemiology and Prevention at Columbia University. <http://www.columbia.edu/~cjd11/charles_dimaggio/DIRE/styled-4/styled-11/code-8/#bayesian-regression-modeling-with-bugs-or-jags>
 
 ## Appendix
+
+put AIC comparison table here
+
