@@ -690,18 +690,23 @@ p_var <- exp(var)/(1+exp(var))
 sigs <- bayes_tab[7,]
 p_sigs <- exp(sigs)/(1+exp(sigs))
 psig <- as.numeric(p_sigs[4])
+hpdl <- as.numeric(p_sigs[6])
+hpdu <- as.numeric(p_sigs[7])
 REs <- augment(ranef(mod,condVar = TRUE), ci.level = 0.95) %>%
   select(c(level, estimate, lb, ub)) %>%
   rename(Family = level) %>%
   mutate(Prob = exp(estimate)/(1+exp(estimate)),
          Lower = exp(lb)/(1+exp(lb)),
          Upper = exp(ub)/(1+exp(ub)))
-colors <- c("Family Effect" = "#5C88DAFF", "GLMM Est" = "#CC0C00FF", "Bayes Mode" = "#84BD00FF")
+colors <- c("Family Effect" = "#5C88DAFF", "GLMM Est" = "#CC0C00FF", "Bayes Mode" = "#84BD00FF",
+            "HPD Interval" = "#FFCD00FF")
 re_plot <- ggplot(REs, aes(x = Prob, y = Family, xmin = Lower, xmax = Upper)) +
   geom_errorbarh(aes(height = 0, color = "Family Effect")) +
   geom_point(aes(color = "Family Effect")) +
-  geom_vline(aes(xintercept = p_var, color = "GLMM Est"), lty = 2) +
-  geom_vline(aes(xintercept = psig, color = "Bayes Mode"), lty = 2) +
+  geom_vline(aes(xintercept = p_var, color = "GLMM Est"), lwd = 1, lty = 2) +
+  geom_vline(aes(xintercept = psig, color = "Bayes Mode"), lwd = 1, lty = 2) +
+  geom_vline(aes(xintercept = hpdl, color = "HPD Interval"), lwd = 1, lty = 4) +
+  geom_vline(aes(xintercept = hpdu, color = "HPD Interval"), lwd = 1, lty = 4) +
   theme_light() +
   scale_color_manual(values = colors) +
   labs(color = "", title = "Random Effect by Family")
