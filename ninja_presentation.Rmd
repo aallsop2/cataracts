@@ -74,7 +74,6 @@ To study the family effect, there were 48 biologically unique families and withi
 The response variable was a binary 0 or 1, with 1 indicating the presence of cataracts of clinical concern and 0 being no cataracts or non-severe cataracts. The possible predictors included in the dataset were: treatment group - HZE irradiation, Gamma irradiation, or unirradiated control group, family, sex, weight, coat color, body condition score, age, myeloid leukemia, harderian tumor, and preT lymphoma. 
 
 ---
-  
 
 class: top, center
 background-image: url('eda.png')
