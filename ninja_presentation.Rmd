@@ -123,15 +123,9 @@ background-image: url('est_probs_plot.png')
 background-size: contain  
 
 ???
-<<<<<<< HEAD
-This plot shows the probability of developing cataracts for each of the fixed effects in our final model. Differences between both sex and treatment group are clearly visible, and notably the differences betweeen treatment group across gender. 
-
-Interpretation: females in general face less probability of developing cataracts than males, regardless of treatment group. We could argue that the effect of treatment group is not of clinical significance for female mice in this dataset. In contrast, males see a higher probability of developing cataracts than females across all treatment groups, but within male mice the difference between treatment group has clinical importance.
-=======
 This plot shows the probability of developing cataracts for each combination of sex by treatment group in our final model. Differences between both sex and treatment group are clearly visible, and notably the differences between treatment group across gender. 
 
 Interpretation: females in general face less probability of developing cataracts than males, across all treatment groups. We could argue that the effect of treatment group is not of clinical significance for female mice in this dataset. As you can see, the probability of developing cataracts is quite low for all 3 treatment groups. Males, on the other hand, have a higher probability of developing cataracts than females across all treatment groups. For males, the differences of development of cataracts across treatment groups is of clinical importance.
->>>>>>> main
 ---
 background-image: url('re_plot.png')
 background-size: contain 

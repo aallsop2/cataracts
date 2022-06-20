@@ -646,7 +646,7 @@ plot_model(mod, sort.est = TRUE, show.values = TRUE, type = "int", pred.type = "
            color = "Dark2", show.p = TRUE,
            width = 0.5, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
 tab_model(mod, show.re.var = TRUE,
-          pred.labels = c("Control(Female)", "Gamma(Female)", "HZE(Female)",
+          pred.labels = c("Control", "Gamma", "HZE",
                           "Control(Male)", "Gamma(Male)", "HZE(Male)"),
           dv.labels = "Final Model Effects of Treatment on Cataracts")
 
