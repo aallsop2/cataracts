@@ -118,9 +118,9 @@ background-image: url('re_plot.png')
 background-size: contain 
 
 ???
-This plot visualizes the estimated probability of developing cataracts for each family in the dataset, along with their confidence intervals. The vertical lines plot the GLMM estimated variance and the MCMC mode for sigma^2. 
+This plot visualizes the estimated probability of developing cataracts for each family in the dataset, along with their confidence intervals. The vertical lines plot the GLMM estimated variance and the MCMC mode, and 95% credible interval for sigma^2. 
 
-Interpretation: many of the probabilities shown are close to 0.5, with a smaller number (top 3, or maybe top 6) of families at the top of the graph that indicate some genetic clustering. Is that a large enough proportion of the families in the dataset to indicate clinical importance of genetic clustering?    
+Interpretation: we see a wide range of probabilities around 0.5, with a smaller number (top 3, or maybe top 6) seemingly unlucky families indicating a genetic predisposition to developing cataracts. Notably, the Bayesian credible interval does not contain 0.5, evidence that genetic variation in incidence of cataracts is not completely random.     
 
 ---
 class: top, left
