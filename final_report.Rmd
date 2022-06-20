@@ -354,83 +354,84 @@ kbl(bayes_tab,
 ```
 
 ```{r postdens}
+colors <- c("Density" = "#5C88DAFF", "Mode" = "#84BD00FF", "HPD" = "#CC0C00FF")
 p0 <- ggplot(posts, aes(x = b0)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[1,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[1,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[1,2]), color = "darkorange3") +
+  geom_density(aes(color = "Density", fill = "Density"), alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[1,6], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[1,7], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[1,4], color = "Mode")) +
   scale_x_continuous(expand = c(0, 0)) +
   theme_light() +
   theme(plot.title = element_text(size= 12)) + 
   labs(x = "Probability",
-       title = "Female Control")
+       title = "$\beta_0$")
 
 p1 <- ggplot(posts, aes(x = b1)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[2,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[2,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[2,2]), color = "darkorange3") +
+  geom_density(aes(color = "Density", fill = "Density"), alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[2,6], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[2,7], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[2,4], color = "Mode")) +
   scale_x_continuous(expand = c(0, 0)) +
   theme_light() +
   theme(plot.title = element_text(size= 12)) + 
   labs(x = "Probability",
-       title = "Female Gamma")
+       title = "$\beta_1$")
 
 p2 <- ggplot(posts, aes(x = b2)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[3,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[3,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[3,2]), color = "darkorange3") +
+  geom_density(aes(color = "Density", fill = "Density"), alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[3,6], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[3,7], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[3,4], color = "Mode")) +
   scale_x_continuous(expand = c(0, 0)) +
   theme_light() +
   theme(plot.title = element_text(size= 12)) + 
   labs(x = "Probability",
-       title = "Female HZE")
+       title = "$\beta_2$")
 
 p3 <- ggplot(posts, aes(x = b3)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[4,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[4,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[4,2]), color = "darkorange3") +
+  geom_density(aes(color = "Density", fill = "Density"), alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[4,6], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[4,7], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[4,4], color = "Mode")) +
   scale_x_continuous(expand = c(0, 0)) +
   theme_light() +
   theme(plot.title = element_text(size= 12)) + 
   labs(x = "Probability",
-       title = "Male Contro")
+       title = "$\beta_3$")
 
 p4 <- ggplot(posts, aes(x = b4)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[5,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[5,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[5,2]), color = "darkorange3") +
+  geom_density(aes(color = "Density", fill = "Density"), alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[5,6], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[5,7], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[5,4], color = "Mode")) +
   scale_x_continuous(expand = c(0, 0)) +
   theme_light() +
   theme(plot.title = element_text(size= 12)) + 
   labs(x = "Probability",
-       title = "Male Gamma")
+       title = "$\beta_4")
 
 p5 <- ggplot(posts, aes(x = b5)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[6,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[6,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[6,2]), color = "darkorange3") +
+  geom_density(aes(color = "Density", fill = "Density"), alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[6,6], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[6,7], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[6,4], color = "Mode")) +
   scale_x_continuous(expand = c(0, 0)) +
   theme_light() +
   theme(plot.title = element_text(size= 12)) + 
   labs(x = "Probability",
-       title = "Male HZE")
+       title = "$\beta_5$")
 
 
 p6 <- ggplot(posts, aes(x = sigma2)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[7,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[7,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[7,3]), color = "darkorange3") + # calculate mode and replot
+  geom_density(aes(color = "Density", fill = "Density"), alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[7,6], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[7,7], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[7,4], color = "Mode")) +
   scale_x_continuous(expand = c(0, 0)) +
   theme_light() +
   theme(plot.title = element_text(size= 12)) + 
   labs(x = "Probability",
-       title = "Random Family Variance")
+       title = "$\\sigma^2$")
 
 grid.arrange(p0, p1, p2, p3, p4, p5, p6, 
              ncol = 3, top = "Posterior Densities with 95% HPD Intervals")
