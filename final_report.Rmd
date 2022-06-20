@@ -448,6 +448,48 @@ The final probability for developing cataracts can be written as:
 $$
 p_i = 0.063 + 0.55*Gamma_i + 0.623*HZE_i + 0.708*Male_i + 0.726*Gamma_i*Male_i + 0.770*HZE_i*Male_i
 $$
+  
+Assessing relative risk for cataracts between groups:  
+
+```{r relative}
+cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
+podds <- pairs(cats_emms, reverse = TRUE)
+podds <- as.data.frame(confint(podds)) %>%
+  rename(Contrast = contrast, Lower = asymp.LCL, Upper = asymp.UCL)
+
+ggplot(podds, aes(x = odds.ratio, y = Contrast, xmin = Lower, xmax = Upper)) +
+  geom_errorbarh(aes(height = 0.2, color = Sex),
+                 position = position_dodge(0.3), lwd = 1) +
+  geom_point(aes(color = Sex), position = position_dodge(0.3)) +
+  geom_text(aes(label = round(odds.ratio, 2), color = Sex), position = position_dodge(0.7)) + 
+  geom_vline(aes(xintercept = 1), color = "#84BD00FF", lty = 2) +
+  theme_light() +
+  theme(axis.text.y = element_text(angle = 45, vjust = 1, hjust = 0.5)) +
+  scale_color_startrek() +
+  labs(x = "Odds Ratio",
+       title = "Relative Risk of Developing Cataracts \nby Treatment Group")
+
+
+
+cats_emms1 <- emmeans(mod, ~Sex | Treatment, infer = TRUE, type = "response")
+podds1 <- pairs(cats_emms1, reverse = TRUE)
+podds1
+podds1 <- as.data.frame(confint(podds1)) %>%
+  rename(Contrast = contrast, Lower = asymp.LCL, Upper = asymp.UCL)
+
+ggplot(podds1, aes(x = odds.ratio, y = Contrast, xmin = Lower, xmax = Upper)) +
+  geom_errorbarh(aes(height = 0.2, color = Treatment),
+                 position = position_dodge(0.3), lwd = 1) +
+  geom_point(aes(color = Treatment), position = position_dodge(0.3)) +
+  geom_text(aes(label = round(odds.ratio, 2), color = Treatment), 
+            position = position_dodge(0.3), vjust = -1) +
+  theme_light() +
+  geom_vline(aes(xintercept = 1), color = "#FFCD00FF", lty = 2) +
+  scale_color_startrek() +
+  labs(x = "Odds Ratio",
+       title = "Relative Risk of Developing \nCataracts by Sex within Treatment")
+```
+
 
 ## Authors' Statements
 
