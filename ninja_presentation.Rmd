@@ -51,8 +51,18 @@ class: top, left
     + Accounting for family clustering, are there differences in cataract development between treatment groups?  
   
 ???
-This particular analysis focuses on potential genetic susceptibilty to developing cataracts. The mice used in this experiment were bred to be biologically heterogeneous, so any genetic predispositions may be easier to assess. Accounting for genetic effects also allows better examination of the effects of treatment on the outcome.  
+This particular analysis focuses on potential genetic susceptibilty to developing cataracts. The mice used in this experiment were bred to be biologically heterogeneous, so any genetic predispositions may be easier to assess. Accounting for genetic effects also allows better examination of the effects of treatment on the outcome. Our goal was to determine if there was a genetic component to cataract development among mice that are exposed to radiation. 
   
+--
+
+ - Experimental Design:  
+    + 1820 genetically heterogeneous mice from 48 unique families were randomly assigned, with equal family weights, to the three treatment groups. 
+    + Mice in the active treatment groups were irradiated at 7-12 weeks of age; all mice were monitored weekly. 
+    + Simplified dataset: symptoms at time of death for mice of Age $\ge$ 552 days, for a total sample size of 1169 mice from 47 families. 
+
+???
+To study the family effect, there were 48 biologically unique families and within those families the mice were assigned to receive one of the three treatments. At time of death for the mice that lived to at least 552 days, the severity of their cataracts were measured along with the other predictor variable measurements. There were 1169 mice total included.
+
 --
   
  - Variable Definitions:  
@@ -63,14 +73,8 @@ This particular analysis focuses on potential genetic susceptibilty to developin
 ???
 The outcome in question is a binary response variable indicating presence or absence of cataracts. The treatment consists of three groups: Gamma irradiation, HZE irradiation, and Unirradiated Control. Biological Family indicates the random genetic effect. The dataset also contained information on potentially important covariates.  
   
---
-  
- - Experimental Design:  
-    + 1820 genetically heterogeneous mice from 48 unique families were randomly assigned, with equal family weights, to the three treatment groups. 
-    + Mice in the active treatment groups were irradiated at 7-12 weeks of age; all mice were monitored weekly. 
-    + Simplified dataset: symptoms at time of death for mice of Age $\ge$ 552 days, for a total sample size of 1169 mice from 47 families. 
-
 ---
+
 class: top, center
 background-image: url('eda.png')
 background-size: contain  
@@ -91,8 +95,13 @@ log(\frac{p}{1-p}) = &\ \beta_0\ +\beta_1*Gamma_i\ + \beta_2*HZE_i\ + \beta_3*M_
 \end{aligned}$$
 
 ???
-Our final model contains two main fixed effects for Treatment and Sex, and interaction terms for the levels of each factor. The model also contains a random intercept for Family. We selected this model using Aikike's Information Criterion (AIC), by comparing to mixed models with just Treatment, Treatment and Sex as additive effects, and all covariates included as additive effects, as well as a fixed model counterpart to this final model.
+Our final model contains two main fixed effects for Treatment and Sex, and an interaction term for sex by treatment. The model also contains a random intercept for Family. We selected this model using Aikike's Information Criterion (AIC), by comparing it to several other models. These included:
+a full mixed model including all the predictors included in the data set,
+a mixed model with just treatment and sex and no interaction,
+and a full fixed model.
+
 --
+
 with non-informative priors:  
 
 $$\begin{aligned}
@@ -114,9 +123,15 @@ background-image: url('est_probs_plot.png')
 background-size: contain  
 
 ???
+<<<<<<< HEAD
 This plot shows the probability of developing cataracts for each of the fixed effects in our final model. Differences between both sex and treatment group are clearly visible, and notably the differences betweeen treatment group across gender. 
 
 Interpretation: females in general face less probability of developing cataracts than males, regardless of treatment group. We could argue that the effect of treatment group is not of clinical significance for female mice in this dataset. In contrast, males see a higher probability of developing cataracts than females across all treatment groups, but within male mice the difference between treatment group has clinical importance.
+=======
+This plot shows the probability of developing cataracts for each combination of sex by treatment group in our final model. Differences between both sex and treatment group are clearly visible, and notably the differences between treatment group across gender. 
+
+Interpretation: females in general face less probability of developing cataracts than males, across all treatment groups. We could argue that the effect of treatment group is not of clinical significance for female mice in this dataset. As you can see, the probability of developing cataracts is quite low for all 3 treatment groups. Males, on the other hand, have a higher probability of developing cataracts than females across all treatment groups. For males, the differences of development of cataracts across treatment groups is of clinical importance.
+>>>>>>> main
 ---
 background-image: url('re_plot.png')
 background-size: contain 
@@ -131,7 +146,9 @@ class: top, left
 ## Conclusions
 
  + Female mice are less likely to develop cataracts than male mice across all treatment groups. Treatment is strongly associated with differences in the probability of male mice developing cataracts, but it is not strongly associated with differences in the probability of female mice developing cataracts.  
-  
+
+???
+Female mice have a lower probability of developing cataracts than male mice across all 3 treatment groups. The difference in probability of developing cataracts for females is very small and doesn't show a strong association. However, the differences in probability of developing cataracts among males in the three treatment groups are quite large and do indicate a strong association.
 --
   
  + GLMM model selection and Bayesian HPD intervals indicate that Family is an important source of variation in predicting cataract development.  

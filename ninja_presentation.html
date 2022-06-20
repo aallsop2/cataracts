@@ -4,7 +4,7 @@
     <title>Three (Groups of) Blind Mice</title>
     <meta charset="utf-8" />
     <meta name="author" content="Amira Burns and Alyssa Allsop" />
-    <meta name="date" content="2022-06-19" />
+    <meta name="date" content="2022-06-20" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -23,7 +23,10 @@ class: center, middle
 ### Alyssa Allsop (allsop.alyssa@gmail.com)  
 ### Amira Burns (amiraburns@gmail.com)  
 ### Colorado State University: MAS Captstone  
-2022-06-19
+2022-06-20
+
+???
+Thanks for joining and listening to us talk about cataracts in mice! We are discussing our analysis  of Dr Weil's and Dr. Edmondson's research into the effects of high atomic energy (HZE) radiation. This work is important because there is very little precedent into studying this topic, and it has direct applications to space travel beyond the protection from HZE ions inside Earth's magnetic field.
 
 ???
 Thanks for joining and listening to us talk about cataracts in mice! We are discussing our analysis  of Dr Weil's and Dr. Edmondson's research into the effects of high atomic energy (HZE) radiation. This work is important because there is very little precedent into studying this topic, and it has direct applications to space travel beyond the protection from HZE ions inside Earth's magnetic field.
@@ -38,6 +41,7 @@ class: top, left
     + Accounting for family clustering, are there differences in cataract development between treatment groups?  
   
 ???
+<<<<<<< HEAD
 This particular analysis focuses on potential genetic susceptibilty to developing cataracts. The mice used in this experiment were bred to be biologically heterogeneous, so any genetic predispositions may be easier to assess. Accounting for genetic effects also allows better examination of the effects of treatment on the outcome.  
   
 --
@@ -52,12 +56,35 @@ The outcome in question is a binary response variable indicating presence or abs
   
 --
   
+=======
+Our goal was to determine if there was a genetic component to cataract development among mice that are exposed to radiation. 
+  
+--
+
+>>>>>>> main
  - Experimental Design:  
     + 1820 genetically heterogeneous mice from 48 unique families were randomly assigned, with equal family weights, to the three treatment groups. 
     + Mice in the active treatment groups were irradiated at 7-12 weeks of age; all mice were monitored weekly. 
     + Simplified dataset: symptoms at time of death for mice of Age `\(\ge\)` 552 days, for a total sample size of 1169 mice from 47 families. 
+<<<<<<< HEAD
+=======
+
+???
+To study the family effect, there were 48 biologically unique families and within those families the mice were assigned to receive one of the three treatments. At time of death for the mice that lived to at least 552 days, the severity of their cataracts were measured along with the other predictor variable measurements. There were 1169 mice total included.
+
+--
+  
+ - Variable Definitions:  
+    + **Response**: Cataract status, either 0 or 1 indicating the presence of cataracts of clinical concern.  
+    + **Primary Predictors**: Treatment, Family  
+    + **Possible Covariates**: Sex, Weight, Coat Color, Body Condition Score, Age, Myeloid Leukemia, Harderian Tumor, PreT Lymphoma  
+  
+???
+The response variable was a binary 0 or 1, with 1 indicating the presence of cataracts of clinical concern and 0 being no cataracts or non-severe cataracts. The possible predictors included in the dataset were: treatment group - HZE irradiation, Gamma irradiation, or unirradiated control group, family, sex, weight, coat color, body condition score, age, myeloid leukemia, harderian tumor, and preT lymphoma. 
+>>>>>>> main
 
 ---
+
 class: top, center
 background-image: url('eda.png')
 background-size: contain  
@@ -78,8 +105,17 @@ log(\frac{p}{1-p}) = &amp;\ \beta_0\ +\beta_1*Gamma_i\ + \beta_2*HZE_i\ + \beta_
 \end{aligned}$$`
 
 ???
+<<<<<<< HEAD
 Our final model contains two main fixed effects for Treatment and Sex, and interaction terms for the levels of each factor. The model also contains a random intercept for Family. We selected this model using Aikike's Information Criterion (AIC), by comparing to mixed models with just Treatment, Treatment and Sex as additive effects, and all covariates included as additive effects, as well as a fixed model counterpart to this final model.
+=======
+Our final model contains two main fixed effects for Treatment and Sex, and an interaction term for sex by treatment. The model also contains a random intercept for Family. We selected this model using Aikike's Information Criterion (AIC), by comparing it to several other models. These included:
+a full mixed model including all the predictors included in the data set,
+a mixed model with just treatment and sex and no interaction,
+and a full fixed model.
+
+>>>>>>> main
 --
+
 with non-informative priors:  
 
 `$$\begin{aligned}
@@ -101,9 +137,15 @@ background-image: url('est_probs_plot.png')
 background-size: contain  
 
 ???
+<<<<<<< HEAD
 This plot shows the probability of developing cataracts for each of the fixed effects in our final model. Differences between both sex and treatment group are clearly visible, and notably the differences betweeen treatment group across gender. 
 
 Interpretation: females in general face less probability of developing cataracts than males, regardless of treatment group. We could argue that the effect of treatment group is not of clinical significance for female mice in this dataset. In contrast, males see a higher probability of developing cataracts than females across all treatment groups, but within male mice the difference between treatment group has clinical importance.
+=======
+This plot shows the probability of developing cataracts for each combination of sex by treatment group in our final model. Differences between both sex and treatment group are clearly visible, and notably the differences between treatment group across gender. 
+
+Interpretation: females in general face less probability of developing cataracts than males, across all treatment groups. We could argue that the effect of treatment group is not of clinical significance for female mice in this dataset. As you can see, the probability of developing cataracts is quite low for all 3 treatment groups. Males, on the other hand, have a higher probability of developing cataracts than females across all treatment groups. For males, the differences of development of cataracts across treatment groups is of clinical importance.
+>>>>>>> main
 ---
 background-image: url('re_plot.png')
 background-size: contain 
@@ -118,7 +160,9 @@ class: top, left
 ## Conclusions
 
  + Female mice are less likely to develop cataracts than male mice across all treatment groups. Treatment is strongly associated with differences in the probability of male mice developing cataracts, but it is not strongly associated with differences in the probability of female mice developing cataracts.  
-  
+
+???
+Female mice have a lower probability of developing cataracts than male mice across all 3 treatment groups. The difference in probability of developing cataracts for females is very small and doesn't show a strong association. However, the differences in probability of developing cataracts among males in the three treatment groups are quite large and do indicate a strong association.
 --
   
  + GLMM model selection and Bayesian HPD intervals indicate that Family is an important source of variation in predicting cataract development.  
