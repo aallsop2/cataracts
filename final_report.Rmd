@@ -7,7 +7,9 @@ output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE) # change to echo = FALSE for final
+knitr::opts_chunk$set(echo = FALSE, 
+                      message = FALSE, 
+                      warning = FALSE) # change to echo = FALSE for final
 ```
 
 ```{r load_libs, warning = FALSE, message = FALSE}
@@ -90,7 +92,6 @@ The response is Merriam-Focht cataract score (Merriam & Focht, 1957), an ordinal
   
 The experimental design prescribed the inclusion of Treatment and Family in a final model. 
 
-------------------------------------------------------------------------
 
 ## Summary Statistics
 
@@ -135,7 +136,7 @@ ct_prop <- kbl(sum_tab,
 ct_prop
 ```
 
-```{r lineplot}
+```{r lineplot, message = FALSE}
 # Plot of average score of sex-group-family
 grsex_score <- cats %>%
   group_by(Sex, Treatment, Family) %>%
@@ -151,7 +152,7 @@ l1 <- ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
        title = "Cataracts by Family, Sex, Treatment Group")
 ```
 
-```{r barplot}
+```{r barplot, message = FALSE}
 # barplot of proportion of each group with cataracts
 sex_trt <- cats %>%
   group_by(Treatment, Sex, Cataracts) %>%
@@ -196,13 +197,7 @@ summary(mod)
 
 
 
-```{r contr}
-cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
-cats_emms
-pairs(cats_emms, reverse = TRUE)
-emmip(cats_emms, Treatment ~ Sex) + theme_light() + 
-  ggtitle("Predicted Probabilities of Cataracts \nby Sex and Treatment Group") + scale_color_startrek()
-```
+
 
 ```{r probs}
 # convert estimates to probabilities
@@ -432,7 +427,15 @@ The final probability for developing cataracts can be written as:
 $$
 p_i = 0.063 + 0.55*Gamma_i + 0.623*HZE_i + 0.708*Male_i + 0.726*Gamma_i*Male_i + 0.770*HZE_i*Male_i
 $$
-  
+
+```{r contr}
+cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
+cats_emms
+pairs(cats_emms, reverse = TRUE)
+emmip(cats_emms, Treatment ~ Sex) + theme_light() + 
+  ggtitle("Predicted Probabilities of Cataracts \nby Sex and Treatment Group") + scale_color_startrek()
+```
+
 Assessing odds ratios for cataracts between groups:  
 
 ```{r oddsr}

@@ -34,46 +34,6 @@
 \makeatother
 \usepackage{xcolor}
 \usepackage[margin=1in]{geometry}
-\usepackage{color}
-\usepackage{fancyvrb}
-\newcommand{\VerbBar}{|}
-\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-% Add ',fontsize=\small' for more characters per line
-\usepackage{framed}
-\definecolor{shadecolor}{RGB}{248,248,248}
-\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\BuiltInTok}[1]{#1}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
-\newcommand{\ExtensionTok}[1]{#1}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ImportTok}[1]{#1}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\NormalTok}[1]{#1}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{graphicx}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -131,65 +91,6 @@
 \begin{document}
 \maketitle
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(readxl)}
-\FunctionTok{library}\NormalTok{(tidyverse)}
-\FunctionTok{library}\NormalTok{(lme4)}
-\FunctionTok{library}\NormalTok{(broom.mixed)}
-\FunctionTok{library}\NormalTok{(kableExtra)}
-\FunctionTok{library}\NormalTok{(emmeans)}
-\FunctionTok{library}\NormalTok{(ggsci)}
-\FunctionTok{library}\NormalTok{(sjPlot)}
-\FunctionTok{library}\NormalTok{(coda)}
-\FunctionTok{library}\NormalTok{(rjags)}
-\FunctionTok{library}\NormalTok{(R2jags)}
-\FunctionTok{library}\NormalTok{(superdiag)}
-\FunctionTok{library}\NormalTok{(mcmcplots)}
-\FunctionTok{library}\NormalTok{(ggmcmc)}
-\FunctionTok{library}\NormalTok{(gridExtra)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{cats }\OtherTok{\textless{}{-}} \FunctionTok{read\_excel}\NormalTok{(}\StringTok{"GRSD.cataract.xlsx"}\NormalTok{, }\AttributeTok{sheet =} \StringTok{"Sheet1"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# remove spaces from column and value names}
-\FunctionTok{names}\NormalTok{(cats) }\OtherTok{\textless{}{-}} \FunctionTok{str\_replace\_all}\NormalTok{(}\FunctionTok{names}\NormalTok{(cats), }\StringTok{" "}\NormalTok{, }\StringTok{"\_"}\NormalTok{)}
-\NormalTok{cats }\OtherTok{\textless{}{-}}\NormalTok{ cats }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{CoatColor =} \FunctionTok{str\_replace\_all}\NormalTok{(coat\_color, }\StringTok{" "}\NormalTok{, }\StringTok{"\_"}\NormalTok{))}
-
-\CommentTok{\# turn categorical vars into factor}
-\NormalTok{cats }\OtherTok{\textless{}{-}}\NormalTok{ cats }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{rename}\NormalTok{(}\AttributeTok{Age =} \StringTok{\textasciigrave{}}\AttributeTok{age\_(days)}\StringTok{\textasciigrave{}}\NormalTok{,}
-         \AttributeTok{Weight =}\NormalTok{ weight,}
-         \AttributeTok{Animal =}\NormalTok{ animal) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Sex =} \FunctionTok{as.factor}\NormalTok{(sex),}
-         \AttributeTok{CoatColor =} \FunctionTok{as.factor}\NormalTok{(CoatColor),}
-         \AttributeTok{Family =} \FunctionTok{as.factor}\NormalTok{(family), }\CommentTok{\# should this stay a factor? Yes?}
-         \AttributeTok{BCS =} \FunctionTok{as.ordered}\NormalTok{(BCS),}
-         \AttributeTok{Treatment =} \FunctionTok{relevel}\NormalTok{(}\FunctionTok{as.factor}\NormalTok{(groups), }\AttributeTok{ref =} \StringTok{"Unirradiated"}\NormalTok{),}
-         \AttributeTok{MyeloidLeukemia =} \FunctionTok{as.factor}\NormalTok{(Myeloid\_Leukemia),}
-         \AttributeTok{HarderianTumor =} \FunctionTok{as.factor}\NormalTok{(Harderian\_Tumor),}
-         \AttributeTok{PreTLymphoma =} \FunctionTok{as.factor}\NormalTok{(PreT\_Lymphoma),}
-         \AttributeTok{Score =} \FunctionTok{as.ordered}\NormalTok{(Cataract\_Score)) }\CommentTok{\# ordinal cat; leave as numeric?}
-
-\CommentTok{\# select vars, add binary conversion for score}
-\NormalTok{cats }\OtherTok{\textless{}{-}}\NormalTok{ cats }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{select}\NormalTok{(}\FunctionTok{c}\NormalTok{(Animal, Sex, Weight, CoatColor, Family, BCS, Age, Treatment,}
-\NormalTok{           MyeloidLeukemia, HarderianTumor, PreTLymphoma, Score)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Cataracts =} \FunctionTok{ifelse}\NormalTok{(Score }\SpecialCharTok{\textless{}} \DecValTok{2}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{))}
-
-\CommentTok{\# glance at the dataset}
-\CommentTok{\# str(cats)}
-\end{Highlighting}
-\end{Shaded}
-
 \hypertarget{abstract}{%
 \subsection{Abstract}\label{abstract}}
 
@@ -236,19 +137,6 @@ group, and n = 496 in the unirradiated control group. There are up to
 two generations of mice pups from each family in the dataset, but
 generation is not distinguished in the simplified data. Family size
 ranges from n = 11 to n = 48, with median family size of 24.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{cats }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{group\_by}\NormalTok{(Score) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{count}\NormalTok{(Treatment) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{pivot\_wider}\NormalTok{(}\AttributeTok{names\_from =}\NormalTok{ Score, }\AttributeTok{values\_from =}\NormalTok{ n) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{group\_by}\NormalTok{(Treatment) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Total =} \FunctionTok{sum}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{1}\StringTok{\textasciigrave{}}\NormalTok{, }\StringTok{\textasciigrave{}}\AttributeTok{2}\StringTok{\textasciigrave{}}\NormalTok{, }\StringTok{\textasciigrave{}}\AttributeTok{3}\StringTok{\textasciigrave{}}\NormalTok{, }\StringTok{\textasciigrave{}}\AttributeTok{4}\StringTok{\textasciigrave{}}\NormalTok{))) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{kbl}\NormalTok{(}\AttributeTok{caption =} \StringTok{"Counts of Score by Treatment"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{add\_header\_above}\NormalTok{(}\FunctionTok{c}\NormalTok{( }\StringTok{" "} \OtherTok{=} \DecValTok{1}\NormalTok{, }\StringTok{"Cataract Score"} \OtherTok{=} \DecValTok{4}\NormalTok{, }\StringTok{" "} \OtherTok{=} \DecValTok{1}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{kable\_classic}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ F, }\AttributeTok{html\_font =} \StringTok{"Cambria"}\NormalTok{, }\AttributeTok{font\_size =} \DecValTok{12}\NormalTok{, }\AttributeTok{position =} \StringTok{"float\_right"}\NormalTok{) }
-\end{Highlighting}
-\end{Shaded}
 
 \begin{wraptable}{r}{0pt}
 
@@ -303,8 +191,6 @@ levels = {[}0, 1{]}. PreT Lymphoma: binary categorical with two levels =
 The experimental design prescribed the inclusion of Treatment and Family
 in a final model.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
 \hypertarget{summary-statistics}{%
 \subsection{Summary Statistics}\label{summary-statistics}}
 
@@ -313,47 +199,6 @@ terms of Treatment and Family and any potential associations between the
 response and covariates. In addition, possible interactions and
 correlations between covariates and the primary predictors in terms of
 the response were of interest.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{sex\_trt }\OtherTok{\textless{}{-}}\NormalTok{ cats }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{group\_by}\NormalTok{(Treatment, Sex, Cataracts) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{n =} \FunctionTok{n}\NormalTok{()) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{ungroup}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{group\_by}\NormalTok{(Treatment, Sex) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{prop =} \FunctionTok{round}\NormalTok{(n}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(n), }\AttributeTok{digits =} \DecValTok{2}\NormalTok{))}
-
-\NormalTok{sum\_tab }\OtherTok{\textless{}{-}}\NormalTok{ sex\_trt }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{pivot\_wider}\NormalTok{(}\AttributeTok{names\_from =}\NormalTok{ Sex, }\AttributeTok{values\_from =} \FunctionTok{c}\NormalTok{(n, prop)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Cataracts =} \FunctionTok{ifelse}\NormalTok{(Cataracts }\SpecialCharTok{==} \DecValTok{0}\NormalTok{, }\StringTok{"No"}\NormalTok{, }\StringTok{"Yes"}\NormalTok{),}
-         \AttributeTok{Treatment =} \FunctionTok{rep}\NormalTok{(}\StringTok{" "}\NormalTok{, }\DecValTok{1}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{relocate}\NormalTok{(prop\_F, }\AttributeTok{.after =}\NormalTok{ n\_F)}
-\NormalTok{n\_C }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{438}\NormalTok{, }\DecValTok{58}\NormalTok{, }\DecValTok{214}\NormalTok{, }\DecValTok{63}\NormalTok{, }\DecValTok{281}\NormalTok{, }\DecValTok{115}\NormalTok{)}
-\NormalTok{prop\_C }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.88}\NormalTok{, }\FloatTok{0.12}\NormalTok{, }\FloatTok{0.77}\NormalTok{, }\FloatTok{0.23}\NormalTok{, }\FloatTok{0.71}\NormalTok{, }\FloatTok{0.29}\NormalTok{)}
-
-\NormalTok{sum\_tab }\OtherTok{\textless{}{-}}\NormalTok{ sum\_tab }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{ungroup}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{n\_C =}\NormalTok{ n\_C, }\AttributeTok{prop\_C =}\NormalTok{ prop\_C) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{add\_row}\NormalTok{(}\AttributeTok{Treatment =} \StringTok{" "}\NormalTok{, }\AttributeTok{Cataracts =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{sum$"}\NormalTok{, }\AttributeTok{n\_F =} \DecValTok{258}\NormalTok{, }\AttributeTok{prop\_F =} \ConstantTok{NA}\NormalTok{,}
-          \AttributeTok{n\_M =} \DecValTok{238}\NormalTok{, }\AttributeTok{prop\_M =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{n\_C =} \DecValTok{496}\NormalTok{, }\AttributeTok{prop\_C =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{.after =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{add\_row}\NormalTok{(}\AttributeTok{Treatment =} \StringTok{" "}\NormalTok{, }\AttributeTok{Cataracts =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{sum$"}\NormalTok{, }\AttributeTok{n\_F =} \DecValTok{145}\NormalTok{, }\AttributeTok{prop\_F =} \ConstantTok{NA}\NormalTok{,}
-          \AttributeTok{n\_M =} \DecValTok{132}\NormalTok{, }\AttributeTok{prop\_M =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{n\_C =} \DecValTok{277}\NormalTok{, }\AttributeTok{prop\_C =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{.after =} \DecValTok{5}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{add\_row}\NormalTok{(}\AttributeTok{Treatment =} \StringTok{" "}\NormalTok{, }\AttributeTok{Cataracts =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{sum$"}\NormalTok{, }\AttributeTok{n\_F =} \DecValTok{205}\NormalTok{, }\AttributeTok{prop\_F =} \ConstantTok{NA}\NormalTok{,}
-          \AttributeTok{n\_M =} \DecValTok{191}\NormalTok{, }\AttributeTok{prop\_M =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{n\_C =} \DecValTok{396}\NormalTok{, }\AttributeTok{prop\_C =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{.after =} \DecValTok{8}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{add\_row}\NormalTok{(}\AttributeTok{Treatment =} \StringTok{" "}\NormalTok{, }\AttributeTok{Cataracts =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{sum$"}\NormalTok{, }\AttributeTok{n\_F =} \DecValTok{608}\NormalTok{, }\AttributeTok{prop\_F =} \ConstantTok{NA}\NormalTok{,}
-          \AttributeTok{n\_M =} \DecValTok{561}\NormalTok{, }\AttributeTok{prop\_M =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{n\_C =} \DecValTok{1169}\NormalTok{, }\AttributeTok{prop\_C =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{.after =} \DecValTok{9}\NormalTok{)}
-
-\FunctionTok{options}\NormalTok{(}\AttributeTok{knitr.kable.NA =} \StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{)}
-\NormalTok{ct\_prop }\OtherTok{\textless{}{-}} \FunctionTok{kbl}\NormalTok{(sum\_tab,}
-               \AttributeTok{caption =} \StringTok{"Mice Counts and Percentages by Sex, Treatment Group, Cataracts"}\NormalTok{,}
-               \AttributeTok{col.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"Treatment"}\NormalTok{, }\StringTok{"Cataracts"}\NormalTok{, }\StringTok{"n"}\NormalTok{, }\StringTok{"prop"}\NormalTok{, }\StringTok{"n"}\NormalTok{, }\StringTok{"prop"}\NormalTok{, }\StringTok{"n"}\NormalTok{, }\StringTok{"prop"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{latex\_options =} \StringTok{"hold\_position"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{kable\_classic\_2}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ F, }\AttributeTok{html\_font =} \StringTok{"Cambria"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{add\_header\_above}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{" "} \OtherTok{=} \DecValTok{2}\NormalTok{, }\StringTok{"Female"} \OtherTok{=} \DecValTok{2}\NormalTok{, }\StringTok{"Male"} \OtherTok{=} \DecValTok{2}\NormalTok{, }\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{sum$"} \OtherTok{=} \DecValTok{2}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{pack\_rows}\NormalTok{(}\AttributeTok{index =} \FunctionTok{c}\NormalTok{(}\StringTok{"Control"} \OtherTok{=} \DecValTok{3}\NormalTok{, }\StringTok{"Gamma"} \OtherTok{=} \DecValTok{3}\NormalTok{, }\StringTok{"HZE"} \OtherTok{=} \DecValTok{3}\NormalTok{, }\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{sum$"} \OtherTok{=} \DecValTok{1}\NormalTok{))}
-\NormalTok{ct\_prop}
-\end{Highlighting}
-\end{Shaded}
 
 \begin{table}[!h]
 
@@ -396,85 +241,6 @@ Treatment & Cataracts & n & prop & n & prop & n & prop\\
 \end{tabular}
 \end{table}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Plot of average score of sex{-}group{-}family}
-\NormalTok{grsex\_score }\OtherTok{\textless{}{-}}\NormalTok{ cats }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{group\_by}\NormalTok{(Sex, Treatment, Family) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{mean\_score =} \FunctionTok{mean}\NormalTok{(Cataracts))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## `summarise()` has grouped output by 'Sex', 'Treatment'. You can override using
-## the `.groups` argument.
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# choose facet direction and just show one}
-\NormalTok{l1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(grsex\_score, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Treatment, }\AttributeTok{y =}\NormalTok{ mean\_score, }\AttributeTok{color =}\NormalTok{ Sex)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{group =}\NormalTok{ Family)) }\SpecialCharTok{+} \FunctionTok{facet\_grid}\NormalTok{(}\FunctionTok{vars}\NormalTok{(Sex)) }\SpecialCharTok{+}
-  \FunctionTok{scale\_color\_startrek}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{scale\_x\_discrete}\NormalTok{(}\AttributeTok{expand =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, .}\DecValTok{2}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"mean score"}\NormalTok{,}
-       \AttributeTok{title =} \StringTok{"Cataracts by Family, Sex, Treatment Group"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# barplot of proportion of each group with cataracts}
-\NormalTok{sex\_trt }\OtherTok{\textless{}{-}}\NormalTok{ cats }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{group\_by}\NormalTok{(Treatment, Sex, Cataracts) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{n =} \FunctionTok{n}\NormalTok{()) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{ungroup}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{group\_by}\NormalTok{(Treatment, Sex) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{prop =} \FunctionTok{round}\NormalTok{(n}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(n), }\AttributeTok{digits =} \DecValTok{2}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## `summarise()` has grouped output by 'Treatment', 'Sex'. You can override using
-## the `.groups` argument.
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{cats\_grp }\OtherTok{\textless{}{-}}\NormalTok{ sex\_trt }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{filter}\NormalTok{(Cataracts }\SpecialCharTok{==} \DecValTok{1}\NormalTok{)}
-
-\NormalTok{b1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(cats\_grp, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Sex, }\AttributeTok{y =}\NormalTok{ prop, }\AttributeTok{fill =}\NormalTok{ Treatment)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_col}\NormalTok{(}\AttributeTok{position =} \StringTok{"dodge"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{scale\_fill\_startrek}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Sample Proportion"}\NormalTok{)}
-
-\NormalTok{logits }\OtherTok{\textless{}{-}}\NormalTok{ sex\_trt }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{group\_by}\NormalTok{(Treatment, Sex) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{odds\_ratio =}\NormalTok{ prop[Cataracts }\SpecialCharTok{==} \DecValTok{1}\NormalTok{]}\SpecialCharTok{/}\NormalTok{prop[Cataracts }\SpecialCharTok{==} \DecValTok{0}\NormalTok{])}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## `summarise()` has grouped output by 'Treatment'. You can override using the
-## `.groups` argument.
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{b2 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(logits, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Sex, }\AttributeTok{y =}\NormalTok{ odds\_ratio, }\AttributeTok{fill =}\NormalTok{ Treatment)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_col}\NormalTok{(}\AttributeTok{position =} \StringTok{"dodge"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{scale\_fill\_startrek}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"Odds Ratio"}\NormalTok{,}
-       \AttributeTok{title =} \StringTok{"Empirical Odds Ratios"}\NormalTok{)}
-
-\FunctionTok{grid.arrange}\NormalTok{(b1, b2, }\AttributeTok{ncol =} \DecValTok{2}\NormalTok{, }\AttributeTok{top =} \StringTok{"Cataracts by Sex, Treatment"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
 \includegraphics{final_report_files/figure-latex/barplot-1.pdf}
 
 \hypertarget{statistical-methods}{%
@@ -482,15 +248,6 @@ Treatment & Cataracts & n & prop & n & prop & n & prop\\
 
 \hypertarget{frequentist-approach}{%
 \subsubsection{Frequentist Approach}\label{frequentist-approach}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# mixed model binomial logistic regression }
-
-\NormalTok{mod }\OtherTok{\textless{}{-}} \FunctionTok{glmer}\NormalTok{(Cataracts }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment}\SpecialCharTok{*}\NormalTok{Sex }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Family), }\AttributeTok{data =}\NormalTok{ cats, }\AttributeTok{family =}\NormalTok{ binomial)}
-\FunctionTok{summary}\NormalTok{(mod)}
-\end{Highlighting}
-\end{Shaded}
 
 \begin{verbatim}
 ## Generalized linear mixed model fit by maximum likelihood (Laplace
@@ -531,24 +288,266 @@ Treatment & Cataracts & n & prop & n & prop & n & prop\\
 ## TrtmnHZE:SM  0.513 -0.373 -0.800 -0.733  0.487
 \end{verbatim}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{plot\_model}\NormalTok{(mod, }\AttributeTok{sort.est =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{show.values =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{type =} \StringTok{"int"}\NormalTok{,}
-           \AttributeTok{color =} \StringTok{"Dark2"}\NormalTok{, }\AttributeTok{vline.color =} \StringTok{"darkorchid3"}\NormalTok{,}
-           \AttributeTok{width =} \FloatTok{0.1}\NormalTok{, }\AttributeTok{title =} \StringTok{"Final Model: Probabilities of Cataracts by Sex, Treatment Group"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+\hypertarget{bayesian-approach}{%
+\subsubsection{Bayesian Approach}\label{bayesian-approach}}
+
+We fit a complementary Bayesian model to examine the distribution of the
+estimates from our final model, as well as test its robustness to
+alternative approaches. The Bayes model is parameterized as:
+
+\[
+\begin{aligned}
+Y_{ij} \sim &Bernoulli(p)\\
+log(\frac{p}{1-p}) = &\ \beta_0*Control_i*F_i\ +\beta_1*Gamma_i*F_i\ + \beta_2*HZE_i*F_i\ + \\ &\beta_3*Control_i*M_i\ +\beta_4*Gamma*M\ + \beta_5*HZE*M\ + \\
+&v_{j} + \epsilon_{ij}\\
+&i = 1, ..., 1169\ \mbox{ mice} \\
+&j = 1,...,47\ \ \mbox{ families, and} \\
+v_j \sim\ &N(0, \tau)
+\end{aligned}
+\]
+
+With non-informative parameters:\\
+\[
+\begin{aligned}
+\beta_0 &\sim N(0, 0.001)\\
+\beta_1 &\sim N(0, 0.001)\\
+\beta_2 &\sim N(0, 0.001)\\
+\beta_3 &\sim N(0, 0.001)\\
+\beta_4 &\sim N(0, 0.001)\\
+\beta_5 &\sim N(0, 0.001)\\
+v_i &\sim N(0, \sigma^2)\\
+\tau &\sim Gamma(0.001, 0.001) \mbox{ where}\ \sigma^2 = 1/\tau\\
+\end{aligned}
+\]
+
+The model was run through a Gibbs sampler Markov Chain Monte Carlo
+(MCMC) algorithm to approximate the posterior distribution of all fixed
+effects estimates and the variance of the random effect. 3 chains of
+60000 total iterations with a 10000-iteration burn-in period; starting
+values were obtained from the estimates generated by the Frequentist
+model, with noise added to avoid false convergence.
+
+\begin{verbatim}
+## Compiling model graph
+##    Resolving undeclared variables
+##    Allocating nodes
+## Graph information:
+##    Observed stochastic nodes: 1169
+##    Unobserved stochastic nodes: 54
+##    Total graph size: 6473
+## 
+## Initializing model
+\end{verbatim}
+
+\begin{wraptable}{l}{0pt}
+
+\caption{\label{tab:bayes_tab}Final Model Parameter Estimates (probabilities)}
+\centering
+\begin{tabular}[t]{l|r|r|r|r|r|r|r}
+\hline
+  & GLMM Est & MCMC Mean & MCMC Median & MCMC Mode & MCMC SD & HPD Lower & HPD Upper\\
+\hline
+\$\textbackslash{}beta\_0\$ & 0.063 & 0.063 & 0.062 & 0.057 & 0.016 & 0.034 & 0.094\\
+\hline
+\$\textbackslash{}beta\_1\$ & 0.553 & 0.549 & 0.551 & 0.550 & 0.090 & 0.371 & 0.720\\
+\hline
+\$\textbackslash{}beta\_2\$ & 0.623 & 0.621 & 0.624 & 0.634 & 0.076 & 0.469 & 0.764\\
+\hline
+\$\textbackslash{}beta\_3\$ & 0.708 & 0.708 & 0.710 & 0.714 & 0.062 & 0.589 & 0.828\\
+\hline
+\$\textbackslash{}beta\_4\$ & 0.726 & 0.721 & 0.729 & 0.723 & 0.090 & 0.544 & 0.883\\
+\hline
+\$\textbackslash{}beta\_5\$ & 0.770 & 0.763 & 0.771 & 0.776 & 0.072 & 0.618 & 0.892\\
+\hline
+\$\textbackslash{}sigma\textasciicircum{}2\$ & 0.597 & 0.609 & 0.604 & 0.585 & 0.041 & 0.539 & 0.694\\
+\hline
+\end{tabular}
+\end{wraptable}
+
+\includegraphics{final_report_files/figure-latex/postdens-1.pdf}
+
+\hypertarget{limitations-and-alternatives}{%
+\subsection{Limitations and
+Alternatives}\label{limitations-and-alternatives}}
+
+Presence of competing risks in the experimental design obscure the
+presence of family clusters of cataracts. It is reasonable to assume
+that individuals in the irradiated Treatment groups were more likely to
+die due to more acute effects of irradiation before developing
+cataracts, compared to individuals in the control group. Simplifying the
+dataset by instituting a cutoff age attempts to address this limitation,
+but the issue persists even after excluding individuals deceased before
+Age = 552.
+
+\hypertarget{results-and-conclusions}{%
+\subsection{Results and Conclusions}\label{results-and-conclusions}}
+
+The final probability for developing cataracts can be written as:\\
+\[
+p_i = 0.063 + 0.55*Gamma_i + 0.623*HZE_i + 0.708*Male_i + 0.726*Gamma_i*Male_i + 0.770*HZE_i*Male_i
+\]
+
+\begin{verbatim}
+## Sex = F:
+##  Treatment      prob     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+##  Unirradiated 0.0631 0.0154 Inf    0.0389     0.101  0.5 -10.343  <.0001
+##  Gamma        0.0770 0.0219 Inf    0.0436     0.132  0.5  -8.062  <.0001
+##  HZE          0.1001 0.0221 Inf    0.0643     0.153  0.5  -8.942  <.0001
+## 
+## Sex = M:
+##  Treatment      prob     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+##  Unirradiated 0.1407 0.0252 Inf    0.0982     0.198  0.5  -8.697  <.0001
+##  Gamma        0.3495 0.0485 Inf    0.2613     0.449  0.5  -2.913  0.0036
+##  HZE          0.4744 0.0448 Inf    0.3882     0.562  0.5  -0.569  0.5693
+## 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the logit scale 
+## Tests are performed on the logit scale
+\end{verbatim}
+
+\begin{verbatim}
+## Sex = F:
+##  contrast             odds.ratio    SE  df null z.ratio p.value
+##  Gamma / Unirradiated       1.24 0.459 Inf    1   0.577  0.8325
+##  HZE / Unirradiated         1.65 0.534 Inf    1   1.546  0.2695
+##  HZE / Gamma                1.33 0.482 Inf    1   0.793  0.7071
+## 
+## Sex = M:
+##  contrast             odds.ratio    SE  df null z.ratio p.value
+##  Gamma / Unirradiated       3.28 0.865 Inf    1   4.509  <.0001
+##  HZE / Unirradiated         5.51 1.331 Inf    1   7.076  <.0001
+##  HZE / Gamma                1.68 0.412 Inf    1   2.115  0.0868
+## 
+## P value adjustment: tukey method for comparing a family of 3 estimates 
+## Tests are performed on the log odds ratio scale
+\end{verbatim}
+
+\includegraphics{final_report_files/figure-latex/contr-1.pdf}
+
+Assessing odds ratios for cataracts between groups:
+
+\includegraphics{final_report_files/figure-latex/oddsr-1.pdf}
+
+\begin{verbatim}
+## Treatment = Unirradiated:
+##  contrast odds.ratio    SE  df null z.ratio p.value
+##  M / F          2.43 0.724 Inf    1   2.977  0.0029
+## 
+## Treatment = Gamma:
+##  contrast odds.ratio    SE  df null z.ratio p.value
+##  M / F          6.44 2.231 Inf    1   5.374  <.0001
+## 
+## Treatment = HZE:
+##  contrast odds.ratio    SE  df null z.ratio p.value
+##  M / F          8.12 2.220 Inf    1   7.658  <.0001
+## 
+## Tests are performed on the log odds ratio scale
+\end{verbatim}
+
+\includegraphics{final_report_files/figure-latex/oddsr2-1.pdf}
+
+Assessing relative risk for cataracts between groups:\\
+\includegraphics{final_report_files/figure-latex/RR-1.pdf}
+
+\includegraphics{final_report_files/figure-latex/RR1-1.pdf}
+
+Visualizing random effect by family:\\
+\includegraphics{final_report_files/figure-latex/re_plot-1.pdf}
+
+\hypertarget{authors-statements}{%
+\subsection{Authors' Statements}\label{authors-statements}}
+
+Both authors contributed to statistical analysis and writing for this
+report. Both authors read and approved the final report. Both authors
+contributed equally to introduction, exploratory data analysis, summary
+statistics, and results. Alyssa Allsop served as the primary
+statistician on fitting Frequentist models; Amira Burns served as the
+primary statistician on fitting the Bayesian model.
+
+\hypertarget{references}{%
+\subsection{References}\label{references}}
+
+Agresti, A (2013). \emph{Categorical Data Analysis} (Third Edition).
+John Wiley \& Sons.
+
+Chernyavskiy, P., Edmondson, E. F., Weil, M. M., \& Little, M. P.
+(2017). \emph{High-energy particle beam and gamma radiation exposure,
+familial relatedness and cancer in mice.} British journal of cancer,
+117(1), 41--50. \url{https://doi.org/10.1038/bjc.2017.141}
+
+Gelman, A., Carlin, J., Stern, H., Dunson, D., Vehtari, A., Rubin, D.
+(2014). \emph{Bayesian Data Analysis} (Third Edition). CRC Press.
+
+Roback, P., Legler, J. (2021). \emph{Beyond Multiple Linear Regression.
+Applied Generalized Linear Models and Multilevel Models in R} (Second
+Edition). CRC Press. Online version:
+\url{https://bookdown.org/roback/bookdown-BeyondMLR/}
+
+DiMaggio, C., Albert, J., Spiegelhalter, D., Best, N., Gelman, A.,
+Carstensen, B., Guerrin, L., Jensen, S. (2015) \emph{Bayesian Analysis
+for Epidemiologists III: Regression Modeling.} Center for Injury
+Epidemiology and Prevention at Columbia University.
+\url{http://www.columbia.edu/~cjd11/charles_dimaggio/DIRE/styled-4/styled-11/code-8/\#bayesian-regression-modeling-with-bugs-or-jags}
+
+R Packages:\\
++ Douglas Bates, Martin Maechler, Ben Bolker, Steve Walker (2015).
+Fitting Linear Mixed-Effects Models Using lme4. Journal of Statistical
+Software, 67(1), 1-48. \url{doi:10.18637/jss.v067.i01}.\\
++ Martyn Plummer (2021). rjags: Bayesian Graphical Models using MCMC. R
+package version 4-12. \url{https://CRAN.R-project.org/package=rjags}\\
++ Russell V. Lenth (2022). emmeans: Estimated Marginal Means, aka
+Least-Squares Means. R package version 1.7.3.
+\url{https://CRAN.R-project.org/package=emmeans}
+
+\hypertarget{appendix}{%
+\subsection{Appendix}\label{appendix}}
+
+\hypertarget{additional-exploratory-data-analysis}{%
+\subsubsection{Additional Exploratory Data
+Analysis}\label{additional-exploratory-data-analysis}}
+
+\hypertarget{glmm-model-selection}{%
+\subsubsection{GLMM Model Selection}\label{glmm-model-selection}}
+
+\hypertarget{glmm-model-diagnostics-necessary}{%
+\subsubsection{GLMM Model Diagnostics
+(necessary?)}\label{glmm-model-diagnostics-necessary}}
+
+\hypertarget{bayes-model-diagnostics}{%
+\subsubsection{Bayes Model Diagnostics}\label{bayes-model-diagnostics}}
+
+Traceplots:
+\includegraphics{final_report_files/figure-latex/trace-1.pdf}
+
+ACF plots:\\
+\includegraphics{final_report_files/figure-latex/acf-1.pdf}
+\includegraphics{final_report_files/figure-latex/acf-2.pdf} Gelman-Rubin
+Diagnostics:
+
+\begin{verbatim}
+## Potential scale reduction factors:
+## 
+##          Point est. Upper C.I.
+## b0                1          1
+## b1                1          1
+## b2                1          1
+## b3                1          1
+## b4                1          1
+## b5                1          1
+## deviance          1          1
+## sigma2            1          1
+## 
+## Multivariate psrf
+## 
+## 1
+\end{verbatim}
+
+\includegraphics{final_report_files/figure-latex/grd-1.pdf}
+
+\hypertarget{post-hoc-assessments}{%
+\subsubsection{Post-Hoc Assessments}\label{post-hoc-assessments}}
 
 \includegraphics{final_report_files/figure-latex/glmm_ors-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{tab\_model}\NormalTok{(mod, }\AttributeTok{show.re.var =} \ConstantTok{TRUE}\NormalTok{,}
-          \AttributeTok{pred.labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Control(Female)"}\NormalTok{, }\StringTok{"Gamma(Female)"}\NormalTok{, }\StringTok{"HZE(Female)"}\NormalTok{,}
-                          \StringTok{"Control(Male)"}\NormalTok{, }\StringTok{"Gamma(Male)"}\NormalTok{, }\StringTok{"HZE(Male)"}\NormalTok{),}
-          \AttributeTok{dv.labels =} \StringTok{"Final Model: Odds Ratios of Cataracts by Sex, Treatment Group"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
 ~
 
@@ -635,823 +634,6 @@ Observations
 Marginal R2 / Conditional R2
 
 0.194 / 0.281
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{cats\_emms }\OtherTok{\textless{}{-}} \FunctionTok{emmeans}\NormalTok{(mod, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{|}\NormalTok{ Sex, }\AttributeTok{infer =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)}
-\NormalTok{cats\_emms}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Sex = F:
-##  Treatment      prob     SE  df asymp.LCL asymp.UCL null z.ratio p.value
-##  Unirradiated 0.0631 0.0154 Inf    0.0389     0.101  0.5 -10.343  <.0001
-##  Gamma        0.0770 0.0219 Inf    0.0436     0.132  0.5  -8.062  <.0001
-##  HZE          0.1001 0.0221 Inf    0.0643     0.153  0.5  -8.942  <.0001
-## 
-## Sex = M:
-##  Treatment      prob     SE  df asymp.LCL asymp.UCL null z.ratio p.value
-##  Unirradiated 0.1407 0.0252 Inf    0.0982     0.198  0.5  -8.697  <.0001
-##  Gamma        0.3495 0.0485 Inf    0.2613     0.449  0.5  -2.913  0.0036
-##  HZE          0.4744 0.0448 Inf    0.3882     0.562  0.5  -0.569  0.5693
-## 
-## Confidence level used: 0.95 
-## Intervals are back-transformed from the logit scale 
-## Tests are performed on the logit scale
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{pairs}\NormalTok{(cats\_emms, }\AttributeTok{reverse =} \ConstantTok{TRUE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Sex = F:
-##  contrast             odds.ratio    SE  df null z.ratio p.value
-##  Gamma / Unirradiated       1.24 0.459 Inf    1   0.577  0.8325
-##  HZE / Unirradiated         1.65 0.534 Inf    1   1.546  0.2695
-##  HZE / Gamma                1.33 0.482 Inf    1   0.793  0.7071
-## 
-## Sex = M:
-##  contrast             odds.ratio    SE  df null z.ratio p.value
-##  Gamma / Unirradiated       3.28 0.865 Inf    1   4.509  <.0001
-##  HZE / Unirradiated         5.51 1.331 Inf    1   7.076  <.0001
-##  HZE / Gamma                1.68 0.412 Inf    1   2.115  0.0868
-## 
-## P value adjustment: tukey method for comparing a family of 3 estimates 
-## Tests are performed on the log odds ratio scale
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{emmip}\NormalTok{(cats\_emms, Treatment }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Sex) }\SpecialCharTok{+} \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+} 
-  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Predicted Probabilities of Cataracts }\SpecialCharTok{\textbackslash{}n}\StringTok{by Sex and Treatment Group"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_startrek}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{final_report_files/figure-latex/contr-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# convert estimates to probabilities}
-\NormalTok{ests }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(mod)}\SpecialCharTok{$}\NormalTok{coef[,}\DecValTok{1}\NormalTok{]}
-\NormalTok{ps }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(ests)}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(ests))}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{bayesian-approach}{%
-\subsubsection{Bayesian Approach}\label{bayesian-approach}}
-
-We fit a complementary Bayesian model to examine the distribution of the
-estimates from our final model, as well as test its robustness to
-alternative approaches. The Bayes model is parameterized as:
-
-\[
-\begin{aligned}
-Y_{ij} \sim &Bernoulli(p)\\
-log(\frac{p}{1-p}) = &\ \beta_0*Control_i*F_i\ +\beta_1*Gamma_i*F_i\ + \beta_2*HZE_i*F_i\ + \\ &\beta_3*Control_i*M_i\ +\beta_4*Gamma*M\ + \beta_5*HZE*M\ + \\
-&v_{j} + \epsilon_{ij}\\
-&i = 1, ..., 1169\ \mbox{ mice} \\
-&j = 1,...,47\ \ \mbox{ families, and} \\
-v_j \sim\ &N(0, \tau)
-\end{aligned}
-\]
-
-With non-informative parameters:\\
-\[
-\begin{aligned}
-\beta_0 &\sim N(0, 0.001)\\
-\beta_1 &\sim N(0, 0.001)\\
-\beta_2 &\sim N(0, 0.001)\\
-\beta_3 &\sim N(0, 0.001)\\
-\beta_4 &\sim N(0, 0.001)\\
-\beta_5 &\sim N(0, 0.001)\\
-v_i &\sim N(0, \sigma^2)\\
-\tau &\sim Gamma(0.001, 0.001) \mbox{ where}\ \sigma^2 = 1/\tau\\
-\end{aligned}
-\]
-
-The model was run through a Gibbs sampler Markov Chain Monte Carlo
-(MCMC) algorithm to approximate the posterior distribution of all fixed
-effects estimates and the variance of the random effect. 3 chains of
-60000 total iterations with a 10000-iteration burn-in period; starting
-values were obtained from the estimates generated by the Frequentist
-model, with noise added to avoid false convergence.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Specify the model}
-\FunctionTok{cat}\NormalTok{(}\StringTok{"model\{}
-\StringTok{  for(i in 1:N)\{}
-\StringTok{    CAT[i] \textasciitilde{} dbern(p[i])     \# Bernoulli{-}distributed response}
-\StringTok{    logit(p[i])\textless{}{-} b0+ b1*Gamma[i] + b2*HZE[i] + b3*Male[i] +}
-\StringTok{    b4*Male[i]*Gamma[i] + b5*Male[i]*HZE[i] + a[Family[i]]   \# likelihood function}
-\StringTok{  \}}
-\StringTok{  for(j in 1:nFam)\{}
-\StringTok{    a[j] \textasciitilde{} dnorm(0, tau)}
-\StringTok{  \}}
-\StringTok{  b0 \textasciitilde{} dnorm(0.0, 1.0E{-}3)   \# vaguely informative priors}
-\StringTok{  b1 \textasciitilde{} dnorm(0.0, 1.0E{-}3)}
-\StringTok{  b2 \textasciitilde{} dnorm(0.0, 1.0E{-}3)}
-\StringTok{  b3 \textasciitilde{} dnorm(0.0, 1.0E{-}3)}
-\StringTok{  b4 \textasciitilde{} dnorm(0.0, 1.0E{-}3)}
-\StringTok{  b5 \textasciitilde{} dnorm(0.0, 1.0E{-}3)}
-\StringTok{  tau \textasciitilde{} dgamma(1.0E{-}3,1.0E{-}3)}
-\StringTok{  sigma2 \textless{}{-} 1/tau     \# convert precision \textquotesingle{}tau\textquotesingle{} to variance \textquotesingle{}sigma2\textquotesingle{}}
-\StringTok{\}"}\NormalTok{, }\AttributeTok{file =} \StringTok{"cat.jag"}\NormalTok{)}
-
-\CommentTok{\# Prepare the data for JAGS}
-\CommentTok{\# break Treatment into dummy variables for each group}
-\NormalTok{treatment }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{, cats)}
-\NormalTok{sex }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{Sex }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, cats)}
-\FunctionTok{colnames}\NormalTok{(treatment) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Unirradiated"}\NormalTok{, }\StringTok{"Gamma"}\NormalTok{, }\StringTok{"HZE"}\NormalTok{)}
-\NormalTok{cats }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(cats, treatment, sex)}
-
-\CommentTok{\# format relevant data as a list}
-\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\AttributeTok{CAT =}\NormalTok{ cats}\SpecialCharTok{$}\NormalTok{Cataracts, }\AttributeTok{Gamma =}\NormalTok{ cats}\SpecialCharTok{$}\NormalTok{Gamma, }
-             \AttributeTok{HZE =}\NormalTok{ cats}\SpecialCharTok{$}\NormalTok{HZE, }\AttributeTok{Male =}\NormalTok{ cats}\SpecialCharTok{$}\NormalTok{SexM, }\AttributeTok{Family =}\NormalTok{ cats}\SpecialCharTok{$}\NormalTok{Family, }
-             \AttributeTok{nFam =} \FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(cats}\SpecialCharTok{$}\NormalTok{Family)), }\AttributeTok{N =} \FunctionTok{nrow}\NormalTok{(cats))}
-
-\NormalTok{nIter }\OtherTok{\textless{}{-}} \DecValTok{60000}
-\NormalTok{nChains }\OtherTok{\textless{}{-}} \DecValTok{3}
-\NormalTok{nThin }\OtherTok{\textless{}{-}} \DecValTok{1}
-\NormalTok{BurnIn }\OtherTok{\textless{}{-}} \DecValTok{10000}
-\NormalTok{nAdapt }\OtherTok{\textless{}{-}} \DecValTok{1000}
-\NormalTok{ests }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(mod)}\SpecialCharTok{$}\NormalTok{coef[,}\DecValTok{1}\NormalTok{] }\CommentTok{\# pull starting values from frequentist model}
-\NormalTok{var }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{VarCorr}\NormalTok{(mod))}\SpecialCharTok{$}\NormalTok{vcov)}
-\NormalTok{inits }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\FunctionTok{list}\NormalTok{(}\StringTok{"tau"} \OtherTok{=}\NormalTok{ var}\FloatTok{+0.2}\NormalTok{, }\StringTok{"b0"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{1}\NormalTok{]}\SpecialCharTok{+}\FloatTok{0.5}\NormalTok{, }\StringTok{"b1"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{2}\NormalTok{]}\SpecialCharTok{+}\FloatTok{0.5}\NormalTok{, }\StringTok{"b2"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{3}\NormalTok{]}\SpecialCharTok{+}\FloatTok{0.5}\NormalTok{,}
-                   \StringTok{"b3"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{4}\NormalTok{]}\SpecialCharTok{+}\FloatTok{0.2}\NormalTok{, }\StringTok{"b4"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{5}\NormalTok{]}\SpecialCharTok{+}\FloatTok{0.2}\NormalTok{, }\StringTok{"b5"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{6}\NormalTok{]}\SpecialCharTok{+}\FloatTok{0.2}\NormalTok{),}
-              \FunctionTok{list}\NormalTok{(}\StringTok{"tau"} \OtherTok{=}\NormalTok{ var}\FloatTok{{-}0.2}\NormalTok{, }\StringTok{"b0"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{1}\NormalTok{]}\SpecialCharTok{{-}}\FloatTok{0.5}\NormalTok{, }\StringTok{"b1"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{2}\NormalTok{]}\SpecialCharTok{{-}}\FloatTok{0.5}\NormalTok{, }\StringTok{"b2"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{3}\NormalTok{]}\SpecialCharTok{{-}}\FloatTok{0.5}\NormalTok{,}
-                   \StringTok{"b3"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{4}\NormalTok{]}\SpecialCharTok{{-}}\FloatTok{0.2}\NormalTok{, }\StringTok{"b4"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{5}\NormalTok{]}\SpecialCharTok{{-}}\FloatTok{0.2}\NormalTok{, }\StringTok{"b5"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{6}\NormalTok{]}\SpecialCharTok{{-}}\FloatTok{0.2}\NormalTok{),}
-              \FunctionTok{list}\NormalTok{(}\StringTok{"tau"} \OtherTok{=}\NormalTok{ var, }\StringTok{"b0"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{1}\NormalTok{], }\StringTok{"b1"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{2}\NormalTok{], }\StringTok{"b2"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{3}\NormalTok{],}
-                   \StringTok{"b3"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{4}\NormalTok{], }\StringTok{"b4"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{5}\NormalTok{], }\StringTok{"b5"} \OtherTok{=}\NormalTok{ ests[}\DecValTok{6}\NormalTok{]))}
-
-\CommentTok{\# {-}{-} Compile and run the model}
-\NormalTok{params }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"b0"}\NormalTok{, }\StringTok{"b1"}\NormalTok{, }\StringTok{"b2"}\NormalTok{, }\StringTok{"b3"}\NormalTok{, }\StringTok{"b4"}\NormalTok{, }\StringTok{"b5"}\NormalTok{, }\StringTok{"sigma2"}\NormalTok{)}
-\FunctionTok{set.seed}\NormalTok{(}\DecValTok{556}\NormalTok{)}
-\NormalTok{model.fit }\OtherTok{\textless{}{-}} \FunctionTok{jags}\NormalTok{(}\AttributeTok{data =}\NormalTok{ data,}
-                  \AttributeTok{inits =}\NormalTok{ inits,}
-                  \AttributeTok{parameters.to.save =}\NormalTok{ params,}
-                  \AttributeTok{model.file =} \StringTok{"cat.jag"}\NormalTok{,}
-                  \AttributeTok{n.chains =}\NormalTok{ nChains,}
-                  \AttributeTok{n.iter =}\NormalTok{ nIter,}
-                  \AttributeTok{n.burnin =}\NormalTok{ BurnIn,}
-                  \AttributeTok{n.thin =}\NormalTok{ nThin)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## module glm loaded
-\end{verbatim}
-
-\begin{verbatim}
-## Compiling model graph
-##    Resolving undeclared variables
-##    Allocating nodes
-## Graph information:
-##    Observed stochastic nodes: 1169
-##    Unobserved stochastic nodes: 54
-##    Total graph size: 6473
-## 
-## Initializing model
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{mcmc.model }\OtherTok{\textless{}{-}} \FunctionTok{as.mcmc}\NormalTok{(model.fit)}
-\CommentTok{\#summary(mcmc.model)}
-
-\CommentTok{\# Convert posterior distributions to probabilities?}
-\NormalTok{posts }\OtherTok{\textless{}{-}}\NormalTok{ mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\SpecialCharTok{{-}}\DecValTok{7}\NormalTok{] }
-\NormalTok{posts }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(posts)}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(posts))}
-\NormalTok{phpds }\OtherTok{\textless{}{-}} \FunctionTok{HPDinterval}\NormalTok{(posts)}
-\NormalTok{posts }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(posts)}
-
-\CommentTok{\# Create table of posterior estimates}
-\NormalTok{means }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(posts, }\DecValTok{2}\NormalTok{, mean)}
-\NormalTok{medians }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(posts, }\DecValTok{2}\NormalTok{, median)}
-\NormalTok{mode\_fun }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) \{}
-\NormalTok{  ux }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{unique}\NormalTok{(x), }\AttributeTok{digits =} \DecValTok{3}\NormalTok{)}
-  \FunctionTok{return}\NormalTok{(ux[}\FunctionTok{which.max}\NormalTok{(}\FunctionTok{tabulate}\NormalTok{(}\FunctionTok{match}\NormalTok{(x, ux)))])}
-\NormalTok{\}}
-\NormalTok{modes }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(}\FunctionTok{round}\NormalTok{(posts, }\DecValTok{4}\NormalTok{), }\DecValTok{2}\NormalTok{, mode\_fun)}
-\NormalTok{sds }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(posts, }\DecValTok{2}\NormalTok{, sd)}
-\NormalTok{glm\_probs }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(ests) }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(ests))}
-\NormalTok{p\_var }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(var) }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(var))}
-\NormalTok{bayes\_tab }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{data.frame}\NormalTok{(}\FunctionTok{c}\NormalTok{(ps, p\_var), means, medians, modes, sds, phpds), }\AttributeTok{digits =} \DecValTok{3}\NormalTok{)}
-\FunctionTok{rownames}\NormalTok{(bayes\_tab) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{beta\_0$"}\NormalTok{, }\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{beta\_1$"}\NormalTok{, }\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{beta\_2$"}\NormalTok{, }\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{beta\_3$"}\NormalTok{, }\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{beta\_4$"}\NormalTok{, }\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{beta\_5$"}\NormalTok{, }\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{sigma\^{}2$"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{kbl}\NormalTok{(bayes\_tab,}
-    \AttributeTok{caption =} \StringTok{"Final Model Parameter Estimates (probabilities)"}\NormalTok{,}
-    \AttributeTok{col.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"GLMM Est"}\NormalTok{, }\StringTok{"MCMC Mean"}\NormalTok{, }\StringTok{"MCMC Median"}\NormalTok{, }\StringTok{"MCMC Mode"}\NormalTok{, }\StringTok{"MCMC SD"}\NormalTok{, }\StringTok{"HPD Lower"}\NormalTok{, }\StringTok{"HPD Upper"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{latex\_options =} \StringTok{"hold\_position"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{kable\_classic\_2}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ F, }\AttributeTok{html\_font =} \StringTok{"Cambria"}\NormalTok{, }\AttributeTok{position =} \StringTok{"float\_left"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{wraptable}{l}{0pt}
-
-\caption{\label{tab:bayes_tab}Final Model Parameter Estimates (probabilities)}
-\centering
-\begin{tabular}[t]{l|r|r|r|r|r|r|r}
-\hline
-  & GLMM Est & MCMC Mean & MCMC Median & MCMC Mode & MCMC SD & HPD Lower & HPD Upper\\
-\hline
-\$\textbackslash{}beta\_0\$ & 0.063 & 0.063 & 0.062 & 0.057 & 0.016 & 0.034 & 0.094\\
-\hline
-\$\textbackslash{}beta\_1\$ & 0.553 & 0.549 & 0.551 & 0.550 & 0.090 & 0.371 & 0.720\\
-\hline
-\$\textbackslash{}beta\_2\$ & 0.623 & 0.621 & 0.624 & 0.634 & 0.076 & 0.469 & 0.764\\
-\hline
-\$\textbackslash{}beta\_3\$ & 0.708 & 0.708 & 0.710 & 0.714 & 0.062 & 0.589 & 0.828\\
-\hline
-\$\textbackslash{}beta\_4\$ & 0.726 & 0.721 & 0.729 & 0.723 & 0.090 & 0.544 & 0.883\\
-\hline
-\$\textbackslash{}beta\_5\$ & 0.770 & 0.763 & 0.771 & 0.776 & 0.072 & 0.618 & 0.892\\
-\hline
-\$\textbackslash{}sigma\textasciicircum{}2\$ & 0.597 & 0.609 & 0.604 & 0.585 & 0.041 & 0.539 & 0.694\\
-\hline
-\end{tabular}
-\end{wraptable}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{colors }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Density"} \OtherTok{=} \StringTok{"\#5C88DAFF"}\NormalTok{, }\StringTok{"Mode"} \OtherTok{=} \StringTok{"\#84BD00FF"}\NormalTok{, }\StringTok{"HPD"} \OtherTok{=} \StringTok{"\#CC0C00FF"}\NormalTok{)}
-\NormalTok{p0 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(posts, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ b0)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_density}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =} \StringTok{"Density"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"Density"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{1}\NormalTok{,}\DecValTok{6}\NormalTok{], }\AttributeTok{color =} \StringTok{"HPD"}\NormalTok{), }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{1}\NormalTok{,}\DecValTok{7}\NormalTok{], }\AttributeTok{color =} \StringTok{"HPD"}\NormalTok{), }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{], }\AttributeTok{color =} \StringTok{"Mode"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{scale\_x\_continuous}\NormalTok{(}\AttributeTok{expand =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size=} \DecValTok{12}\NormalTok{)) }\SpecialCharTok{+} 
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Probability"}\NormalTok{,}
-       \AttributeTok{title =} \StringTok{"$}\SpecialCharTok{\textbackslash{}b}\StringTok{eta\_0$"}\NormalTok{)}
-
-\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(posts, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ b1)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_density}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =} \StringTok{"Density"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"Density"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{2}\NormalTok{,}\DecValTok{6}\NormalTok{], }\AttributeTok{color =} \StringTok{"HPD"}\NormalTok{), }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{2}\NormalTok{,}\DecValTok{7}\NormalTok{], }\AttributeTok{color =} \StringTok{"HPD"}\NormalTok{), }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{], }\AttributeTok{color =} \StringTok{"Mode"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{scale\_x\_continuous}\NormalTok{(}\AttributeTok{expand =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size=} \DecValTok{12}\NormalTok{)) }\SpecialCharTok{+} 
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Probability"}\NormalTok{,}
-       \AttributeTok{title =} \StringTok{"$}\SpecialCharTok{\textbackslash{}b}\StringTok{eta\_1$"}\NormalTok{)}
-
-\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(posts, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ b2)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_density}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =} \StringTok{"Density"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"Density"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{3}\NormalTok{,}\DecValTok{6}\NormalTok{], }\AttributeTok{color =} \StringTok{"HPD"}\NormalTok{), }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{3}\NormalTok{,}\DecValTok{7}\NormalTok{], }\AttributeTok{color =} \StringTok{"HPD"}\NormalTok{), }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{], }\AttributeTok{color =} \StringTok{"Mode"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{scale\_x\_continuous}\NormalTok{(}\AttributeTok{expand =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size=} \DecValTok{12}\NormalTok{)) }\SpecialCharTok{+} 
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Probability"}\NormalTok{,}
-       \AttributeTok{title =} \StringTok{"$}\SpecialCharTok{\textbackslash{}b}\StringTok{eta\_2$"}\NormalTok{)}
-
-\NormalTok{p3 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(posts, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ b3)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_density}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =} \StringTok{"Density"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"Density"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{4}\NormalTok{,}\DecValTok{6}\NormalTok{], }\AttributeTok{color =} \StringTok{"HPD"}\NormalTok{), }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{4}\NormalTok{,}\DecValTok{7}\NormalTok{], }\AttributeTok{color =} \StringTok{"HPD"}\NormalTok{), }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{4}\NormalTok{,}\DecValTok{4}\NormalTok{], }\AttributeTok{color =} \StringTok{"Mode"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{scale\_x\_continuous}\NormalTok{(}\AttributeTok{expand =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size=} \DecValTok{12}\NormalTok{)) }\SpecialCharTok{+} 
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Probability"}\NormalTok{,}
-       \AttributeTok{title =} \StringTok{"$}\SpecialCharTok{\textbackslash{}b}\StringTok{eta\_3$"}\NormalTok{)}
-
-\NormalTok{p4 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(posts, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ b4)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_density}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =} \StringTok{"Density"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"Density"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{], }\AttributeTok{color =} \StringTok{"HPD"}\NormalTok{), }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{], }\AttributeTok{color =} \StringTok{"HPD"}\NormalTok{), }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{5}\NormalTok{,}\DecValTok{4}\NormalTok{], }\AttributeTok{color =} \StringTok{"Mode"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{scale\_x\_continuous}\NormalTok{(}\AttributeTok{expand =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size=} \DecValTok{12}\NormalTok{)) }\SpecialCharTok{+} 
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Probability"}\NormalTok{,}
-       \AttributeTok{title =} \StringTok{"$}\SpecialCharTok{\textbackslash{}b}\StringTok{eta\_4"}\NormalTok{)}
-
-\NormalTok{p5 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(posts, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ b5)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_density}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =} \StringTok{"Density"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"Density"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{6}\NormalTok{,}\DecValTok{6}\NormalTok{], }\AttributeTok{color =} \StringTok{"HPD"}\NormalTok{), }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{], }\AttributeTok{color =} \StringTok{"HPD"}\NormalTok{), }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{6}\NormalTok{,}\DecValTok{4}\NormalTok{], }\AttributeTok{color =} \StringTok{"Mode"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{scale\_x\_continuous}\NormalTok{(}\AttributeTok{expand =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size=} \DecValTok{12}\NormalTok{)) }\SpecialCharTok{+} 
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Probability"}\NormalTok{,}
-       \AttributeTok{title =} \StringTok{"$}\SpecialCharTok{\textbackslash{}b}\StringTok{eta\_5$"}\NormalTok{)}
-
-
-\NormalTok{p6 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(posts, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ sigma2)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_density}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =} \StringTok{"Density"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"Density"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{7}\NormalTok{,}\DecValTok{6}\NormalTok{], }\AttributeTok{color =} \StringTok{"HPD"}\NormalTok{), }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{7}\NormalTok{,}\DecValTok{7}\NormalTok{], }\AttributeTok{color =} \StringTok{"HPD"}\NormalTok{), }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ bayes\_tab[}\DecValTok{7}\NormalTok{,}\DecValTok{4}\NormalTok{], }\AttributeTok{color =} \StringTok{"Mode"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{scale\_x\_continuous}\NormalTok{(}\AttributeTok{expand =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size=} \DecValTok{12}\NormalTok{)) }\SpecialCharTok{+} 
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Probability"}\NormalTok{,}
-       \AttributeTok{title =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{sigma\^{}2$"}\NormalTok{)}
-
-\FunctionTok{grid.arrange}\NormalTok{(p0, p1, p2, p3, p4, p5, p6, }
-             \AttributeTok{ncol =} \DecValTok{3}\NormalTok{, }\AttributeTok{top =} \StringTok{"Posterior Densities with 95\% HPD Intervals"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
-## font width unknown for character 0x8
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
-## font width unknown for character 0x8
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
-## font width unknown for character 0x8
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
-## font width unknown for character 0x8
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
-## font width unknown for character 0x8
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## width unknown for character 0x8
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
-## font width unknown for character 0x8
-\end{verbatim}
-
-\includegraphics{final_report_files/figure-latex/postdens-1.pdf}
-
-\hypertarget{limitations-and-alternatives}{%
-\subsection{Limitations and
-Alternatives}\label{limitations-and-alternatives}}
-
-Presence of competing risks in the experimental design obscure the
-presence of family clusters of cataracts. It is reasonable to assume
-that individuals in the irradiated Treatment groups were more likely to
-die due to more acute effects of irradiation before developing
-cataracts, compared to individuals in the control group. Simplifying the
-dataset by instituting a cutoff age attempts to address this limitation,
-but the issue persists even after excluding individuals deceased before
-Age = 552.
-
-\hypertarget{results-and-conclusions}{%
-\subsection{Results and Conclusions}\label{results-and-conclusions}}
-
-The final probability for developing cataracts can be written as:\\
-\[
-p_i = 0.063 + 0.55*Gamma_i + 0.623*HZE_i + 0.708*Male_i + 0.726*Gamma_i*Male_i + 0.770*HZE_i*Male_i
-\]
-
-Assessing odds ratios for cataracts between groups:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{cats\_emms }\OtherTok{\textless{}{-}} \FunctionTok{emmeans}\NormalTok{(mod, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{|}\NormalTok{ Sex, }\AttributeTok{infer =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)}
-\NormalTok{podds }\OtherTok{\textless{}{-}} \FunctionTok{pairs}\NormalTok{(cats\_emms, }\AttributeTok{reverse =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{podds }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{confint}\NormalTok{(podds)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{rename}\NormalTok{(}\AttributeTok{Contrast =}\NormalTok{ contrast, }\AttributeTok{Lower =}\NormalTok{ asymp.LCL, }\AttributeTok{Upper =}\NormalTok{ asymp.UCL)}
-
-\NormalTok{or1\_plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(podds, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ odds.ratio, }\AttributeTok{y =}\NormalTok{ Contrast, }\AttributeTok{xmin =}\NormalTok{ Lower, }\AttributeTok{xmax =}\NormalTok{ Upper)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_errorbarh}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{height =} \FloatTok{0.2}\NormalTok{, }\AttributeTok{color =}\NormalTok{ Sex),}
-                 \AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.3}\NormalTok{), }\AttributeTok{lwd =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ Sex), }\AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.3}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =} \FunctionTok{round}\NormalTok{(odds.ratio, }\DecValTok{2}\NormalTok{), }\AttributeTok{color =}\NormalTok{ Sex), }\AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.7}\NormalTok{)) }\SpecialCharTok{+} 
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{1}\NormalTok{), }\AttributeTok{color =} \StringTok{"\#84BD00FF"}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{vjust =} \DecValTok{1}\NormalTok{, }\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{scale\_color\_startrek}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Odds Ratio"}\NormalTok{,}
-       \AttributeTok{title =} \StringTok{"Odds Ratios of Developing Cataracts }\SpecialCharTok{\textbackslash{}n}\StringTok{by Treatment Group within Sex"}\NormalTok{)}
-
-\NormalTok{or1\_plot}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{final_report_files/figure-latex/oddsr-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{cats\_emms1 }\OtherTok{\textless{}{-}} \FunctionTok{emmeans}\NormalTok{(mod, }\SpecialCharTok{\textasciitilde{}}\NormalTok{Sex }\SpecialCharTok{|}\NormalTok{ Treatment, }\AttributeTok{infer =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)}
-\NormalTok{podds1 }\OtherTok{\textless{}{-}} \FunctionTok{pairs}\NormalTok{(cats\_emms1, }\AttributeTok{reverse =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{podds1}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Treatment = Unirradiated:
-##  contrast odds.ratio    SE  df null z.ratio p.value
-##  M / F          2.43 0.724 Inf    1   2.977  0.0029
-## 
-## Treatment = Gamma:
-##  contrast odds.ratio    SE  df null z.ratio p.value
-##  M / F          6.44 2.231 Inf    1   5.374  <.0001
-## 
-## Treatment = HZE:
-##  contrast odds.ratio    SE  df null z.ratio p.value
-##  M / F          8.12 2.220 Inf    1   7.658  <.0001
-## 
-## Tests are performed on the log odds ratio scale
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{podds1 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{confint}\NormalTok{(podds1)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{rename}\NormalTok{(}\AttributeTok{Contrast =}\NormalTok{ contrast, }\AttributeTok{Lower =}\NormalTok{ asymp.LCL, }\AttributeTok{Upper =}\NormalTok{ asymp.UCL)}
-
-\NormalTok{or2\_plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(podds1, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ odds.ratio, }\AttributeTok{y =}\NormalTok{ Contrast, }\AttributeTok{xmin =}\NormalTok{ Lower, }\AttributeTok{xmax =}\NormalTok{ Upper)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_errorbarh}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{height =} \FloatTok{0.2}\NormalTok{, }\AttributeTok{color =}\NormalTok{ Treatment),}
-                 \AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.3}\NormalTok{), }\AttributeTok{lwd =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ Treatment), }\AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.3}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =} \FunctionTok{round}\NormalTok{(odds.ratio, }\DecValTok{2}\NormalTok{), }\AttributeTok{color =}\NormalTok{ Treatment), }
-            \AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.3}\NormalTok{), }\AttributeTok{vjust =} \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{1}\NormalTok{), }\AttributeTok{color =} \StringTok{"\#FFCD00FF"}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{scale\_color\_startrek}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Odds Ratio"}\NormalTok{,}
-       \AttributeTok{title =} \StringTok{"Odds Ratio of Developing }\SpecialCharTok{\textbackslash{}n}\StringTok{Cataracts by Sex within Treatment"}\NormalTok{)}
-
-\NormalTok{or2\_plot}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{final_report_files/figure-latex/oddsr2-1.pdf}
-
-Assessing relative risk for cataracts between groups:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{em1 }\OtherTok{\textless{}{-}} \FunctionTok{emmeans}\NormalTok{(mod, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment}\SpecialCharTok{|}\NormalTok{Sex)}
-\NormalTok{em1log }\OtherTok{\textless{}{-}} \FunctionTok{regrid}\NormalTok{(em1, }\StringTok{"log"}\NormalTok{)}
-\NormalTok{rrs1 }\OtherTok{\textless{}{-}} \FunctionTok{contrast}\NormalTok{(em1log, }\AttributeTok{interaction =} \StringTok{"revpairwise"}\NormalTok{, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)}
-\NormalTok{rrs1 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{confint}\NormalTok{(rrs1)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{rename}\NormalTok{(}\AttributeTok{Contrast =}\NormalTok{ Treatment\_revpairwise, }\AttributeTok{Lower =}\NormalTok{ asymp.LCL, }\AttributeTok{Upper =}\NormalTok{ asymp.UCL)}
-
-\NormalTok{rr1\_plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(rrs1, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ ratio, }\AttributeTok{y =}\NormalTok{ Contrast, }\AttributeTok{xmin =}\NormalTok{ Lower, }\AttributeTok{xmax =}\NormalTok{ Upper)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_errorbarh}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{height =} \FloatTok{0.2}\NormalTok{, }\AttributeTok{color =}\NormalTok{ Sex),}
-                 \AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.3}\NormalTok{), }\AttributeTok{lwd =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ Sex), }\AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.3}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =} \FunctionTok{round}\NormalTok{(ratio, }\DecValTok{2}\NormalTok{), }\AttributeTok{color =}\NormalTok{ Sex), }
-            \AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.7}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{1}\NormalTok{), }\AttributeTok{color =} \StringTok{"\#84BD00FF"}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{scale\_color\_startrek}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Relative Risk"}\NormalTok{,}
-       \AttributeTok{title =} \StringTok{"Relative Risk of Developing }\SpecialCharTok{\textbackslash{}n}\StringTok{Cataracts by Sex within Treatment"}\NormalTok{)}
-
-\NormalTok{rr1\_plot}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{final_report_files/figure-latex/RR-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{em2 }\OtherTok{\textless{}{-}} \FunctionTok{emmeans}\NormalTok{(mod, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Sex}\SpecialCharTok{|}\NormalTok{Treatment)}
-\NormalTok{em2log }\OtherTok{\textless{}{-}} \FunctionTok{regrid}\NormalTok{(em2, }\StringTok{"log"}\NormalTok{)}
-\NormalTok{rrs2 }\OtherTok{\textless{}{-}} \FunctionTok{contrast}\NormalTok{(em2log, }\AttributeTok{interaction =} \StringTok{"revpairwise"}\NormalTok{, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)}
-\NormalTok{rrs2 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{confint}\NormalTok{(rrs2)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{rename}\NormalTok{(}\AttributeTok{Contrast =}\NormalTok{ Sex\_revpairwise, }\AttributeTok{Lower =}\NormalTok{ asymp.LCL, }\AttributeTok{Upper =}\NormalTok{ asymp.UCL)}
-
-\NormalTok{rr2\_plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(rrs2, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ ratio, }\AttributeTok{y =}\NormalTok{ Contrast, }\AttributeTok{xmin =}\NormalTok{ Lower, }\AttributeTok{xmax =}\NormalTok{ Upper)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_errorbarh}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{height =} \FloatTok{0.2}\NormalTok{, }\AttributeTok{color =}\NormalTok{ Treatment),}
-                 \AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.3}\NormalTok{), }\AttributeTok{lwd =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ Treatment), }\AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.3}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =} \FunctionTok{round}\NormalTok{(ratio, }\DecValTok{2}\NormalTok{), }\AttributeTok{color =}\NormalTok{ Treatment), }
-            \AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.3}\NormalTok{), }\AttributeTok{vjust =} \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{1}\NormalTok{), }\AttributeTok{color =} \StringTok{"\#FFCD00FF"}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{scale\_color\_startrek}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Relative Risk"}\NormalTok{,}
-       \AttributeTok{title =} \StringTok{"Relative Risk of Developing }\SpecialCharTok{\textbackslash{}n}\StringTok{Cataracts by Treatment within Sex"}\NormalTok{)}
-
-\NormalTok{rr2\_plot}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{final_report_files/figure-latex/RR1-1.pdf}
-
-Visualizing random effect by family:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{p\_sigs }\OtherTok{\textless{}{-}}\NormalTok{ bayes\_tab[}\DecValTok{7}\NormalTok{,]}
-\NormalTok{est }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(p\_sigs[}\DecValTok{1}\NormalTok{])}
-\NormalTok{psig }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(p\_sigs[}\DecValTok{4}\NormalTok{])}
-\NormalTok{hpdl }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(p\_sigs[}\DecValTok{6}\NormalTok{])}
-\NormalTok{hpdu }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(p\_sigs[}\DecValTok{7}\NormalTok{])}
-\NormalTok{REs }\OtherTok{\textless{}{-}} \FunctionTok{augment}\NormalTok{(}\FunctionTok{ranef}\NormalTok{(mod,}\AttributeTok{condVar =} \ConstantTok{TRUE}\NormalTok{), }\AttributeTok{ci.level =} \FloatTok{0.95}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{select}\NormalTok{(}\FunctionTok{c}\NormalTok{(level, estimate, lb, ub)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{rename}\NormalTok{(}\AttributeTok{Family =}\NormalTok{ level) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Prob =} \FunctionTok{exp}\NormalTok{(estimate)}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(estimate)),}
-         \AttributeTok{Lower =} \FunctionTok{exp}\NormalTok{(lb)}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(lb)),}
-         \AttributeTok{Upper =} \FunctionTok{exp}\NormalTok{(ub)}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(ub)))}
-\NormalTok{colors }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Family Effect"} \OtherTok{=} \StringTok{"\#5C88DAFF"}\NormalTok{, }\StringTok{"GLMM Est"} \OtherTok{=} \StringTok{"\#CC0C00FF"}\NormalTok{, }\StringTok{"Bayes Mode"} \OtherTok{=} \StringTok{"\#84BD00FF"}\NormalTok{,}
-            \StringTok{"HPD Interval"} \OtherTok{=} \StringTok{"\#FFCD00FF"}\NormalTok{)}
-\NormalTok{re\_plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(REs, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Prob, }\AttributeTok{y =}\NormalTok{ Family, }\AttributeTok{xmin =}\NormalTok{ Lower, }\AttributeTok{xmax =}\NormalTok{ Upper)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_errorbarh}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{height =} \DecValTok{0}\NormalTok{, }\AttributeTok{color =} \StringTok{"Family Effect"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =} \StringTok{"Family Effect"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ est, }\AttributeTok{color =} \StringTok{"GLMM Est"}\NormalTok{), }\AttributeTok{lwd =} \DecValTok{1}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ psig, }\AttributeTok{color =} \StringTok{"Bayes Mode"}\NormalTok{), }\AttributeTok{lwd =} \DecValTok{1}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ hpdl, }\AttributeTok{color =} \StringTok{"HPD Interval"}\NormalTok{), }\AttributeTok{lwd =} \DecValTok{1}\NormalTok{, }\AttributeTok{lty =} \DecValTok{4}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ hpdu, }\AttributeTok{color =} \StringTok{"HPD Interval"}\NormalTok{), }\AttributeTok{lwd =} \DecValTok{1}\NormalTok{, }\AttributeTok{lty =} \DecValTok{4}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ colors) }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{color =} \StringTok{""}\NormalTok{, }\AttributeTok{title =} \StringTok{"Random Effect by Family"}\NormalTok{)}
-
-\NormalTok{re\_plot}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{final_report_files/figure-latex/re_plot-1.pdf}
-
-\hypertarget{authors-statements}{%
-\subsection{Authors' Statements}\label{authors-statements}}
-
-Both authors contributed to statistical analysis and writing for this
-report. Both authors read and approved the final report. Both authors
-contributed equally to introduction, exploratory data analysis, summary
-statistics, and results. Alyssa Allsop served as the primary
-statistician on fitting Frequentist models; Amira Burns served as the
-primary statistician on fitting the Bayesian model.
-
-\hypertarget{references}{%
-\subsection{References}\label{references}}
-
-Agresti, A (2013). \emph{Categorical Data Analysis} (Third Edition).
-John Wiley \& Sons.
-
-Chernyavskiy, P., Edmondson, E. F., Weil, M. M., \& Little, M. P.
-(2017). \emph{High-energy particle beam and gamma radiation exposure,
-familial relatedness and cancer in mice.} British journal of cancer,
-117(1), 41--50. \url{https://doi.org/10.1038/bjc.2017.141}
-
-Gelman, A., Carlin, J., Stern, H., Dunson, D., Vehtari, A., Rubin, D.
-(2014). \emph{Bayesian Data Analysis} (Third Edition). CRC Press.
-
-Roback, P., Legler, J. (2021). \emph{Beyond Multiple Linear Regression.
-Applied Generalized Linear Models and Multilevel Models in R} (Second
-Edition). CRC Press. Online version:
-\url{https://bookdown.org/roback/bookdown-BeyondMLR/}
-
-DiMaggio, C., Albert, J., Spiegelhalter, D., Best, N., Gelman, A.,
-Carstensen, B., Guerrin, L., Jensen, S. (2015) \emph{Bayesian Analysis
-for Epidemiologists III: Regression Modeling.} Center for Injury
-Epidemiology and Prevention at Columbia University.
-\url{http://www.columbia.edu/~cjd11/charles_dimaggio/DIRE/styled-4/styled-11/code-8/\#bayesian-regression-modeling-with-bugs-or-jags}
-
-R Packages:\\
-+ Douglas Bates, Martin Maechler, Ben Bolker, Steve Walker (2015).
-Fitting Linear Mixed-Effects Models Using lme4. Journal of Statistical
-Software, 67(1), 1-48. \url{doi:10.18637/jss.v067.i01}.\\
-+ Martyn Plummer (2021). rjags: Bayesian Graphical Models using MCMC. R
-package version 4-12. \url{https://CRAN.R-project.org/package=rjags}\\
-+ Russell V. Lenth (2022). emmeans: Estimated Marginal Means, aka
-Least-Squares Means. R package version 1.7.3.
-\url{https://CRAN.R-project.org/package=emmeans}
-
-\hypertarget{appendix}{%
-\subsection{Appendix}\label{appendix}}
-
-\hypertarget{additional-exploratory-data-analysis}{%
-\subsubsection{Additional Exploratory Data
-Analysis}\label{additional-exploratory-data-analysis}}
-
-\hypertarget{glmm-model-selection}{%
-\subsubsection{GLMM Model Selection}\label{glmm-model-selection}}
-
-\hypertarget{glmm-model-diagnostics-necessary}{%
-\subsubsection{GLMM Model Diagnostics
-(necessary?)}\label{glmm-model-diagnostics-necessary}}
-
-\hypertarget{bayes-model-diagnostics}{%
-\subsubsection{Bayes Model Diagnostics}\label{bayes-model-diagnostics}}
-
-Traceplots:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{params }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"b0"}\NormalTok{, }\StringTok{"b1"}\NormalTok{, }\StringTok{"b2"}\NormalTok{, }\StringTok{"b3"}\NormalTok{, }\StringTok{"b4"}\NormalTok{, }\StringTok{"b5"}\NormalTok{, }\StringTok{"sigma\^{}2"}\NormalTok{)}
-\FunctionTok{traplot}\NormalTok{(mcmc.model, }\AttributeTok{parms =}\NormalTok{ params )}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{final_report_files/figure-latex/trace-1.pdf}
-
-ACF plots:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{))}
-\FunctionTok{acf}\NormalTok{(mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\DecValTok{1}\NormalTok{], }\AttributeTok{main =} \StringTok{"b0"}\NormalTok{)}
-\FunctionTok{acf}\NormalTok{(mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\DecValTok{2}\NormalTok{], }\AttributeTok{main =} \StringTok{"b1"}\NormalTok{)}
-\FunctionTok{acf}\NormalTok{(mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\DecValTok{3}\NormalTok{], }\AttributeTok{main =} \StringTok{"b2"}\NormalTok{)}
-\FunctionTok{acf}\NormalTok{(mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\DecValTok{4}\NormalTok{], }\AttributeTok{main =} \StringTok{"b3"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{final_report_files/figure-latex/acf-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{))}
-\FunctionTok{acf}\NormalTok{(mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\DecValTok{5}\NormalTok{], }\AttributeTok{main =} \StringTok{"b4"}\NormalTok{)}
-\FunctionTok{acf}\NormalTok{(mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\DecValTok{6}\NormalTok{], }\AttributeTok{main =} \StringTok{"b5"}\NormalTok{)}
-\FunctionTok{acf}\NormalTok{(mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\DecValTok{8}\NormalTok{], }\AttributeTok{main =} \StringTok{"sigma2"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{final_report_files/figure-latex/acf-2.pdf} Gelman-Rubin
-Diagnostics:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{gelman.diag}\NormalTok{(mcmc.model)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Potential scale reduction factors:
-## 
-##          Point est. Upper C.I.
-## b0                1          1
-## b1                1          1
-## b2                1          1
-## b3                1          1
-## b4                1          1
-## b5                1          1
-## deviance          1          1
-## sigma2            1          1
-## 
-## Multivariate psrf
-## 
-## 1
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{gelman.plot}\NormalTok{(mcmc.model)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{final_report_files/figure-latex/grd-1.pdf}
-
-\hypertarget{post-hoc-assessments}{%
-\subsubsection{Post-Hoc Assessments}\label{post-hoc-assessments}}
 
 \hypertarget{full-code}{%
 \subsubsection{Full Code}\label{full-code}}
