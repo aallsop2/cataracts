@@ -98,7 +98,7 @@ log(\frac{p}{1-p}) = &\ \beta_0\ +\beta_1*Gamma_i\ + \beta_2*HZE_i\ + \beta_3*M_
 Our final model contains two main fixed effects for Treatment and Sex, and an interaction term for sex by treatment. The model also contains a random intercept for Family. We selected this model using Aikike's Information Criterion (AIC), by comparing it to several other models. These included:
 a full mixed model including all the predictors included in the data set,
 a mixed model with just treatment and sex and no interaction,
-and a full fixed model.
+and a comprable fixed model to our final model with just sex and treatment.
 
 --
 

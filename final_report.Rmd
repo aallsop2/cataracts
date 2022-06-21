@@ -610,4 +610,6 @@ traplot(mcmc.model, parms = params )
 
 ```
 
+
 ### Post-Hoc Assessments
+
