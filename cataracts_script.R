@@ -646,7 +646,7 @@ plot_model(mod, sort.est = TRUE, show.values = TRUE, type = "int", pred.type = "
            color = "Dark2", show.p = TRUE,
            width = 0.5, title = "Final Model: Cataracts Odds Ratios by Sex, Treatment Group")
 tab_model(mod, show.re.var = TRUE,
-          pred.labels = c("Control(Female)", "Gamma(Female)", "HZE(Female)",
+          pred.labels = c("Control", "Gamma", "HZE",
                           "Control(Male)", "Gamma(Male)", "HZE(Male)"),
           dv.labels = "Final Model Effects of Treatment on Cataracts")
 
@@ -666,7 +666,7 @@ preds <- cats %>%
 preds <- preds %>%
   mutate(Odds = exp(LogOdds))
 preds <- preds %>%
-  mutate(Probs = Odds / (1 + Odds)) # fitted values!(
+  mutate(Probs = Odds / (1 + Odds)) # fitted values!
 
 cats <- cats %>%
   mutate(Probs = fitted(mod))
@@ -678,7 +678,39 @@ ggplot(cats, aes(x = Probs, y = Cataracts)) +
 # -- Post-Hoc Fixed Effect Analysis
 cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
 cats_emms
-pairs(cats_emms, reverse = TRUE)
+plot(cats_emms)
+podds <- pairs(cats_emms, reverse = TRUE)
+podds
+podds <- as.data.frame(confint(podds)) %>%
+  rename(Contrast = contrast, Lower = asymp.LCL, Upper = asymp.UCL)
+cats_emms1 <- emmeans(mod, ~Sex | Treatment, infer = TRUE, type = "response")
+cats_emms1
+plot(cats_emms1)
+podds1 <- pairs(cats_emms1, reverse = TRUE)
+podds1
+podds1 <- as.data.frame(confint(podds1)) %>%
+  rename(Contrast = contrast, Lower = asymp.LCL, Upper = asymp.UCL)
+
+ggplot(podds, aes(x = odds.ratio, y = Contrast, xmin = Lower, xmax = Upper)) +
+  geom_errorbarh(aes(height = 0.2, color = Sex),
+                 position = position_dodge(0.3), lwd = 1) +
+  geom_point(aes(color = Sex), position = position_dodge(0.3)) +
+  geom_vline(aes(xintercept = 1), color = "#84BD00FF", lty = 2) +
+  theme_light() +
+  theme(axis.text.y = element_text(angle = 45, vjust = 1, hjust = 0.5)) +
+  scale_color_startrek() +
+  labs(x = "Odds Ratio",
+       title = "Relative Risk of Developing Cataracts \nby Treatment Group")
+
+ggplot(podds1, aes(x = odds.ratio, y = Contrast, xmin = Lower, xmax = Upper)) +
+  geom_errorbarh(aes(height = 0.2, color = Treatment),
+                 position = position_dodge(0.3), lwd = 1) +
+  geom_point(aes(color = Treatment), position = position_dodge(0.3)) +
+  theme_light() +
+  geom_vline(aes(xintercept = 1), color = "#FFCD00FF", lty = 2) +
+  scale_color_startrek() +
+  labs(x = "Odds Ratio",
+       title = "Relative Risk of Developing \nCataracts by Sex within Treatment")
 
 # save lineplot of probs for presentation
 png(filename = "est_probs_plot.png", units = "in", width = 6, height = 6, res = 300)

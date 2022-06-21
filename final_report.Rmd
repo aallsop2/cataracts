@@ -86,13 +86,15 @@ The response is Merriam-Focht cataract score (Merriam & Focht, 1957), an ordinal
 + Coat color: categorical with six levels = [albino, black, creme brown, grey, light brown, light grey].\
 + Body condition score (BCS): ordered categorical with 5 levels, representing a range from emaciated to obese. Levels = [BC1, BC2, BC3, BC4, BC5].\
 + Age: numeric, in days; range = [552, 816].\
-+ Three categorical variables indicating presence of other cancers: Harderian Tumor: categorical with three levels = [bilateral, unilateral, none]. Myeloid Leukemia: binary categorical with two levels = [0, 1]. PreT Lymphoma: binary categorical with two levels = [0, 1].
++ Three categorical variables indicating presence of other cancers: Harderian Tumor: categorical with three levels = [bilateral, unilateral, none]. Myeloid Leukemia: binary categorical with two levels = [0, 1]. PreT Lymphoma: binary categorical with two levels = [0, 1].  
+  
+The experimental design prescribed the inclusion of Treatment and Family in a final model. 
 
 ------------------------------------------------------------------------
 
 ## Summary Statistics
 
-Exploratory data analysis consist
+Exploratory data analysis consisted of investigating the response in terms of Treatment and Family and any potential associations between the response and covariates. In addition, possible interactions and correlations between covariates and the primary predictors in terms of the response were of interest.
 
 ```{r table, message = FALSE}
 sex_trt <- cats %>%
@@ -210,6 +212,13 @@ emmip(cats_emms, Treatment ~ Sex) + theme_light() +
   ggtitle("Predicted Probabilities of Cataracts \nby Sex and Treatment Group") + scale_color_startrek()
 ```
 
+```{r probs}
+# convert estimates to probabilities
+ests <- summary(mod)$coef[,1]
+ps <- exp(ests)/(1+exp(ests))
+```
+
+
 ### Bayesian Approach
 
 We fit a complementary Bayesian model to examine the distribution of the estimates from our final model, as well as test its robustness to alternative approaches. The Bayes model is parameterized as:
@@ -234,6 +243,7 @@ $$
 \beta_3 &\sim N(0, 0.001)\\
 \beta_4 &\sim N(0, 0.001)\\
 \beta_5 &\sim N(0, 0.001)\\
+v_i &\sim N(0, \sigma^2)\\
 \tau &\sim Gamma(0.001, 0.001) \mbox{ where}\ \sigma^2 = 1/\tau\\
 \end{aligned}
 $$
@@ -311,8 +321,9 @@ model.fit <- jags(data = data,
 mcmc.model <- as.mcmc(model.fit)
 #summary(mcmc.model)
 
-# Convert posterior distributions to odd ratios
+# Convert posterior distributions to probabilities?
 posts <- mcmc.model[[3]][,-7] 
+posts <- exp(posts)/(1 + exp(posts))
 phpds <- HPDinterval(posts)
 posts <- data.frame(posts)
 
@@ -325,105 +336,105 @@ mode_fun <- function(x) {
 }
 modes <- apply(round(posts, 4), 2, mode_fun)
 sds <- apply(posts, 2, sd)
-<<<<<<< HEAD
 glm_probs <- exp(ests) / (1 + exp(ests))
-bayes_tab <- round(data.frame(glm_probs, means, medians, modes, sds, phpds), digits = 3)
-=======
-bayes_tab <- round(data.frame(c(ests, var), means, medians, modes, sds, phpds), digits = 3)
->>>>>>> ALB_analysis
+p_var <- exp(var) / (1 + exp(var))
+bayes_tab <- round(data.frame(c(ps, p_var), means, medians, modes, sds, phpds), digits = 3)
 rownames(bayes_tab) <- c("$\\beta_0$", "$\\beta_1$", "$\\beta_2$", "$\\beta_3$", "$\\beta_4$", "$\\beta_5$", "$\\sigma^2$")
 ```
 
 ```{r bayes_tab}
 kbl(bayes_tab,
-    caption = "Final Model Statistics",
-<<<<<<< HEAD
-    col.names = c("GLMM Est", "Bayes Mean", "Bayes Median", "Bayes Mode", "Bayes SD", "Bayes HPD Lower", "Bayes HPD Upper")) %>%
-=======
+    caption = "Final Model Parameter Estimates (probabilities)",
     col.names = c("GLMM Est", "MCMC Mean", "MCMC Median", "MCMC Mode", "MCMC SD", "HPD Lower", "HPD Upper")) %>%
->>>>>>> ALB_analysis
   kable_styling(latex_options = "hold_position") %>%
   kable_classic_2(full_width = F, html_font = "Cambria", position = "float_left")
 ```
 
+```{r bayes_fits}
+dat <- cats %>%
+  select(c(Cataracts, Gamma, HZE, SexM)) %>%
+  
+```
+
 ```{r postdens}
+colors <- c("Density" = "#5C88DAFF", "Mode" = "#84BD00FF", "HPD" = "#CC0C00FF")
 p0 <- ggplot(posts, aes(x = b0)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[1,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[1,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[1,2]), color = "darkorange3") +
+  geom_density(aes(color = "Density", fill = "Density"), alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[1,6], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[1,7], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[1,4], color = "Mode")) +
   scale_x_continuous(expand = c(0, 0)) +
   theme_light() +
   theme(plot.title = element_text(size= 12)) + 
   labs(x = "Probability",
-       title = "Female Control")
+       title = "$\beta_0$")
 
 p1 <- ggplot(posts, aes(x = b1)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[2,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[2,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[2,2]), color = "darkorange3") +
+  geom_density(aes(color = "Density", fill = "Density"), alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[2,6], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[2,7], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[2,4], color = "Mode")) +
   scale_x_continuous(expand = c(0, 0)) +
   theme_light() +
   theme(plot.title = element_text(size= 12)) + 
   labs(x = "Probability",
-       title = "Female Gamma")
+       title = "$\beta_1$")
 
 p2 <- ggplot(posts, aes(x = b2)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[3,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[3,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[3,2]), color = "darkorange3") +
+  geom_density(aes(color = "Density", fill = "Density"), alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[3,6], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[3,7], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[3,4], color = "Mode")) +
   scale_x_continuous(expand = c(0, 0)) +
   theme_light() +
   theme(plot.title = element_text(size= 12)) + 
   labs(x = "Probability",
-       title = "Female HZE")
+       title = "$\beta_2$")
 
 p3 <- ggplot(posts, aes(x = b3)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[4,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[4,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[4,2]), color = "darkorange3") +
+  geom_density(aes(color = "Density", fill = "Density"), alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[4,6], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[4,7], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[4,4], color = "Mode")) +
   scale_x_continuous(expand = c(0, 0)) +
   theme_light() +
   theme(plot.title = element_text(size= 12)) + 
   labs(x = "Probability",
-       title = "Male Contro")
+       title = "$\beta_3$")
 
 p4 <- ggplot(posts, aes(x = b4)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[5,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[5,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[5,2]), color = "darkorange3") +
+  geom_density(aes(color = "Density", fill = "Density"), alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[5,6], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[5,7], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[5,4], color = "Mode")) +
   scale_x_continuous(expand = c(0, 0)) +
   theme_light() +
   theme(plot.title = element_text(size= 12)) + 
   labs(x = "Probability",
-       title = "Male Gamma")
+       title = "$\beta_4")
 
 p5 <- ggplot(posts, aes(x = b5)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[6,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[6,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[6,2]), color = "darkorange3") +
+  geom_density(aes(color = "Density", fill = "Density"), alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[6,6], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[6,7], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[6,4], color = "Mode")) +
   scale_x_continuous(expand = c(0, 0)) +
   theme_light() +
   theme(plot.title = element_text(size= 12)) + 
   labs(x = "Probability",
-       title = "Male HZE")
+       title = "$\beta_5$")
 
 
 p6 <- ggplot(posts, aes(x = sigma2)) +
-  geom_density(color = "cyan4", fill = "aquamarine4", alpha = 0.5) +
-  geom_vline(aes(xintercept = bayes_tab[7,5]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[7,6]), color = "darkorchid", linetype = "dashed") +
-  geom_vline(aes(xintercept = bayes_tab[7,3]), color = "darkorange3") + # calculate mode and replot
+  geom_density(aes(color = "Density", fill = "Density"), alpha = 0.5) +
+  geom_vline(aes(xintercept = bayes_tab[7,6], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[7,7], color = "HPD"), linetype = "dashed") +
+  geom_vline(aes(xintercept = bayes_tab[7,4], color = "Mode")) +
   scale_x_continuous(expand = c(0, 0)) +
   theme_light() +
   theme(plot.title = element_text(size= 12)) + 
   labs(x = "Probability",
-       title = "Random Family Variance")
+       title = "$\\sigma^2$")
 
 grid.arrange(p0, p1, p2, p3, p4, p5, p6, 
              ncol = 3, top = "Posterior Densities with 95% HPD Intervals")
@@ -433,11 +444,138 @@ grid.arrange(p0, p1, p2, p3, p4, p5, p6,
 
 Presence of competing risks in the experimental design obscure the presence of family clusters of cataracts. It is reasonable to assume that individuals in the irradiated Treatment groups were more likely to die due to more acute effects of irradiation before developing cataracts, compared to individuals in the control group. Simplifying the dataset by instituting a cutoff age attempts to address this limitation, but the issue persists even after excluding individuals deceased before Age = 552.
 
-## Results and Conclusions
+## Results and Conclusions  
+
+
+The final probability for developing cataracts can be written as:  
+$$
+p_i = 0.063 + 0.55*Gamma_i + 0.623*HZE_i + 0.708*Male_i + 0.726*Gamma_i*Male_i + 0.770*HZE_i*Male_i
+$$
+  
+Assessing odds ratios for cataracts between groups:  
+
+```{r oddsr}
+cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
+podds <- pairs(cats_emms, reverse = TRUE)
+podds <- as.data.frame(confint(podds)) %>%
+  rename(Contrast = contrast, Lower = asymp.LCL, Upper = asymp.UCL)
+
+or1_plot <- ggplot(podds, aes(x = odds.ratio, y = Contrast, xmin = Lower, xmax = Upper)) +
+  geom_errorbarh(aes(height = 0.2, color = Sex),
+                 position = position_dodge(0.3), lwd = 1) +
+  geom_point(aes(color = Sex), position = position_dodge(0.3)) +
+  geom_text(aes(label = round(odds.ratio, 2), color = Sex), position = position_dodge(0.7)) + 
+  geom_vline(aes(xintercept = 1), color = "#84BD00FF", lty = 2) +
+  theme_light() +
+  theme(axis.text.y = element_text(angle = 45, vjust = 1, hjust = 0.5)) +
+  scale_color_startrek() +
+  labs(x = "Odds Ratio",
+       title = "Odds Ratios of Developing Cataracts \nby Treatment Group within Sex")
+
+or1_plot
+```
+
+```{r oddsr2}
+cats_emms1 <- emmeans(mod, ~Sex | Treatment, infer = TRUE, type = "response")
+podds1 <- pairs(cats_emms1, reverse = TRUE)
+podds1
+podds1 <- as.data.frame(confint(podds1)) %>%
+  rename(Contrast = contrast, Lower = asymp.LCL, Upper = asymp.UCL)
+
+or2_plot <- ggplot(podds1, aes(x = odds.ratio, y = Contrast, xmin = Lower, xmax = Upper)) +
+  geom_errorbarh(aes(height = 0.2, color = Treatment),
+                 position = position_dodge(0.3), lwd = 1) +
+  geom_point(aes(color = Treatment), position = position_dodge(0.3)) +
+  geom_text(aes(label = round(odds.ratio, 2), color = Treatment), 
+            position = position_dodge(0.3), vjust = -1) +
+  theme_light() +
+  geom_vline(aes(xintercept = 1), color = "#FFCD00FF", lty = 2) +
+  scale_color_startrek() +
+  labs(x = "Odds Ratio",
+       title = "Odds Ratio of Developing \nCataracts by Sex within Treatment")
+
+or2_plot
+```  
+
+Assessing relative risk for cataracts between groups:  
+```{r RR}
+em1 <- emmeans(mod, ~ Treatment|Sex)
+em1log <- regrid(em1, "log")
+rrs1 <- contrast(em1log, interaction = "revpairwise", type = "response")
+rrs1 <- as.data.frame(confint(rrs1)) %>%
+  rename(Contrast = Treatment_revpairwise, Lower = asymp.LCL, Upper = asymp.UCL)
+
+rr1_plot <- ggplot(rrs1, aes(x = ratio, y = Contrast, xmin = Lower, xmax = Upper)) +
+  geom_errorbarh(aes(height = 0.2, color = Sex),
+                 position = position_dodge(0.3), lwd = 1) +
+  geom_point(aes(color = Sex), position = position_dodge(0.3)) +
+  geom_text(aes(label = round(ratio, 2), color = Sex), 
+            position = position_dodge(0.7)) +
+  theme_light() +
+  geom_vline(aes(xintercept = 1), color = "#84BD00FF", lty = 2) +
+  scale_color_startrek() +
+  labs(x = "Relative Risk",
+       title = "Relative Risk of Developing \nCataracts by Sex within Treatment")
+
+rr1_plot
+```
+  
+```{r RR1}
+em2 <- emmeans(mod, ~ Sex|Treatment)
+em2log <- regrid(em2, "log")
+rrs2 <- contrast(em2log, interaction = "revpairwise", type = "response")
+rrs2 <- as.data.frame(confint(rrs2)) %>%
+  rename(Contrast = Sex_revpairwise, Lower = asymp.LCL, Upper = asymp.UCL)
+
+rr2_plot <- ggplot(rrs2, aes(x = ratio, y = Contrast, xmin = Lower, xmax = Upper)) +
+  geom_errorbarh(aes(height = 0.2, color = Treatment),
+                 position = position_dodge(0.3), lwd = 1) +
+  geom_point(aes(color = Treatment), position = position_dodge(0.3)) +
+  geom_text(aes(label = round(ratio, 2), color = Treatment), 
+            position = position_dodge(0.3), vjust = -1) +
+  theme_light() +
+  geom_vline(aes(xintercept = 1), color = "#FFCD00FF", lty = 2) +
+  scale_color_startrek() +
+  labs(x = "Relative Risk",
+       title = "Relative Risk of Developing \nCataracts by Treatment within Sex")
+
+rr2_plot
+```
+
+Visualizing random effect by family:  
+```{r re_plot}
+p_var <- exp(var)/(1+exp(var))
+sigs <- bayes_tab[7,]
+p_sigs <- exp(sigs)/(1+exp(sigs))
+psig <- as.numeric(p_sigs[4])
+hpdl <- as.numeric(p_sigs[6])
+hpdu <- as.numeric(p_sigs[7])
+REs <- augment(ranef(mod,condVar = TRUE), ci.level = 0.95) %>%
+  select(c(level, estimate, lb, ub)) %>%
+  rename(Family = level) %>%
+  mutate(Prob = exp(estimate)/(1+exp(estimate)),
+         Lower = exp(lb)/(1+exp(lb)),
+         Upper = exp(ub)/(1+exp(ub)))
+colors <- c("Family Effect" = "#5C88DAFF", "GLMM Est" = "#CC0C00FF", "Bayes Mode" = "#84BD00FF",
+            "HPD Interval" = "#FFCD00FF")
+re_plot <- ggplot(REs, aes(x = Prob, y = Family, xmin = Lower, xmax = Upper)) +
+  geom_errorbarh(aes(height = 0, color = "Family Effect")) +
+  geom_point(aes(color = "Family Effect")) +
+  geom_vline(aes(xintercept = p_var, color = "GLMM Est"), lwd = 1, lty = 2) +
+  geom_vline(aes(xintercept = psig, color = "Bayes Mode"), lwd = 1, lty = 2) +
+  geom_vline(aes(xintercept = hpdl, color = "HPD Interval"), lwd = 1, lty = 4) +
+  geom_vline(aes(xintercept = hpdu, color = "HPD Interval"), lwd = 1, lty = 4) +
+  theme_light() +
+  scale_color_manual(values = colors) +
+  labs(color = "", title = "Random Effect by Family")
+
+re_plot
+```
+
 
 ## Authors' Statements
 
-Both authors contributed to statistical analysis and writing for this report. Both authors read and approved the final report. Both authors contributed equally to introduction, exploratory data analysis and summary statistics. Alyssa Allsop served as the primary statistician on Frequentist models; Amira Burns served as the primary statistician on Bayesian models.
+Both authors contributed to statistical analysis and writing for this report. Both authors read and approved the final report. Both authors contributed equally to introduction, exploratory data analysis, summary statistics, and results. Alyssa Allsop served as the primary statistician on Frequentist models; Amira Burns served as the primary statistician on Bayesian models.
 
 ## References
 
@@ -449,6 +587,27 @@ Gelman, A., Carlin, J., Stern, H., Dunson, D., Vehtari, A., Rubin, D. (2014). *B
 
 Roback, P., Legler, J. (2021). *Beyond Multiple Linear Regression. Applied Generalized Linear Models and Multilevel Models in R* (Second Edition). CRC Press. Online version: <https://bookdown.org/roback/bookdown-BeyondMLR/>
 
-DiMaggio, C., Albert, J., Spiegelhalter, D., Best, N., Gelman, A., Carstensen, B., Guerrin, L., Jensen, S. (2015) *Bayesian Analysis for Epidemiologists III: Regression Modeling.* Center for Injury Epidemiology and Prevention at Columbia University. <http://www.columbia.edu/~cjd11/charles_dimaggio/DIRE/styled-4/styled-11/code-8/#bayesian-regression-modeling-with-bugs-or-jags>
+DiMaggio, C., Albert, J., Spiegelhalter, D., Best, N., Gelman, A., Carstensen, B., Guerrin, L., Jensen, S. (2015) *Bayesian Analysis for Epidemiologists III: Regression Modeling.* Center for Injury Epidemiology and Prevention at Columbia University. <http://www.columbia.edu/~cjd11/charles_dimaggio/DIRE/styled-4/styled-11/code-8/#bayesian-regression-modeling-with-bugs-or-jags>  
+  
+R Packages:  
+ + Douglas Bates, Martin Maechler, Ben Bolker, Steve Walker (2015). Fitting Linear Mixed-Effects Models Using lme4. Journal of Statistical Software, 67(1), 1-48. doi:10.18637/jss.v067.i01.  
+ + Martyn Plummer (2021). rjags: Bayesian Graphical Models using MCMC. R package version 4-12. https://CRAN.R-project.org/package=rjags  
+ + Russell V. Lenth (2022). emmeans: Estimated Marginal Means, aka Least-Squares Means. R package version 1.7.3. https://CRAN.R-project.org/package=emmeans  
 
-## Appendix
+## Appendix  
+
+### Additional Exploratory Data Analysis
+
+### GLMM Model Selection
+
+### GLMM Model Diagnostics (necessary?)
+
+### Bayes Model Diagnostics  
+Traceplots:
+```{r trace}
+params = c("b0", "b1", "b2", "b3", "b4", "b5", "sigma^2")
+traplot(mcmc.model, parms = params )
+
+```
+
+### Post-Hoc Assessments

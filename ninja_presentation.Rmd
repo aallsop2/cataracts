@@ -51,7 +51,7 @@ class: top, left
     + Accounting for family clustering, are there differences in cataract development between treatment groups?  
   
 ???
-Our goal was to determine if there was a genetic component to cataract development among mice that are exposed to radiation. 
+This particular analysis focuses on potential genetic susceptibilty to developing cataracts. The mice used in this experiment were bred to be biologically heterogeneous, so any genetic predispositions may be easier to assess. Accounting for genetic effects also allows better examination of the effects of treatment on the outcome. Our goal was to determine if there was a genetic component to cataract development among mice that are exposed to radiation. 
   
 --
 
@@ -71,8 +71,8 @@ To study the family effect, there were 48 biologically unique families and withi
     + **Possible Covariates**: Sex, Weight, Coat Color, Body Condition Score, Age, Myeloid Leukemia, Harderian Tumor, PreT Lymphoma  
   
 ???
-The response variable was a binary 0 or 1, with 1 indicating the presence of cataracts of clinical concern and 0 being no cataracts or non-severe cataracts. The possible predictors included in the dataset were: treatment group - HZE irradiation, Gamma irradiation, or unirradiated control group, family, sex, weight, coat color, body condition score, age, myeloid leukemia, harderian tumor, and preT lymphoma. 
-
+The outcome in question is a binary response variable indicating presence or absence of cataracts. The treatment consists of three groups: Gamma irradiation, HZE irradiation, and Unirradiated Control. Biological Family indicates the random genetic effect. The dataset also contained information on potentially important covariates.  
+  
 ---
 
 class: top, center
