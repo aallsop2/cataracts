@@ -1,0 +1,141 @@
+---
+title: Three (Groups of) Blind Mice. Familial Clusters of Cataract Development in Irradiated Mice
+
+# to produce blinded version set to 1
+blinded: 0
+
+authors: 
+- name: Alyssa Allsop and Amira Burns
+  affiliation: Department of Statistics, Colorado State University
+  
+
+keywords:
+- Hierarchical modeling
+- Logistic Regression
+- Bayesian analysis
+
+abstract: |
+  The text of your abstract.  200 or fewer words.
+
+bibliography: bibliography.bib
+output: rticles::asa_article
+---
+
+\section{Introduction}
+\label{sec:intro}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      message = FALSE, 
+                      warning = FALSE) 
+
+```
+
+```{r load_libs, warning = FALSE, message = FALSE}
+library(readxl)
+library(tidyverse)
+library(lme4)
+library(broom.mixed)
+library(kableExtra)
+library(xtable)
+library(emmeans)
+library(ggsci)
+library(sjPlot)
+library(coda)
+library(rjags)
+library(R2jags)
+library(superdiag)
+library(mcmcplots)
+library(ggmcmc)
+library(gridExtra)
+```
+
+```{r load_data}
+cats <- read_excel(path = "GRSD.cataract.xlsx", sheet = "Sheet1")
+```
+
+```{r format_data}
+# remove spaces from column and value names
+names(cats) <- str_replace_all(names(cats), " ", "_")
+cats <- cats %>%
+  mutate(CoatColor = str_replace_all(coat_color, " ", "_"))
+
+# turn categorical vars into factor
+cats <- cats %>%
+  rename(Age = `age_(days)`,
+         Weight = weight,
+         Animal = animal) %>%
+  mutate(Sex = as.factor(sex),
+         CoatColor = as.factor(CoatColor),
+         Family = as.factor(family), # should this stay a factor? Yes?
+         BCS = as.ordered(BCS),
+         Treatment = relevel(as.factor(groups), ref = "Unirradiated"),
+         MyeloidLeukemia = as.factor(Myeloid_Leukemia),
+         HarderianTumor = as.factor(Harderian_Tumor),
+         PreTLymphoma = as.factor(PreT_Lymphoma),
+         Score = as.ordered(Cataract_Score)) # ordinal cat; leave as numeric?
+
+# select vars, add binary conversion for score
+cats <- cats %>%
+  select(c(Animal, Sex, Weight, CoatColor, Family, BCS, Age, Treatment,
+           MyeloidLeukemia, HarderianTumor, PreTLymphoma, Score)) %>%
+  mutate(Cataracts = ifelse(Score < 2, 0, 1))
+
+# glance at the dataset
+# str(cats)
+```
+
+Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth's magnetic field. In contrast, extensive research shows exposure to high doses of gamma radiation leads to acute radiation sickness. Effects include damage to the blood forming system, GI system, immune system, increased risk for cancer, cardiovascular disease, neurodegenerative disease, death, and cataracts.. The serious health implications from HZE radiation for astronauts who leave Earth's magnetic field warrant further study. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families (Chernyavskiy, et. al., 2017). Accounting for potential family clustering allows for thorough examination of the primary research questions. Is there a genetic susceptibility to cataracts caused by radiation? Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation and gamma radiation? The full dataset includes 1820 unique mice from 48 unique families, with equal random assignments by family to each of three treatment groups. Mice are bred over several generations to create a genetically heterogeneous sample, the better to represent the diverse biology of the human population. The treatments are HZE irradiation, gamma irradiation, and non-irradiated control. The HZE group is irradiated with either silicon or iron nuclei HZE ions, which are considered as a single treatment group. The second group is subjected to 137 Cs gamma irradiation. Mice in both irradiated groups are exposed to radiation at 7-12 weeks of age. The third group is unirradiated control. All mice are monitored until 800 days of age --effectively a survival study. Mice are checked weekly for symptoms of cataracts, cataract risk factors, and other symptoms of radiation exposure such as tumors and carcinomas. Resources do not allow for weekly measurement of every mouse; previous measurements are carried forward if a mouse is not assessed on a particular week. This analysis uses a simplified version of the data set - a snapshot of the 1169 mice that are alive at 552 days. This cutoff is chosen because it is the median survival time for the group with the shortest median survival. There are 47 unique families with n = 396 in the HZE group, n = 277 in the gamma radiation group, and n = 496 in the unirradiated control group. There are up to two generations of mice pups from each family in the dataset, but generation is not distinguished in the simplified data. Family size ranges from n = 11 to n = 48, with median family size of 24.  
+  
+```{r gsc_table}
+gsc <- cats %>% group_by(Score) %>%
+  count(Treatment) %>%
+  pivot_wider(names_from = Score, values_from = n) %>%
+  group_by(Treatment) %>%
+  mutate(Total = sum(c(`1`, `2`, `3`, `4`)))
+
+xtable(gsc, caption = "Counts of score by treatment group") %>%
+  xtable2kable(booktabs = T, include.rownames = FALSE,
+               table.placement = NULL) %>%
+  add_header_above(c( " " = 1, "Cataract Score" = 4, " " = 1)) %>%
+  kable_styling(full_width = F, position = "float_right") 
+
+```
+
+The response is Merriam-Focht cataract score (Merriam & Focht, 1957), an ordinal categorical variable corresponding to radiation-associated ocular changes in the eye. A score of 0 is associated with a completely clear lens, while a score of 5 is associated with a completely occluded lens. This dataset contains cataract score levels = [1, 2, 3, 4]. A score $\ge$ 2 indicates presence of cataracts, and the small sample sizes for score $>$ 2 across all treatment groups raise concerns about making inference on an ordinal analysis; consequently, the response is converted to binary *Cataracts* with score = 1 converted to 0, and score $\ge$ 2 converted to 1. The main experimental factor is *Treatment*, a categorical variable with three levels = [HZE radiation, gamma radiation, non-irradiated control]. A single random effect, genetic *Family*, is a categorical factor with 47 levels. Both Treatment and Family are central to the experimental design and will serve as the basis for all models considered. Additional covariates under consideration were Sex, coat color, weight in grams, body condition score (BCS) age in days, and presence three cancers: myeloid leukemia, harderian tumors, and PreT lymphoma.  
+  
+\section{Summary Statistics}
+\label{sec:sumstats}
+
+
+
+
+\section{Statistical Methods}
+\label{sec:methods}  
+The experimental design prescribed the inclusion of Treatment and Family in a final model.
+
+
+\section{Limitations and Alternatives}
+\label{sec:limits}
+
+
+\section{Results}
+\label{sec:results}
+
+
+\section{Conclusions}
+\label{sec:conc}
+
+\section{Author's Statements}
+\label{sec:auth}
+
+
+\section{Appendix}
+\label{sec:appendix}
+
+
+@Campbell02 @Schubert13 [@Chi81]
+
+
+
+

@@ -1,9 +1,11 @@
 ---
-title: "Three (Groups of) Blind Mice" 
-subtitle: "Familial Clusters of Cataract Development in Irradiated Mice"
+title: "Three (Groups of) Blind Mice"
 author: "Alyssa Allsop and Amira Burns"
 date: "`r Sys.Date()`"
-output: pdf_document
+output:
+  bookdown::pdf_document2:
+    df_print: paged
+subtitle: Familial Clusters of Cataract Development in Irradiated Mice
 ---
 
 ```{r setup, include=FALSE}
@@ -76,10 +78,10 @@ cats %>% group_by(Score) %>%
   count(Treatment) %>%
   pivot_wider(names_from = Score, values_from = n) %>%
   group_by(Treatment) %>%
-  mutate(Total = sum(c(`1`, `2`, `3`, `4`))) %>%
+  mutate(Total = sum(c(`1`, `2`, `3`, `4`))) %>% 
   kbl(caption = "Counts of Score by Treatment") %>%
   add_header_above(c( " " = 1, "Cataract Score" = 4, " " = 1)) %>%
-  kable_classic(full_width = F, html_font = "Cambria", font_size = 12, position = "float_right") 
+  kable_styling(full_width = F, position = "float_right")
 ```
 
 The response is Merriam-Focht cataract score (Merriam & Focht, 1957), an ordinal categorical variable corresponding to radiation-associated ocular changes in the eye. A score of 0 is associated with a completely clear lens, while a score of 5 is associated with a completely occluded lens. This dataset contains cataract score levels = [1, 2, 3, 4]. A score $\ge$ 2 indicates presence of cataracts, and the small sample sizes for score $>$ 2 across all treatment groups raise concerns about making inference on an ordinal analysis; consequently, the response is converted to binary *Cataracts* with score = 1 converted to 0, and score $\ge$ 2 converted to 1. The main experimental factor is *Treatment*, a categorical variable with three levels = [HZE radiation, gamma radiation, non-irradiated control]. A single random effect, genetic *Family*, is a categorical factor with 47 levels. Both Treatment and Family are central to the experimental design and will serve as the basis for all models considered. Additional covariates under consideration are:\
@@ -145,7 +147,6 @@ grsex_score <- cats %>%
 # choose facet direction and just show one
 l1 <- ggplot(grsex_score, aes(x = Treatment, y = mean_score, color = Sex)) +
   geom_line(aes(group = Family)) + facet_grid(vars(Sex)) +
-  scale_color_startrek() +
   scale_x_discrete(expand = c(0, .2)) +
   theme_light() +
   labs(y = "mean score",
@@ -166,7 +167,6 @@ cats_grp <- sex_trt %>%
 
 b1 <- ggplot(cats_grp, aes(x = Sex, y = prop, fill = Treatment)) +
   geom_col(position = "dodge") +
-  scale_fill_startrek() +
   theme_light() +
   ggtitle("Sample Proportion")
 
@@ -176,7 +176,6 @@ logits <- sex_trt %>%
 
 b2 <- ggplot(logits, aes(x = Sex, y = odds_ratio, fill = Treatment)) +
   geom_col(position = "dodge") +
-  scale_fill_startrek() +
   theme_light() +
   labs(y = "Odds Ratio",
        title = "Empirical Odds Ratios")
@@ -433,7 +432,7 @@ cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
 cats_emms
 pairs(cats_emms, reverse = TRUE)
 emmip(cats_emms, Treatment ~ Sex) + theme_light() + 
-  ggtitle("Predicted Probabilities of Cataracts \nby Sex and Treatment Group") + scale_color_startrek()
+  ggtitle("Predicted Probabilities of Cataracts \nby Sex and Treatment Group") 
 ```
 
 Assessing odds ratios for cataracts between groups:  
@@ -452,7 +451,6 @@ or1_plot <- ggplot(podds, aes(x = odds.ratio, y = Contrast, xmin = Lower, xmax =
   geom_vline(aes(xintercept = 1), color = "#84BD00FF", lty = 2) +
   theme_light() +
   theme(axis.text.y = element_text(angle = 45, vjust = 1, hjust = 0.5)) +
-  scale_color_startrek() +
   labs(x = "Odds Ratio",
        title = "Odds Ratios of Developing Cataracts \nby Treatment Group within Sex")
 
@@ -474,7 +472,6 @@ or2_plot <- ggplot(podds1, aes(x = odds.ratio, y = Contrast, xmin = Lower, xmax 
             position = position_dodge(0.3), vjust = -1) +
   theme_light() +
   geom_vline(aes(xintercept = 1), color = "#FFCD00FF", lty = 2) +
-  scale_color_startrek() +
   labs(x = "Odds Ratio",
        title = "Odds Ratio of Developing \nCataracts by Sex within Treatment")
 
@@ -497,7 +494,6 @@ rr1_plot <- ggplot(rrs1, aes(x = ratio, y = Contrast, xmin = Lower, xmax = Upper
             position = position_dodge(0.7)) +
   theme_light() +
   geom_vline(aes(xintercept = 1), color = "#84BD00FF", lty = 2) +
-  scale_color_startrek() +
   labs(x = "Relative Risk",
        title = "Relative Risk of Developing \nCataracts by Sex within Treatment")
 
@@ -519,7 +515,6 @@ rr2_plot <- ggplot(rrs2, aes(x = ratio, y = Contrast, xmin = Lower, xmax = Upper
             position = position_dodge(0.3), vjust = -1) +
   theme_light() +
   geom_vline(aes(xintercept = 1), color = "#FFCD00FF", lty = 2) +
-  scale_color_startrek() +
   labs(x = "Relative Risk",
        title = "Relative Risk of Developing \nCataracts by Treatment within Sex")
 
