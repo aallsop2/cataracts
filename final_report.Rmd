@@ -191,19 +191,33 @@ grid.arrange(b1, b2, ncol = 2, top = "Cataracts by Sex, Treatment")
 ```{r glmm}
 # mixed model binomial logistic regression 
 
-mod <- glmer(Cataracts ~ Treatment*Sex + (1|Family), data = cats, family = binomial)
-summary(mod)
+full_mod <- glmer(Cataracts ~ Treatment + Sex + Weight + CoatColor + BCS + HarderianTumor +
+                    MyeloidLeukemia + PreTLymphoma + (1|Family), data = cats, family = binomial)
+fixed_mod <- glm(Cataracts ~ Treatment*Sex, data = cats, family = binomial)
+no_interaction <- glmer(Cataracts ~ Treatment + Sex + (1|Family), data = cats, family = binomial)
+final_mod <- glmer(Cataracts ~ Treatment*Sex + (1|Family), data = cats, family = binomial)
+summary(final_mod)
 ```
-
-
-
 
 
 ```{r probs}
 # convert estimates to probabilities
-ests <- summary(mod)$coef[,1]
+ests <- summary(final_mod)$coef[,1]
 ps <- exp(ests)/(1+exp(ests))
 ```
+
+In order to study the family/genetic effect on cataract development among mice, a mixed model with a random intercept for family was fit. From plot ______, it was apparent that there was an interaction between sex and treatment group and therefore an interaction term was included in the model. The final model was a generalized mixed logistic regression model after converting the response to a binary 0, 1. The terms included in the final model were: sex, treatment group, sex by treatment group interaction, and a random intercept for family. The full model is written as follows:
+
+$Y_{ij} \sim Bernoulli(p)$  
+
+$$\begin{aligned}
+log(\frac{p}{1-p}) = &\ \beta_0\ +\beta_1*Gamma_i\ + \beta_2*HZE_i\ + \beta_3*M_i\ + \\ &\beta_4*Gamma_i*M_i\ + \beta_5*HZE_i*M_i\ +\ [v_{j} + \epsilon_{ij}] \\
+&i = 1, ..., 1169\ \mbox{ mice} \\
+&j = 1,...,47\ \ \mbox{ families}
+\end{aligned}$$
+
+Where M represents males, v is the variance of the random intercept for family, and $\epsilon$ is the error variance.
+
 
 
 ### Bayesian Approach
@@ -555,6 +569,10 @@ re_plot <- ggplot(REs, aes(x = Prob, y = Family, xmin = Lower, xmax = Upper)) +
 re_plot
 ```
 
+Female mice are less likely to develop cataracts than male mice across all treatment groups. Treatment is strongly associated with differences in the probability of male mice developing cataracts, but it is not strongly associated with differences in the probability of female mice developing cataracts.  
+Female mice have a lower probability of developing cataracts than male mice across all 3 treatment groups. The difference in probability of developing cataracts for females is very small and doesn't show a strong association. However, the differences in probability of developing cataracts among males in the three treatment groups are quite large and do indicate a strong association.
+
+GLMM model selection and Bayesian HPD intervals indicate that Family is an important source of variation in predicting cataract development.  
 
 ## Authors' Statements
 
