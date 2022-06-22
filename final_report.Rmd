@@ -126,14 +126,13 @@ sum_tab <- sum_tab %>%
           n_M = 561, prop_M = NA, n_C = 1169, prop_C = NA, .after = 9)
 
 options(knitr.kable.NA = '')
-ct_prop <- kbl(sum_tab,
-               caption = "Mice Counts and Percentages by Sex, Treatment Group, Cataracts",
-               col.names = c("Treatment", "Cataracts", "n", "prop", "n", "prop", "n", "prop")) %>%
+ct_prop <- kbl(sum_tab, col.names = c("Treatment", "Cataracts", "n", "prop", "n", "prop", "n", "prop")) %>%
   kable_styling(latex_options = "hold_position") %>%
   kable_classic_2(full_width = F, html_font = "Cambria") %>%
   add_header_above(c(" " = 2, "Female" = 2, "Male" = 2, "$\\sum$" = 2)) %>%
-  pack_rows(index = c("Control" = 3, "Gamma" = 3, "HZE" = 3, "$\\sum$" = 1))
-ct_prop
+  pack_rows(index = c("Control" = 3, "Gamma" = 3, "HZE" = 3, "$\\sum$" = 1)) %>%
+  save_kable("bookdown_report/ct_tab.png")
+
 ```
 
 ```{r lineplot, message = FALSE}

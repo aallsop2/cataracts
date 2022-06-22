@@ -27,6 +27,17 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
+% From pandoc table feature
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
 
 
 \usepackage{booktabs}
@@ -55,8 +66,7 @@
 
 \if0\blind
 {
-  \title{\bf Three (Groups of) Blind Mice. Familial Clusters of Cataract
-Development in Irradiated Mice}
+  \title{\bf Three (Groups of) Blind Mice. Familial Clusters of Cataract Development in Irradiated Mice}
 
   \author{
         Alyssa Allsop and Amira Burns \\
@@ -71,20 +81,18 @@ Development in Irradiated Mice}
   \bigskip
   \bigskip
   \begin{center}
-    {\LARGE\bf Three (Groups of) Blind Mice. Familial Clusters of
-Cataract Development in Irradiated Mice}
+    {\LARGE\bf Three (Groups of) Blind Mice. Familial Clusters of Cataract Development in Irradiated Mice}
   \end{center}
   \medskip
 } \fi
 
 \bigskip
 \begin{abstract}
-The text of your abstract. 200 or fewer words.
+As astronauts travel farther into space, outside of the earth's protective magnetic field, they are exposed to radiation that could have serious effects. One of those side effects is cataract development. It has also been thought that there might be a genetic predisposition to develop cataracts that is passed down in families. The goal of this study was to use mice in families exposed to radiation to determine if there is cataract clustering in families. A mixed effects model was created to account for the family effect on cataract development. The model included terms for sex, treatment group, sex by treatment group interaction, and a random intercept for family. Family was shown to be an important source of variation in predicting cataract development. Males had big differences in cataract development among treatment groups whereas females had only small differences. Males were also more likely to develop severe cataracts than females in all three treatment groups. Other risks involved in radiation exposure could cause death before cataracts have time to develop. This complicates the inferences made about cataract development from this dataset; however, the conclusions indicate the necessity of further research to better understand how humans might react to radiation as they leave the earth's magnetic field.
 \end{abstract}
 
 \noindent%
-{\it Keywords:} Hierarchical modeling, Logistic Regression, Bayesian
-analysis
+{\it Keywords:} Hierarchical modeling, Logistic Regression, Bayesian analysis
 \vfill
 
 \newpage
@@ -93,46 +101,7 @@ analysis
 \section{Introduction}
 \label{sec:intro}
 
-Little is known about the effects of high atomic number and energy (HZE)
-radiation, a main component of space radiation to which exposure is
-unavoidable beyond Earth's magnetic field. In contrast, extensive
-research shows exposure to high doses of gamma radiation leads to acute
-radiation sickness. Effects include damage to the blood forming system,
-GI system, immune system, increased risk for cancer, cardiovascular
-disease, neurodegenerative disease, death, and cataracts.. The serious
-health implications from HZE radiation for astronauts who leave Earth's
-magnetic field warrant further study. Adverse effects from radiation may
-also be attributable to other factors, including genetics; several
-different cancers have been observed to cluster in mice families
-(Chernyavskiy, et. al., 2017). Accounting for potential family
-clustering allows for thorough examination of the primary research
-questions. Is there a genetic susceptibility to cataracts caused by
-radiation? Accounting for potential genetic susceptibility, is there a
-difference in cataract presentation between HZE radiation and gamma
-radiation? The full dataset includes 1820 unique mice from 48 unique
-families, with equal random assignments by family to each of three
-treatment groups. Mice are bred over several generations to create a
-genetically heterogeneous sample, the better to represent the diverse
-biology of the human population. The treatments are HZE irradiation,
-gamma irradiation, and non-irradiated control. The HZE group is
-irradiated with either silicon or iron nuclei HZE ions, which are
-considered as a single treatment group. The second group is subjected to
-137 Cs gamma irradiation. Mice in both irradiated groups are exposed to
-radiation at 7-12 weeks of age. The third group is unirradiated control.
-All mice are monitored until 800 days of age --effectively a survival
-study. Mice are checked weekly for symptoms of cataracts, cataract risk
-factors, and other symptoms of radiation exposure such as tumors and
-carcinomas. Resources do not allow for weekly measurement of every
-mouse; previous measurements are carried forward if a mouse is not
-assessed on a particular week. This analysis uses a simplified version
-of the data set - a snapshot of the 1169 mice that are alive at 552
-days. This cutoff is chosen because it is the median survival time for
-the group with the shortest median survival. There are 47 unique
-families with n = 396 in the HZE group, n = 277 in the gamma radiation
-group, and n = 496 in the unirradiated control group. There are up to
-two generations of mice pups from each family in the dataset, but
-generation is not distinguished in the simplified data. Family size
-ranges from n = 11 to n = 48, with median family size of 24.
+Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth's magnetic field. In contrast, extensive research shows exposure to high doses of gamma radiation leads to acute radiation sickness. Effects include damage to the blood forming system, GI system, immune system, increased risk for cancer, cardiovascular disease, neurodegenerative disease, death, and cataracts.. The serious health implications from HZE radiation for astronauts who leave Earth's magnetic field warrant further study. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families (Chernyavskiy, et. al., 2017). Accounting for potential family clustering allows for thorough examination of the primary research questions. Is there a genetic susceptibility to cataracts caused by radiation? Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation and gamma radiation? The full dataset includes 1820 unique mice from 48 unique families, with equal random assignments by family to each of three treatment groups. Mice are bred over several generations to create a genetically heterogeneous sample, the better to represent the diverse biology of the human population. The treatments are HZE irradiation, gamma irradiation, and non-irradiated control. The HZE group is irradiated with either silicon or iron nuclei HZE ions, which are considered as a single treatment group. The second group is subjected to 137 Cs gamma irradiation. Mice in both irradiated groups are exposed to radiation at 7-12 weeks of age. The third group is unirradiated control. All mice are monitored until 800 days of age --effectively a survival study. Mice are checked weekly for symptoms of cataracts, cataract risk factors, and other symptoms of radiation exposure such as tumors and carcinomas. Resources do not allow for weekly measurement of every mouse; previous measurements are carried forward if a mouse is not assessed on a particular week. This analysis uses a simplified version of the data set - a snapshot of the 1169 mice that are alive at 552 days. This cutoff is chosen because it is the median survival time for the group with the shortest median survival. There are 47 unique families with n = 396 in the HZE group, n = 277 in the gamma radiation group, and n = 496 in the unirradiated control group. There are up to two generations of mice pups from each family in the dataset, but generation is not distinguished in the simplified data. Family size ranges from n = 11 to n = 48, with median family size of 24.
 
 \begin{wraptable}{r}{0pt}
 \centering
@@ -150,51 +119,190 @@ Unirradiated & 438 &  45 &  11 &   2 & 496 \\
 \caption{Counts of score by treatment group} 
 \end{wraptable}
 
-The response is Merriam-Focht cataract score (Merriam \& Focht, 1957),
-an ordinal categorical variable corresponding to radiation-associated
-ocular changes in the eye. A score of 0 is associated with a completely
-clear lens, while a score of 5 is associated with a completely occluded
-lens. This dataset contains cataract score levels = {[}1, 2, 3, 4{]}. A
-score \(\ge\) 2 indicates presence of cataracts, and the small sample
-sizes for score \(>\) 2 across all treatment groups raise concerns about
-making inference on an ordinal analysis; consequently, the response is
-converted to binary \emph{Cataracts} with score = 1 converted to 0, and
-score \(\ge\) 2 converted to 1. The main experimental factor is
-\emph{Treatment}, a categorical variable with three levels = {[}HZE
-radiation, gamma radiation, non-irradiated control{]}. A single random
-effect, genetic \emph{Family}, is a categorical factor with 47 levels.
-Both Treatment and Family are central to the experimental design and
-will serve as the basis for all models considered. Additional covariates
-under consideration were Sex, coat color, weight in grams, body
-condition score (BCS) age in days, and presence three cancers: myeloid
-leukemia, harderian tumors, and PreT lymphoma.
+The response is Merriam-Focht cataract score (Merriam \& Focht, 1957), an ordinal categorical variable corresponding to radiation-associated ocular changes in the eye. A score of 0 is associated with a completely clear lens, while a score of 5 is associated with a completely occluded lens. This dataset contains cataract score levels = {[}1, 2, 3, 4{]}. A score \(\ge\) 2 indicates presence of cataracts, and the small sample sizes for score \(>\) 2 across all treatment groups raise concerns about making inference on an ordinal analysis; consequently, the response is converted to binary \emph{Cataracts} with score = 1 converted to 0, and score \(\ge\) 2 converted to 1. The main experimental factor is \emph{Treatment}, a categorical variable with three levels = {[}HZE radiation, gamma radiation, non-irradiated control{]}. A single random effect, genetic \emph{Family}, is a categorical factor with 47 levels. Both Treatment and Family are central to the experimental design and will serve as the basis for all models considered. Additional covariates under consideration were Sex, coat color, weight in grams, body condition score (BCS) age in days, and presence three cancers: myeloid leukemia, harderian tumors, and PreT lymphoma. The experimental design prescribed the inclusion of Treatment and Family in the analysis.
 
 \section{Summary Statistics}
 \label{sec:sumstats}
 
+Exploratory data analysis focused on assessing binary Cataracts status in terms of Treatment. Tables and graphs were produced to explore (wc) any potential associations between covariates and the response, and correlations between coviarates and either Treatment or the response. Further examination of potential covariates show distinct patterns of cataracts status between male and female mice. Figure \ref{fig:bareda} highlights the differences between males and females across all treatment groups.
+
+\begin{figure}[H]
+
+{\centering \includegraphics{bookdown_report_files/figure-latex/bareda-1} 
+
+}
+
+\caption{Sample proportions with cataracts by sex, treatment group}\label{fig:bareda}
+\end{figure}
+
+Figure \ref{fig:lineeda} allows us to visualize any patterns between families within other predictors of interest. Different patterns are displayed across families, but distinct clustering is not apparent.\\
+
+\begin{figure}[H]
+
+\hfill{}\includegraphics{bookdown_report_files/figure-latex/lineeda-1} 
+
+\caption{Average family cataract score by sex, treatment group}\label{fig:lineeda}
+\end{figure}
+
 \section{Statistical Methods}
 \label{sec:methods}
 
-The experimental design prescribed the inclusion of Treatment and Family
-in a final model.
+Hierarchical logistic regression was selected as the primary analytic method, due to the binary response and random effect of interest to the research question. Figure \ref{fig:bareda} indicated potential interaction between Sex and Treatment group; therefore, an interaction term was included in the model. Various models were fit and assessed using Aikike's Information Criterion (AIC); the full list of models fit can be viewed in the \textbf{APPENDIX - add cross ref!}.The final model, Model \eqref{eq:glmm}, can be written as:
+
+\begin{equation}
+\begin{aligned}
+Y_{ij} \sim &Bernoulli(p) \\
+log(\frac{p}{1-p}) = &\ \beta_0\ +\beta_1*Gamma_i\ + \beta_2*HZE_i\ + \beta_3*M_i\ + \\ &\beta_4*Gamma_i*M_i\ + \beta_5*HZE_i*M_i\ +\ [v_{j} + \epsilon_{ij}] \\
+&i = 1, ..., 1169\ \mbox{ mice} \\
+&j = 1,...,47\ \ \mbox{ families}
+\end{aligned}
+\label{eq:glmm}
+\end{equation}
+
+where \(M_i\) is an indicator for males, \(v_{j}\) is the variance of the random intercept for Family \(j\), and \(\epsilon_{ij}\) is the residual variance.
+
+A complementary Bayesian model with non-informative priors was fit to examine the distribution of the estimates from the final model, as well as test its robustness to alternative approaches. The Bayes model is parameterized as:\\
+\begin{equation}
+\begin{aligned}
+Y_{ij} \sim &Bernoulli(p)\\
+log(\frac{p}{1-p}) = &\ \beta_0*Control_i*F_i\ +\beta_1*Gamma_i*F_i\ + \beta_2*HZE_i*F_i\ + \\ &\beta_3*Control_i*M_i\ +\beta_4*Gamma*M\ + \beta_5*HZE*M\ + \\
+&v_{j} + \epsilon_{ij}\\
+&i = 1, ..., 1169\ \mbox{ mice} \\
+&j = 1,...,47\ \ \mbox{ families, and} \\
+v_j \sim\ &N(0, \tau)
+\\
+&\mbox{ with non-informative priors:}\\
+\beta_0 &\sim N(0, 0.001)\\
+\beta_1 &\sim N(0, 0.001)\\
+\beta_2 &\sim N(0, 0.001)\\
+\beta_3 &\sim N(0, 0.001)\\
+\beta_4 &\sim N(0, 0.001)\\
+\beta_5 &\sim N(0, 0.001)\\
+v_i &\sim N(0, \sigma^2)\\
+\tau &\sim Gamma(0.001, 0.001) \mbox{ where}\ \sigma^2 = 1/\tau 
+\end{aligned}
+\label{eq:bayes}
+\end{equation}
+
+Model \eqref{eq:bayes}, was run through a Gibbs sampler Markov Chain Monte Carlo (MCMC) algorithm in the RJAGS package \textbf{(add citation!!!)} to approximate the posterior distributions of the estimates of all fixed effects and the variance of the random effect. 3 chains of 60000 total iterations with a 10000-iteration burn-in period; starting values were obtained from the estimates generated by Model \eqref{eq:glmm}, with noise added to avoid false convergence.
+
+Estimates for the final analysis:
+
+\begin{wraptable}{r}{0pt}
+\centering
+\begin{tabular}{rrrrrrr}
+  \toprule
+GLMM Est & MCMC Mean & MCMC Median & MCMC Mode & MCMC SD & HPD Lower & HPD Upper \\ 
+  \midrule
+-2.70 & -2.73 & -2.72 & -2.68 & 0.27 & -3.25 & -2.20 \\ 
+  0.21 & 0.20 & 0.20 & 0.09 & 0.38 & -0.53 & 0.95 \\ 
+  0.50 & 0.51 & 0.51 & 0.49 & 0.33 & -0.14 & 1.15 \\ 
+  0.89 & 0.90 & 0.90 & 0.90 & 0.30 & 0.31 & 1.50 \\ 
+  0.97 & 0.99 & 0.99 & 1.09 & 0.46 & 0.08 & 1.88 \\ 
+  1.21 & 1.21 & 1.22 & 1.27 & 0.41 & 0.40 & 2.00 \\ 
+  0.40 & 0.45 & 0.42 & 0.32 & 0.18 & 0.15 & 0.81 \\ 
+   \bottomrule
+\end{tabular}
+\caption{Final model parameter estimates} 
+\end{wraptable}
 
 \section{Limitations and Alternatives}
 \label{sec:limits}
 
+Presence of competing risks in the experimental design obscure the presence of family clusters of cataracts. It is reasonable to assume that individuals in the irradiated Treatment groups were more likely to die due to more acute effects of irradiation before developing cataracts, compared to individuals in the control group. Simplifying the dataset by instituting a cutoff age attempts to address this limitation, but the issue persists even after excluding individuals deceased before Age = 552.
+
 \section{Results}
 \label{sec:results}
+
+The final probability for developing cataracts can be written as:\\
+\begin{equation}
+p_i = 0.063 + 0.55*Gamma_i + 0.623*HZE_i + 0.708*Male_i + 0.726*Gamma_i*Male_i + 0.770*HZE_i*Male_i
+\label{eq:probs}
+\end{equation}
+
+\begin{verbatim}
+## Sex = F:
+##  Treatment      prob     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+##  Unirradiated 0.0631 0.0154 Inf    0.0389     0.101  0.5 -10.343  <.0001
+##  Gamma        0.0770 0.0219 Inf    0.0436     0.132  0.5  -8.062  <.0001
+##  HZE          0.1001 0.0221 Inf    0.0643     0.153  0.5  -8.942  <.0001
+## 
+## Sex = M:
+##  Treatment      prob     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+##  Unirradiated 0.1407 0.0252 Inf    0.0982     0.198  0.5  -8.697  <.0001
+##  Gamma        0.3495 0.0485 Inf    0.2613     0.449  0.5  -2.913  0.0036
+##  HZE          0.4744 0.0448 Inf    0.3882     0.562  0.5  -0.569  0.5693
+## 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the logit scale 
+## Tests are performed on the logit scale
+\end{verbatim}
+
+\begin{verbatim}
+## Sex = F:
+##  contrast             odds.ratio    SE  df null z.ratio p.value
+##  Gamma / Unirradiated       1.24 0.459 Inf    1   0.577  0.8325
+##  HZE / Unirradiated         1.65 0.534 Inf    1   1.546  0.2695
+##  HZE / Gamma                1.33 0.482 Inf    1   0.793  0.7071
+## 
+## Sex = M:
+##  contrast             odds.ratio    SE  df null z.ratio p.value
+##  Gamma / Unirradiated       3.28 0.865 Inf    1   4.509  <.0001
+##  HZE / Unirradiated         5.51 1.331 Inf    1   7.076  <.0001
+##  HZE / Gamma                1.68 0.412 Inf    1   2.115  0.0868
+## 
+## P value adjustment: tukey method for comparing a family of 3 estimates 
+## Tests are performed on the log odds ratio scale
+\end{verbatim}
+
+\begin{figure}[H]
+
+\includegraphics{bookdown_report_files/figure-latex/contr-1} \hfill{}
+
+\caption{Predicted probability of cataracts by sex, treatment group}\label{fig:contr}
+\end{figure}
+
+Figure \ref{fig:contr} shows the probability of developing cataracts for each combination of sex by treatment group. Differences between both sex and treatment group are clearly visible, notably the differences between treatment group across gender.
+
+Assessing relative risk for cataracts between groups:\\
+\includegraphics{bookdown_report_files/figure-latex/RR-1.pdf} \includegraphics{bookdown_report_files/figure-latex/RR-2.pdf}
+
+Figure \ref{fig:RR} shows the relative risk of cataract development for all groups in Model \eqref{eq:glmm}. \textbf{add interpretation}
+
+Visualizing random effect by family:\\
+\includegraphics{bookdown_report_files/figure-latex/re_plot-1.pdf}
+
+Figure @ref(fig:re\_plot) visualizes the estimated probability of developing cataracts for each family in the dataset, along with their confidence intervals. The vertical lines plot the GLMM estimated variance from Model \eqref{eq:glmm} and the MCMC mode and HPD interval for \(\sigma^2\) from Model \eqref{eq:bayes}. Many of the probabilities shown are close to 0.5, with small numbers of families at the top and bottom of the graph that indicate some respective genetic predisposition or resistance to cataract development.
 
 \section{Conclusions}
 \label{sec:conc}
 
+\textbf{Turn this into a nice paragraph or two; add quantitative info from results to back these up, or keep it general?}
+
+Females in general face less probability of developing cataracts than males, across all treatment groups. We could argue that the effect of treatment group is not of clinical significance for female mice in this dataset. As you can see, the probability of developing cataracts is quite low for all 3 treatment groups. Males, on the other hand, have a higher probability of developing cataracts than females across all treatment groups. For males, the differences of development of cataracts across treatment groups is of clinical importance.
+
 \section{Author's Statements}
 \label{sec:auth}
 
-\section{Appendix}
-\label{sec:appendix}
+Both authors contributed to statistical analysis and writing for this report. Both authors read and approved the final report. Both authors contributed equally to introduction, exploratory data analysis, summary statistics, and results. Alyssa Allsop served as the primary statistician on fitting Frequentist models; Amira Burns served as the primary statistician on fitting the Bayesian model.
 
-\citet{Campbell02} \citeauthor{Schubert13}
-\citetext{\citeyear{Schubert13}; \citealp{Chi81}}
+\section{Appendix}
+\label{sec:appendix}  
+\begin{table}[!h]
+\centering
+\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedright}X}
+  \toprule
+Model & AIC \\ 
+  \midrule
+Full Mixed Model & 1017.98 \\ 
+  Final Model & 1038.9 \\ 
+  Fixed Effects Model & 1040.3 \\ 
+  Mixed Model with no Interaction & 1023.19 \\ 
+  Base Model & 1123.57 \\ 
+   \bottomrule
+\end{tabu}
+\caption{Model selection via AIC comparision} 
+\end{table}
 
 \bibliographystyle{agsm}
 \bibliography{bibliography.bib}
