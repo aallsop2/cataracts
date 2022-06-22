@@ -86,7 +86,9 @@ cats <- cats %>%
 # str(cats)
 ```
 
-Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth's magnetic field. In contrast, extensive research shows exposure to high doses of gamma radiation leads to acute radiation sickness. Effects include damage to the blood forming system, GI system, immune system, increased risk for cancer, cardiovascular disease, neurodegenerative disease, death, and cataracts.. The serious health implications from HZE radiation for astronauts who leave Earth's magnetic field warrant further study. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families (Chernyavskiy, et. al., 2017). Accounting for potential family clustering allows for thorough examination of the primary research questions. Is there a genetic susceptibility to cataracts caused by radiation? Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation and gamma radiation? The full dataset includes 1820 unique mice from 48 unique families, with equal random assignments by family to each of three treatment groups. Mice are bred over several generations to create a genetically heterogeneous sample, the better to represent the diverse biology of the human population. The treatments are HZE irradiation, gamma irradiation, and non-irradiated control. The HZE group is irradiated with either silicon or iron nuclei HZE ions, which are considered as a single treatment group. The second group is subjected to 137 Cs gamma irradiation. Mice in both irradiated groups are exposed to radiation at 7-12 weeks of age. The third group is unirradiated control. All mice are monitored until 800 days of age --effectively a survival study. Mice are checked weekly for symptoms of cataracts, cataract risk factors, and other symptoms of radiation exposure such as tumors and carcinomas. Resources do not allow for weekly measurement of every mouse; previous measurements are carried forward if a mouse is not assessed on a particular week. This analysis uses a simplified version of the data set - a snapshot of the 1169 mice that are alive at 552 days. This cutoff is chosen because it is the median survival time for the group with the shortest median survival. There are 47 unique families with n = 396 in the HZE group, n = 277 in the gamma radiation group, and n = 496 in the unirradiated control group. There are up to two generations of mice pups from each family in the dataset, but generation is not distinguished in the simplified data. Family size ranges from n = 11 to n = 48, with median family size of 24.  
+Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth's magnetic field. In contrast, extensive research shows exposure to high doses of gamma radiation leads to acute radiation sickness. Effects include damage to the blood forming system, GI system, immune system, increased risk for cancer, cardiovascular disease, neurodegenerative disease, death, and cataracts. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families [@mice2017]. Accounting for potential family clustering allows for thorough examination of the primary research questions.  
+Is there a genetic susceptibility to cataracts caused by radiation? Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation, gamma radiation and unirradiation? 1820 individual mice from 48 unique families, were randomly assigned with equal family weight to each of three treatment groups. The mice were bred over several generations to create a genetically heterogeneous sample to better represent biological diversity within the human population. The treatments are HZE irradiation, gamma irradiation, and non-irradiated control. The HZE group is irradiated with either silicon or iron nuclei HZE ions, which are considered as a single treatment group. The second group is subjected to 137 Cs gamma irradiation. Mice in both irradiated groups are exposed to radiation at 7-12 weeks of age. The third group is unirradiated control. All mice are monitored until 800 days of age --effectively a survival study. Mice are checked weekly for symptoms of cataracts, cataract risk factors, and other symptoms of radiation exposure such as tumors and carcinomas. Resources do not allow for weekly measurement of every mouse; previous measurements are carried forward if a mouse is not assessed on a particular week.   
+This analysis uses a simplified version of the data set - a snapshot of the 1169 mice that are alive at 552 days. This cutoff is chosen because it is the median survival time for the group with the shortest median survival. There are 47 unique families with n = 396 in the HZE group, n = 277 in the gamma radiation group, and n = 496 in the unirradiated control group. There are up to two generations of mice pups from each family in the dataset, but generation is not distinguished in the simplified data. Family size ranges from n = 11 to n = 48, with median family size of 24.  
   
 ```{r gsc_table}
 gsc <- cats %>% group_by(Score) %>%
@@ -197,7 +199,7 @@ v_i &\sim N(0, \sigma^2)\\
 \end{equation}
 
   
-Model \@ref(eq:bayes), was run through a Gibbs sampler Markov Chain Monte Carlo (MCMC) algorithm in the RJAGS package **(add citation!!!)** to approximate the posterior distributions of the estimates of all fixed effects and the variance of the random effect. 3 chains of 60000 total iterations with a 10000-iteration burn-in period; starting values were obtained from the estimates generated by Model \@ref(eq:glmm), with noise added to avoid false convergence.  
+Model \@ref(eq:bayes), was run through a Gibbs sampler Markov Chain Monte Carlo (MCMC) algorithm in the [@R-rjags] package to approximate the posterior distributions of the estimates of all fixed effects and the variance of the random effect. 3 chains of 60000 total iterations with a 10000-iteration burn-in period; starting values were obtained from the estimates generated by Model \@ref(eq:glmm), with random noise added to avoid false convergence.  
   
 ```{r bayes_mod, results='hide', cache=TRUE}
 # Specify the model
@@ -291,7 +293,7 @@ colnames(est_tab) <- c("GLMM Est", "MCMC Mean", "MCMC Median",
                        "MCMC Mode", "MCMC SD", "HPD Lower", "HPD Upper")
 xtable(est_tab, caption = "Final model parameter estimates") %>%
   xtable2kable(booktabs = T, include.rownames = FALSE, table.placement = NULL) %>%
-  kable_styling(latex_options = "hold_position", position = "float_right") 
+  kable_styling(latex_options = "HOLD_position", position = "float_right") 
 ```
  
 
@@ -305,14 +307,15 @@ Presence of competing risks in the experimental design obscure the presence of f
   
 The final probability for developing cataracts can be written as:  
 \begin{equation}
-p_i = 0.063 + 0.55*Gamma_i + 0.623*HZE_i + 0.708*Male_i + 0.726*Gamma_i*Male_i + 0.770*HZE_i*Male_i
+\begin{aligned}
+p_i = &0.063 + 0.55*Gamma_i + 0.623*HZE_i + \\
+&0.708*Male_i + 0.726*Gamma_i*Male_i + 0.770*HZE_i*Male_i
+\endf{aligned}
 (\#eq:probs)
 \end{equation}  
   
 ```{r contr, fig.cap="Predicted probability of cataracts by sex, treatment group", fig.align='left'}
 cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
-cats_emms
-pairs(cats_emms, reverse = TRUE)
 emmip(cats_emms, Treatment ~ Sex) + 
   theme_light() + scale_color_startrek()
 ```  
@@ -364,9 +367,13 @@ Visualizing random effect by family:
 ```{r re_plot, fig.cap="Estimated random probability of developing cataracts by family"}
 p_sigs <- est_tab[7,]
 est <- as.numeric(p_sigs[1])
+est <- exp(est) / (1 + exp(est))
 psig <- as.numeric(p_sigs[4])
+psig <- exp(psig) / (1 + exp(psig))
 hpdl <- as.numeric(p_sigs[6])
+hpdl <- exp(hpdl) / (1 + exp(hpdl))
 hpdu <- as.numeric(p_sigs[7])
+
 REs <- augment(ranef(mod,condVar = TRUE), ci.level = 0.95) %>%
   select(c(level, estimate, lb, ub)) %>%
   rename(Family = level) %>%
@@ -427,8 +434,11 @@ xtable(dt, caption = "Model selection via AIC comparision") %>%
 ```  
 
 
+Sample citations:
 
-
+[@R-lme4]  
+[@R-rjags]
+[@R-emmeans]
 
 
 

@@ -101,7 +101,9 @@ As astronauts travel farther into space, outside of the earth's protective magne
 \section{Introduction}
 \label{sec:intro}
 
-Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth's magnetic field. In contrast, extensive research shows exposure to high doses of gamma radiation leads to acute radiation sickness. Effects include damage to the blood forming system, GI system, immune system, increased risk for cancer, cardiovascular disease, neurodegenerative disease, death, and cataracts.. The serious health implications from HZE radiation for astronauts who leave Earth's magnetic field warrant further study. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families (Chernyavskiy, et. al., 2017). Accounting for potential family clustering allows for thorough examination of the primary research questions. Is there a genetic susceptibility to cataracts caused by radiation? Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation and gamma radiation? The full dataset includes 1820 unique mice from 48 unique families, with equal random assignments by family to each of three treatment groups. Mice are bred over several generations to create a genetically heterogeneous sample, the better to represent the diverse biology of the human population. The treatments are HZE irradiation, gamma irradiation, and non-irradiated control. The HZE group is irradiated with either silicon or iron nuclei HZE ions, which are considered as a single treatment group. The second group is subjected to 137 Cs gamma irradiation. Mice in both irradiated groups are exposed to radiation at 7-12 weeks of age. The third group is unirradiated control. All mice are monitored until 800 days of age --effectively a survival study. Mice are checked weekly for symptoms of cataracts, cataract risk factors, and other symptoms of radiation exposure such as tumors and carcinomas. Resources do not allow for weekly measurement of every mouse; previous measurements are carried forward if a mouse is not assessed on a particular week. This analysis uses a simplified version of the data set - a snapshot of the 1169 mice that are alive at 552 days. This cutoff is chosen because it is the median survival time for the group with the shortest median survival. There are 47 unique families with n = 396 in the HZE group, n = 277 in the gamma radiation group, and n = 496 in the unirradiated control group. There are up to two generations of mice pups from each family in the dataset, but generation is not distinguished in the simplified data. Family size ranges from n = 11 to n = 48, with median family size of 24.
+Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth's magnetic field. In contrast, extensive research shows exposure to high doses of gamma radiation leads to acute radiation sickness. Effects include damage to the blood forming system, GI system, immune system, increased risk for cancer, cardiovascular disease, neurodegenerative disease, death, and cataracts. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families \citep{mice2017}. Accounting for potential family clustering allows for thorough examination of the primary research questions.\\
+Is there a genetic susceptibility to cataracts caused by radiation? Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation, gamma radiation and unirradiation? 1820 individual mice from 48 unique families, were randomly assigned with equal family weight to each of three treatment groups. The mice were bred over several generations to create a genetically heterogeneous sample to better represent biological diversity within the human population. The treatments are HZE irradiation, gamma irradiation, and non-irradiated control. The HZE group is irradiated with either silicon or iron nuclei HZE ions, which are considered as a single treatment group. The second group is subjected to 137 Cs gamma irradiation. Mice in both irradiated groups are exposed to radiation at 7-12 weeks of age. The third group is unirradiated control. All mice are monitored until 800 days of age --effectively a survival study. Mice are checked weekly for symptoms of cataracts, cataract risk factors, and other symptoms of radiation exposure such as tumors and carcinomas. Resources do not allow for weekly measurement of every mouse; previous measurements are carried forward if a mouse is not assessed on a particular week.\\
+This analysis uses a simplified version of the data set - a snapshot of the 1169 mice that are alive at 552 days. This cutoff is chosen because it is the median survival time for the group with the shortest median survival. There are 47 unique families with n = 396 in the HZE group, n = 277 in the gamma radiation group, and n = 496 in the unirradiated control group. There are up to two generations of mice pups from each family in the dataset, but generation is not distinguished in the simplified data. Family size ranges from n = 11 to n = 48, with median family size of 24.
 
 \begin{wraptable}{r}{0pt}
 \centering
@@ -184,11 +186,11 @@ v_i &\sim N(0, \sigma^2)\\
 \label{eq:bayes}
 \end{equation}
 
-Model \eqref{eq:bayes}, was run through a Gibbs sampler Markov Chain Monte Carlo (MCMC) algorithm in the RJAGS package \textbf{(add citation!!!)} to approximate the posterior distributions of the estimates of all fixed effects and the variance of the random effect. 3 chains of 60000 total iterations with a 10000-iteration burn-in period; starting values were obtained from the estimates generated by Model \eqref{eq:glmm}, with noise added to avoid false convergence.
+Model \eqref{eq:bayes}, was run through a Gibbs sampler Markov Chain Monte Carlo (MCMC) algorithm in the \citep{R-rjags} package to approximate the posterior distributions of the estimates of all fixed effects and the variance of the random effect. 3 chains of 60000 total iterations with a 10000-iteration burn-in period; starting values were obtained from the estimates generated by Model \eqref{eq:glmm}, with random noise added to avoid false convergence.
 
 Estimates for the final analysis:
 
-\begin{wraptable}{r}{0pt}
+\begin{wraptable}{r}{0pt}[H]
 \centering
 \begin{tabular}{rrrrrrr}
   \toprule
@@ -219,41 +221,6 @@ The final probability for developing cataracts can be written as:\\
 p_i = 0.063 + 0.55*Gamma_i + 0.623*HZE_i + 0.708*Male_i + 0.726*Gamma_i*Male_i + 0.770*HZE_i*Male_i
 \label{eq:probs}
 \end{equation}
-
-\begin{verbatim}
-## Sex = F:
-##  Treatment      prob     SE  df asymp.LCL asymp.UCL null z.ratio p.value
-##  Unirradiated 0.0631 0.0154 Inf    0.0389     0.101  0.5 -10.343  <.0001
-##  Gamma        0.0770 0.0219 Inf    0.0436     0.132  0.5  -8.062  <.0001
-##  HZE          0.1001 0.0221 Inf    0.0643     0.153  0.5  -8.942  <.0001
-## 
-## Sex = M:
-##  Treatment      prob     SE  df asymp.LCL asymp.UCL null z.ratio p.value
-##  Unirradiated 0.1407 0.0252 Inf    0.0982     0.198  0.5  -8.697  <.0001
-##  Gamma        0.3495 0.0485 Inf    0.2613     0.449  0.5  -2.913  0.0036
-##  HZE          0.4744 0.0448 Inf    0.3882     0.562  0.5  -0.569  0.5693
-## 
-## Confidence level used: 0.95 
-## Intervals are back-transformed from the logit scale 
-## Tests are performed on the logit scale
-\end{verbatim}
-
-\begin{verbatim}
-## Sex = F:
-##  contrast             odds.ratio    SE  df null z.ratio p.value
-##  Gamma / Unirradiated       1.24 0.459 Inf    1   0.577  0.8325
-##  HZE / Unirradiated         1.65 0.534 Inf    1   1.546  0.2695
-##  HZE / Gamma                1.33 0.482 Inf    1   0.793  0.7071
-## 
-## Sex = M:
-##  contrast             odds.ratio    SE  df null z.ratio p.value
-##  Gamma / Unirradiated       3.28 0.865 Inf    1   4.509  <.0001
-##  HZE / Unirradiated         5.51 1.331 Inf    1   7.076  <.0001
-##  HZE / Gamma                1.68 0.412 Inf    1   2.115  0.0868
-## 
-## P value adjustment: tukey method for comparing a family of 3 estimates 
-## Tests are performed on the log odds ratio scale
-\end{verbatim}
 
 \begin{figure}[H]
 
@@ -303,6 +270,12 @@ Full Mixed Model & 1017.98 \\
 \end{tabu}
 \caption{Model selection via AIC comparision} 
 \end{table}
+
+Sample citations:
+
+\citep{R-lme4}\strut \\
+\citep{R-rjags}
+\citep{R-emmeans}
 
 \bibliographystyle{agsm}
 \bibliography{bibliography.bib}
