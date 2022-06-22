@@ -67,6 +67,12 @@ cats <- cats %>%
 
 ## Abstract
 
+As astronauts travel farther into space, outside of the earth’s protective magnetic field, they are exposed to radiation that could have serious effects. One of those side effects is cataract development. It has also been thought that there might be a genetic predisposition to develop cataracts that is passed down in families. The goal of this study was to use mice in families exposed to radiation to determine if there is cataract clustering in families. 
+The mice were bread in heterogeneous diverse families to try to mimic the diversity of human genes. Within families, mice were assigned to receive either HZE irradiation, gamma irradiation, or no radiation. From there, the mice were monitored and symptoms recorded at time of death for mice that lived to at least 552 days. 
+A mixed effects model was created to account for the family effect on cataract development. The model included terms for sex, treatment group, sex by treatment group interaction, and a random intercept for family. Family was shown to be an important source of variation in predicting cataract development. Males had big differences in cataract development among treatment groups whereas females had only small differences. Males were also more likely to develop severe cataracts than females in all three treatment groups.
+There are other risks involved in radiation exposure that could cause death before cataracts have time to develop. This complicates the inferences made about cataract development from this study alone. Overall, this is a great starting point into studying how humans might react to radiation as they leave the earth’s magnetic field
+
+
 ## Introduction
 
 Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth's magnetic field. In contrast, extensive research shows exposure to high doses of gamma radiation leads to acute radiation sickness. Effects include damage to the blood forming system, GI system, immune system, increased risk for cancer, cardiovascular disease, neurodegenerative disease, death, and cataracts.. The serious health implications from HZE radiation for astronauts who leave Earth's magnetic field warrant further study. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families (Chernyavskiy, et. al., 2017). Accounting for potential family clustering allows for thorough examination of the primary research questions. Is there a genetic susceptibility to cataracts caused by radiation? Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation and gamma radiation? The full dataset includes 1820 unique mice from 48 unique families, with equal random assignments by family to each of three treatment groups. Mice are bred over several generations to create a genetically heterogeneous sample, the better to represent the diverse biology of the human population. The treatments are HZE irradiation, gamma irradiation, and non-irradiated control. The HZE group is irradiated with either silicon or iron nuclei HZE ions, which are considered as a single treatment group. The second group is subjected to 137 Cs gamma irradiation. Mice in both irradiated groups are exposed to radiation at 7-12 weeks of age. The third group is unirradiated control. All mice are monitored until 800 days of age --effectively a survival study. Mice are checked weekly for symptoms of cataracts, cataract risk factors, and other symptoms of radiation exposure such as tumors and carcinomas. Resources do not allow for weekly measurement of every mouse; previous measurements are carried forward if a mouse is not assessed on a particular week. This analysis uses a simplified version of the data set - a snapshot of the 1169 mice that are alive at 552 days. This cutoff is chosen because it is the median survival time for the group with the shortest median survival. There are 47 unique families with n = 396 in the HZE group, n = 277 in the gamma radiation group, and n = 496 in the unirradiated control group. There are up to two generations of mice pups from each family in the dataset, but generation is not distinguished in the simplified data. Family size ranges from n = 11 to n = 48, with median family size of 24.
@@ -217,6 +223,8 @@ log(\frac{p}{1-p}) = &\ \beta_0\ +\beta_1*Gamma_i\ + \beta_2*HZE_i\ + \beta_3*M_
 
 Where M represents males, v is the variance of the random intercept for family, and $\epsilon$ is the error variance.
 
+Akaike's Information Criterion (AIC) was used in the model selection process. Other models considered included: a mixed model with all predictors included in the dataset, a mixed model with only treatment and sex and no interaction, a fixed effects model with sex, treatment, and sex by treatment interaction. 
+
 
 
 ### Bayesian Approach
@@ -288,8 +296,8 @@ nChains <- 3
 nThin <- 1
 BurnIn <- 10000
 nAdapt <- 1000
-ests <- summary(mod)$coef[,1] # pull starting values from frequentist model
-var <- as.numeric(as.data.frame(VarCorr(mod))$vcov)
+ests <- summary(final_mod)$coef[,1] # pull starting values from frequentist model
+var <- as.numeric(as.data.frame(VarCorr(final_mod))$vcov)
 inits <- list(list("tau" = var+0.2, "b0" = ests[1]+0.5, "b1" = ests[2]+0.5, "b2" = ests[3]+0.5,
                    "b3" = ests[4]+0.2, "b4" = ests[5]+0.2, "b5" = ests[6]+0.2),
               list("tau" = var-0.2, "b0" = ests[1]-0.5, "b1" = ests[2]-0.5, "b2" = ests[3]-0.5,
@@ -442,7 +450,7 @@ p_i = 0.063 + 0.55*Gamma_i + 0.623*HZE_i + 0.708*Male_i + 0.726*Gamma_i*Male_i +
 $$
 
 ```{r contr}
-cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
+cats_emms <- emmeans(final_mod, ~ Treatment | Sex, infer = TRUE, type = "response")
 cats_emms
 pairs(cats_emms, reverse = TRUE)
 emmip(cats_emms, Treatment ~ Sex) + theme_light() + 
@@ -452,7 +460,7 @@ emmip(cats_emms, Treatment ~ Sex) + theme_light() +
 Assessing odds ratios for cataracts between groups:  
 
 ```{r oddsr}
-cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
+cats_emms <- emmeans(final_mod, ~ Treatment | Sex, infer = TRUE, type = "response")
 podds <- pairs(cats_emms, reverse = TRUE)
 podds <- as.data.frame(confint(podds)) %>%
   rename(Contrast = contrast, Lower = asymp.LCL, Upper = asymp.UCL)
@@ -473,7 +481,7 @@ or1_plot
 ```
 
 ```{r oddsr2}
-cats_emms1 <- emmeans(mod, ~Sex | Treatment, infer = TRUE, type = "response")
+cats_emms1 <- emmeans(final_mod, ~Sex | Treatment, infer = TRUE, type = "response")
 podds1 <- pairs(cats_emms1, reverse = TRUE)
 podds1
 podds1 <- as.data.frame(confint(podds1)) %>%
@@ -496,7 +504,7 @@ or2_plot
 
 Assessing relative risk for cataracts between groups:  
 ```{r RR}
-em1 <- emmeans(mod, ~ Treatment|Sex)
+em1 <- emmeans(final_mod, ~ Treatment|Sex)
 em1log <- regrid(em1, "log")
 rrs1 <- contrast(em1log, interaction = "revpairwise", type = "response")
 rrs1 <- as.data.frame(confint(rrs1)) %>%
@@ -518,7 +526,7 @@ rr1_plot
 ```
   
 ```{r RR1}
-em2 <- emmeans(mod, ~ Sex|Treatment)
+em2 <- emmeans(final_mod, ~ Sex|Treatment)
 em2log <- regrid(em2, "log")
 rrs2 <- contrast(em2log, interaction = "revpairwise", type = "response")
 rrs2 <- as.data.frame(confint(rrs2)) %>%
@@ -546,7 +554,7 @@ est <- as.numeric(p_sigs[1])
 psig <- as.numeric(p_sigs[4])
 hpdl <- as.numeric(p_sigs[6])
 hpdu <- as.numeric(p_sigs[7])
-REs <- augment(ranef(mod,condVar = TRUE), ci.level = 0.95) %>%
+REs <- augment(ranef(final_mod,condVar = TRUE), ci.level = 0.95) %>%
   select(c(level, estimate, lb, ub)) %>%
   rename(Family = level) %>%
   mutate(Prob = exp(estimate)/(1+exp(estimate)),
@@ -600,6 +608,24 @@ R Packages:
 
 ### GLMM Model Selection
 
+```{r aic}
+#AIC comparison table
+row1 <- c("Sex", "Unirradiated", "HZE", "Gamma")
+Male <- c( 0.14, 0.47, 0.35)
+Female <- c( 0.06, 0.10, 0.08)
+dt <- rbind(Male, Female)
+colnames(dt) <- c("Unirradiated", "HZE", "Gamma")
+
+aics <- c(round(AIC(final_mod),2), round(AIC(full_mod),2), round(AIC(fixed_mod),2), round(AIC(no_interaction),2))
+models <- c("Final Model", "Full Mixed Model", "Fixed Effects Model", "Mixed Model with no Interaction")
+dt <- cbind(models,aics)
+colnames(dt) <- c("Model", "AIC")
+
+dt %>% 
+  kbl(caption = "AIC Comparison Across Different Models") %>% 
+  kable_classic_2(full_width = T, html_font = "Cambria", )
+```
+
 ### GLMM Model Diagnostics (necessary?)
 
 ### Bayes Model Diagnostics  
@@ -631,10 +657,10 @@ gelman.plot(mcmc.model)
 ### Post-Hoc Assessments
 
 ```{r glmm_ors}
-plot_model(mod, sort.est = TRUE, show.values = TRUE, type = "int",
+plot_model(final_mod, sort.est = TRUE, show.values = TRUE, type = "int",
            color = "Dark2", vline.color = "darkorchid3",
            width = 0.1, title = "Final Model: Probabilities of Cataracts by Sex, Treatment Group")
-tab_model(mod, show.re.var = TRUE,
+tab_model(final_mod, show.re.var = TRUE,
           pred.labels = c("Control(Female)", "Gamma(Female)", "HZE(Female)",
                           "Control(Male)", "Gamma(Male)", "HZE(Male)"),
           dv.labels = "Final Model: Odds Ratios of Cataracts by Sex, Treatment Group")
