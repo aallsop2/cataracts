@@ -27,7 +27,7 @@ output:
 \label{sec:intro}
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(fig.width=4, fig.height = 4, fig.pos = 'H',
+knitr::opts_chunk$set(fig.width=4, fig.height=4, fig.pos = 'H',
                       echo=FALSE, warning=FALSE, message=FALSE) 
 
 ```
@@ -86,9 +86,7 @@ cats <- cats %>%
 # str(cats)
 ```
 
-
 Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth's magnetic field. In contrast, extensive research shows exposure to high doses of gamma radiation leads to acute radiation sickness. One known effect of radiation exposure is cataract development. The serious health implications from HZE radiation for astronauts who leave Earth's magnetic field warrant further study. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families (Chernyavskiy, et. al., 2017). Accounting for potential family clustering allows for thorough examination of the primary research questions. Is there a genetic susceptibility to cataracts caused by radiation? Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation and gamma radiation? The full dataset includes 1820 unique mice from 48 unique families, with equal random assignments by family to each of three treatment groups. Mice are bred over several generations to create a genetically heterogeneous sample, the better to represent the diverse biology of the human population. The treatments are HZE irradiation, gamma irradiation, and non-irradiated control. Mice in both irradiated groups are exposed to radiation at 7-12 weeks of age. All mice are monitored until 800 days of age -effectively a survival study. This analysis uses a simplified version of the data set - a snapshot of the 1169 mice that are alive at 552 days. This cutoff is chosen because it is the median survival time for the group with the shortest median survival. There are 47 unique families with n = 396 in the HZE group, n = 277 in the gamma radiation group, and n = 496 in the unirradiated control group. Family size ranges from n = 11 to n = 48, with median family size of 24.  
-
   
 ```{r gsc_table}
 gsc <- cats %>% group_by(Score) %>%
@@ -106,11 +104,12 @@ xtable(gsc, caption = "Counts of score by treatment group") %>%
   kable_styling(full_width = F, position = "float_right") 
 ```
 
-The response is a discrete ordinal variable corresponding to radiation-associated ocular changes in the eye. A score of 0 is associated with a completely clear lens, while a score of 5 is associated with a completely occluded lens. This dataset contains cataract score levels = [1, 2, 3, 4]. A score $\ge$ 2 indicates presence of cataracts, and the small sample sizes for score $>$ 2 across all treatment groups raise concerns about making inference on an ordinal analysis; consequently, the response is converted to binary *Cataracts* with score = 1 converted to 0, and score $\ge$ 2 converted to 1. The main experimental factor is *Treatment*, a categorical variable with three levels = [HZE radiation, gamma radiation, non-irradiated control]. A single random effect, genetic *Family*, is a categorical factor with 47 levels. Both Treatment and Family are central to the experimental design and will serve as the basis for all models considered. Additional covariates under consideration were Sex, coat color, weight in grams, body condition score (BCS) age in days, and presence three cancers: myeloid leukemia, harderian tumors, and PreT lymphoma. The experimental design prescribed the inclusion of Treatment and Family in the analysis.  
+The response is a discrete ordinal variable corresponding to radiation-associated ocular changes in the eye. A score of 0 is associated with a completely clear lens, while a score of 5 is associated with a completely occluded lens. This dataset contains cataract score levels = [1, 2, 3, 4]. A score $\ge$ 2 indicates presence of cataracts, and the small sample sizes for score $>$ 2 across all treatment groups raise concerns about making inference on an ordinal analysis; consequently, the response is converted to binary *Cataracts* with score = 1 converted to 0, and score $\ge$ 2 converted to 1. The main experimental factor is *Treatment*, a categorical variable with three levels = [HZE radiation, gamma radiation, non-irradiated control]. A single random effect, genetic *Family*, is a categorical factor with 47 levels. Both Treatment and Family are central to the experimental design and will serve as the basis for all models considered. Additional covariates under consideration were sex, coat color, weight in grams, body condition score (BCS), age in days, and presence of three cancers: myeloid leukemia, harderian tumors, and PreT lymphoma. The experimental design prescribed the inclusion of Treatment and Family in the analysis.
   
 \section{Summary Statistics}
 \label{sec:sumstats}
   
+
 ```{r bareda, fig.cap="Sample proportions with cataracts by sex, treatment group"}
 # barplot of proportion of each group with cataracts
 sex_trt <- cats %>%
@@ -129,11 +128,9 @@ b1 <- ggplot(cats_grp, aes(x = Sex, y = proportion, fill = Treatment)) +
   theme_light() 
 
 b1
-```  
-Exploratory data analysis focused on assessing binary Cataracts status in terms of Treatment. Tables and graphs were produced to investigate any potential associations between covariates and the response, and correlations between coviarates and either Treatment or the response. Further examination of potential covariates show distinct patterns of cataracts status between male and female mice. Figure \@ref(fig:bareda) highlights the differences between males and females across all treatment groups.  
+```
 
-
-
+Exploratory data analysis focused on assessing binary Cataracts status in terms of Treatment. Tables and graphs were produced to explore (wc) any potential associations between covariates and the response, and correlations between coviarates and either Treatment or the response. Further examination of potential covariates show distinct patterns of cataracts status between male and female mice. Figure \@ref(fig:bareda) highlights the differences between males and females across all treatment groups.  
   
 Figure \@ref(fig:lineeda) allows us to visualize any patterns between families within other predictors of interest. Different patterns are displayed across families, but distinct clustering is not apparent.  
 ```{r lineeda, fig.cap="Average family cataract score by sex, treatment group"}
@@ -159,7 +156,7 @@ l1
 \section{Statistical Methods}
 \label{sec:methods}  
 
-Hierarchical logistic regression was selected as the primary analysis method, due to the binary response and random effect of interest to the research question. Figure \@ref(fig:bareda) indicated potential interaction between Sex and Treatment group; therefore, an interaction term was included in the model. Various models were fit and assessed using Aikike's Information Criterion (AIC); the full list of models fit can be viewed in Appendix Table \@ref(glmms).The final model, Model \@ref(eq:glmm), can be written as:
+Hierarchical logistic regression was selected as the primary analytic method, due to the binary response and random effect of interest to the research question. Figure \@ref(fig:bareda) indicated potential interaction between Sex and Treatment group; therefore, an interaction term was included in the model. Various models were fit and assessed using Aikike's Information Criterion (AIC); the full list of models fit can be viewed in the Appendix Table \@ref(glmms).The final model, Model \@ref(eq:glmm), can be written as:
 
 \begin{equation}
 \begin{aligned}
@@ -171,7 +168,9 @@ log(\frac{p}{1-p}) = &\ \beta_0\ +\beta_1*Gamma_i\ + \beta_2*HZE_i\ + \beta_3*M_
 (\#eq:glmm)
 \end{equation}
 
-where $M_i$ is an indicator for males, $v_{j}$ is the variance of the random intercept for Family $j$, and $\epsilon_{ij}$ is the residual variance.  
+where $M_i$ is an indicator for males, $v_{j}$ is the variance of the random intercept for Family $j$, and $\epsilon_{ij}$ is the residual variance.
+Assumptions for fitting this model were: the random effects must come from a normal distribution, the chosen link function is appropriate, and estimation of variance is appropriate (no over-dispersion). 
+These assumptions were checked and met as follows: quantiles of the random effect were compared with the quantiles of a normal distribution and looked approximately normal **(this plot is in the appendix. Not sure if it should go in the acutal report?)**, the chosen link function was a logit which is appropriate because the outcome is binary, and finally, the ratio of the chi square statistic to the residual degrees of freedom is less than 1 (.89) which indicates that there is no over-dispersion.
   
 ```{r final_mod}
 mod <- glmer(Cataracts ~ Treatment*Sex + (1|Family), data = cats, family = binomial)
@@ -197,7 +196,7 @@ v_i &\sim N(0, \sigma^2)\\
 \end{equation}
 
   
-Model \@ref(eq:bayes), was run through a Gibbs sampler Markov Chain Monte Carlo (MCMC) algorithm in the `rjags` package [@R-rjags] to approximate the posterior distributions of the estimates of all fixed effects and the variance of the random effect. 3 chains of 60000 total iterations with a 10000-iteration burn-in period; starting values were obtained from the estimates generated by Model \@ref(eq:glmm), with random noise added to avoid false convergence.  
+Model \@ref(eq:bayes), was run through a Gibbs sampler Markov Chain Monte Carlo (MCMC) algorithm in the 'rjags' package [@R-rjags] to approximate the posterior distributions of the estimates of all fixed effects and the variance of the random effect. 3 chains of 60000 total iterations with a 10000-iteration burn-in period; starting values were obtained from the estimates generated by Model \@ref(eq:glmm), with noise added to avoid false convergence.  
   
 ```{r bayes_mod, results='hide', cache=TRUE}
 # Specify the model
@@ -296,9 +295,10 @@ xtable(est_tab_show, caption = "Final model parameter estimates") %>%
 ```
  
 The 95% highest posterior density (HPD) credible intervals from Model \@ref(eq:bayes)
+
 \section{Limitations and Alternatives}
 \label{sec:limits}
-  
+ 
 Logistic regression assumes linearity of $log(\frac{p}{1-p})$ [@BMLR2021]. 
 Limitations include lack of robust diagnostic assessment of GLMMs [@CDA]. 
 Presence of competing risks in the experimental design obscure the presence of family clusters of cataracts. Simplifying the dataset by instituting a cutoff age attempts to address this limitation, but the issue persists even after excluding individuals deceased before Age = 552.  
@@ -314,18 +314,18 @@ p_i = &0.063 + 0.55*Gamma_i + 0.623*HZE_i + \\
 \end{aligned}
 (\#eq:probs)
 \end{equation}  
-  
-Comparisons of different groups across Sex and Treatment were assessed on Model \@ref(eq:glmm) using the `emmeans` package [@R-emmeans]. Figure \@ref(fig:contr) shows the probability of developing cataracts for each combination of sex by treatment group. Differences between both sex and treatment group are clearly visible, notably the differences between treatment group across gender. 
+
+Comparisons of different groups across Sex and Treatment were assessed on Model \@ref(eq:glmm) using the `emmeans` package [@R-emmeans]. Figure \@ref(fig:contr) shows the probability of developing cataracts for each combination of sex by treatment group. Differences between both sex and treatment group are clearly visible, notably the differences between treatment group across gender.
   
 ```{r contr, fig.cap="Predicted probability of cataracts by sex, treatment group", fig.align='center'}
 cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
 emmip(cats_emms, Treatment ~ Sex) + 
   theme_light() + scale_color_startrek()
 ```  
- 
+  
   
 Assessing relative risk for cataracts between groups:  
-```{r RR, fig.show='hold', fig.cap='Relative risk of cataract development by all predictor combinations', out.width='50%', fig.fullwidth=TRUE}
+```{r RR, fig.show='hold', fig.cap='Relative risk of cataract development between all group combinations', , out.width='50%', fig.fullwidth=TRUE}
 em1 <- emmeans(mod, ~ Treatment|Sex)
 em1log <- regrid(em1, "log")
 rrs1 <- contrast(em1log, interaction = "revpairwise", type = "response")
@@ -361,22 +361,27 @@ rrplot2 <- ggplot(rrs2, aes(x = ratio, y = Contrast, xmin = Lower, xmax = Upper)
   geom_vline(aes(xintercept = 1), color = "#FFCD00FF", lty = 2) +
   scale_color_startrek() +
   labs(x = "Relative Risk", title = "Within Treatment, across Sex")
-par(mar = c(4, 4, .1, .2));
+par(mar = c(4, 4, .2, .2));
 rrplot1
 rrplot2
 ``` 
-Fix this plot!  
-  
-```{r re, fig.cap="Estimated random probability of developing cataracts by family", fig.align='center'}
+ 
+
+
+Figure \@ref(fig:RR) shows the relative risk of cataract development for all groups in Model \@ref(eq:glmm). From the plot on the left we see that mice in the HZE group had a higher risk of developing severe cataracts than both the gamma and control groups. Males in the HZE group had 1.36 times greater risk than males in the gamma group. The biggest difference is seen in the HZE group compared to the unirradiated control group for males. Males in HZE had 3.37 times greater risk than males in the control group. On the right, it is made clear that males have a much higher risk of developing cataracts than females. In the HZE group, males have a 4.74 times higher risk of developing severe cataracts than females and in the gamma group it is a 4.54 times higher risk.
+
+Fix this plot! 
+
+Visualizing random effect by family:  
+```{r re_plot, fig.cap="Estimated random probability of developing cataracts by family", fig.align = 'center}
 p_sigs <- est_tab[7,]
 est <- as.numeric(p_sigs[1])
-est <- exp(est) / (1 + exp(est))
+est <- exp(est) / (1 + exp(est)) 
 psig <- as.numeric(p_sigs[4])
 psig <- exp(psig) / (1 + exp(psig))
 hpdl <- as.numeric(p_sigs[6])
 hpdl <- exp(hpdl) / (1 + exp(hpdl))
 hpdu <- as.numeric(p_sigs[7])
-
 REs <- augment(ranef(mod,condVar = TRUE), ci.level = 0.95) %>%
   select(c(level, estimate, lb, ub)) %>%
   rename(Family = level) %>%
@@ -396,16 +401,16 @@ ggplot(REs, aes(x = Prob, y = Family, xmin = Lower, xmax = Upper)) +
   scale_color_manual(values = colors) +
   labs(color = "")
 ```
-  
-Figure \@ref(fig:re) visualizes the estimated probability of developing cataracts for each family in the dataset, along with their confidence intervals. The vertical lines plot the GLMM estimated variance from Model \@ref(eq:glmm) and the MCMC mode and HPD interval for $\sigma^2$ from Model \@ref(eq:bayes). Many of the probabilities shown are close to 0.5, with small numbers of families at the top and bottom of the graph that indicate some respective genetic predisposition or resistance to cataract development.  
 
-
+	
+Figure \@ref(fig:re) visualizes the estimated probability of developing cataracts for each family in the dataset, along with their confidence intervals. The vertical lines plot the GLMM estimated variance from Model \@ref(eq:glmm) and the MCMC mode and HPD interval for $\sigma^2$ from Model \@ref(eq:bayes). Many of the probabilities shown are close to 0.5, with small numbers of families at the top and bottom of the graph that indicate some respective genetic predisposition or resistance to cataract development.  **from the comments on our presentation it seemed like Ann thought we shouldn't compare these to 0.5. Not sure how to interpret it otherwise though**
 
 
 \section{Conclusions}
 \label{sec:conc}  
 
-**Turn this into a nice paragraph or two; add quantitative info from results to back these up, or keep it general?**  
+**Turn this into a nice paragraph or two; add quantitative info from results to back these up, or keep it general?** 
+**alyssa's thoughts: I think a table would be nice comparing males and females probabilities, but would it fit? and would it be redundant of the line chart showing probabilities among groups and sexes? I don't know if listing out all the numbers of probabilities would be good in sentence form.*
   
 Females in general face less probability of developing cataracts than males, across all treatment groups. We could argue that the effect of treatment group is not of clinical significance for female mice in this dataset. As you can see, the probability of developing cataracts is quite low for all 3 treatment groups. Males, on the other hand, have a higher probability of developing cataracts than females across all treatment groups. For males, the differences of development of cataracts across treatment groups is of clinical importance.  
 
@@ -423,14 +428,13 @@ Both authors contributed to statistical analysis and writing for this report. Bo
 AIC was used as the primary model selection criteria because it accurately compares non-nested models. This feature was of particular importance when assessing models with a random effect against a model with only fixed effects. 
 ```{r glmms}
 # mixed model binomial logistic regression 
-
 full_mod <- glmer(Cataracts ~ Treatment + Sex + Weight + CoatColor + BCS + HarderianTumor +
-                    MyeloidLeukemia + PreTLymphoma + (1|Family), data = cats, family = binomial)
+                    MyeloidLeukemia + PreTLymphoma + (1|Family), data = cats, family = binomial,
+                  control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 no_interaction <- glmer(Cataracts ~ Treatment + Sex + (1|Family), data = cats, family = binomial)
 final_mod <- glmer(Cataracts ~ Treatment*Sex + (1|Family), data = cats, family = binomial)
 simple_mod <- glmer(Cataracts ~ Treatment + (1|Family), data = cats, family = binomial)
 fixed_mod <- glm(Cataracts ~ Treatment*Sex, data = cats, family = binomial)
-
 aics <- c(round(AIC(final_mod),2), round(AIC(full_mod),2), round(AIC(fixed_mod),2), round(AIC(no_interaction),2), round(AIC(simple_mod),2))
 models <- c("Final Model", "Full Mixed Model",
             "Fixed Effects Model", "Mixed Model with no Interaction", "Base Model")
@@ -440,6 +444,12 @@ xtable(dt, caption = "Model selection via AIC comparision") %>%
   xtable2kable(booktabs = T, include.rownames = FALSE, table.placement = NULL) %>%
   kable_styling(full_width = F, latex_options = "hold_position") 
 
+## assumption of normally distributed random effect
+plot(ranef(final_mod), xlab = "qnorm", ylab = "Random Intercept for Family", main = "QQ-Plot of Random Effect")
+
+## assumption of no over-dispersion
+rp <- residuals(final_mod, type = "pearson")
+sum(rp^2)/df.residual(final_mod)
 ```  
 
 ### Bayesian Model Diagnostics  
@@ -448,3 +458,11 @@ xtable(dt, caption = "Model selection via AIC comparision") %>%
 ### Source Code  
 ```{r ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
 ```
+
+
+
+
+
+
+
+
