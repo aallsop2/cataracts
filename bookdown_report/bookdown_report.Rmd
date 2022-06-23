@@ -86,9 +86,9 @@ cats <- cats %>%
 # str(cats)
 ```
 
-Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth's magnetic field. In contrast, extensive research shows exposure to high doses of gamma radiation leads to acute radiation sickness. Effects include damage to the blood forming system, GI system, immune system, increased risk for cancer, cardiovascular disease, neurodegenerative disease, death, and cataracts. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families [@mice2017]. Accounting for potential family clustering allows for thorough examination of the primary research questions.  
-Is there a genetic susceptibility to cataracts caused by radiation? Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation, gamma radiation and unirradiation? 1820 individual mice from 48 unique families, were randomly assigned with equal family weight to each of three treatment groups. The mice were bred over several generations to create a genetically heterogeneous sample to better represent biological diversity within the human population. The treatments are HZE irradiation, gamma irradiation, and non-irradiated control. The HZE group is irradiated with either silicon or iron nuclei HZE ions, which are considered as a single treatment group. The second group is subjected to 137 Cs gamma irradiation. Mice in both irradiated groups are exposed to radiation at 7-12 weeks of age. The third group is unirradiated control. All mice are monitored until 800 days of age --effectively a survival study. Mice are checked weekly for symptoms of cataracts, cataract risk factors, and other symptoms of radiation exposure such as tumors and carcinomas. Resources do not allow for weekly measurement of every mouse; previous measurements are carried forward if a mouse is not assessed on a particular week.   
-This analysis uses a simplified version of the data set - a snapshot of the 1169 mice that are alive at 552 days. This cutoff is chosen because it is the median survival time for the group with the shortest median survival. There are 47 unique families with n = 396 in the HZE group, n = 277 in the gamma radiation group, and n = 496 in the unirradiated control group. There are up to two generations of mice pups from each family in the dataset, but generation is not distinguished in the simplified data. Family size ranges from n = 11 to n = 48, with median family size of 24.  
+
+Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth's magnetic field. In contrast, extensive research shows exposure to high doses of gamma radiation leads to acute radiation sickness. One known effect of radiation exposure is cataract development. The serious health implications from HZE radiation for astronauts who leave Earth's magnetic field warrant further study. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families (Chernyavskiy, et. al., 2017). Accounting for potential family clustering allows for thorough examination of the primary research questions. Is there a genetic susceptibility to cataracts caused by radiation? Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation and gamma radiation? The full dataset includes 1820 unique mice from 48 unique families, with equal random assignments by family to each of three treatment groups. Mice are bred over several generations to create a genetically heterogeneous sample, the better to represent the diverse biology of the human population. The treatments are HZE irradiation, gamma irradiation, and non-irradiated control. Mice in both irradiated groups are exposed to radiation at 7-12 weeks of age. All mice are monitored until 800 days of age -effectively a survival study. This analysis uses a simplified version of the data set - a snapshot of the 1169 mice that are alive at 552 days. This cutoff is chosen because it is the median survival time for the group with the shortest median survival. There are 47 unique families with n = 396 in the HZE group, n = 277 in the gamma radiation group, and n = 496 in the unirradiated control group. Family size ranges from n = 11 to n = 48, with median family size of 24.  
+
   
 ```{r gsc_table}
 gsc <- cats %>% group_by(Score) %>%
@@ -100,7 +100,8 @@ gsc <- cats %>% group_by(Score) %>%
 xtable(gsc, caption = "Counts of score by treatment group") %>%
   xtable2kable(booktabs = T,
                include.rownames = FALSE,
-               table.placement = NULL) %>%
+               table.placement = NULL,
+               caption.placement = "top") %>%
   add_header_above(c( " " = 1, "Cataract Score" = 4, " " = 1)) %>%
   kable_styling(full_width = F, position = "float_right") 
 ```
@@ -431,8 +432,7 @@ simple_mod <- glmer(Cataracts ~ Treatment + (1|Family), data = cats, family = bi
 fixed_mod <- glm(Cataracts ~ Treatment*Sex, data = cats, family = binomial)
 
 aics <- c(round(AIC(final_mod),2), round(AIC(full_mod),2), round(AIC(fixed_mod),2), round(AIC(no_interaction),2), round(AIC(simple_mod),2))
-devs <- 
-models <- c("Full Mixed Model", "Final Model",
+models <- c("Final Model", "Full Mixed Model",
             "Fixed Effects Model", "Mixed Model with no Interaction", "Base Model")
 dt <- cbind(models,aics)
 colnames(dt) <- c("Model", "AIC")
