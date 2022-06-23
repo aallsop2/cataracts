@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.6.21)  22 JUN 2022 17:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.6.21)  22 JUN 2022 21:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -469,18 +469,13 @@ Non-PDF special ignored!
 <special> header=psfrag.pro
 
 {/Users/amiraburns/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
-<bookdown_report_files/figure-latex/bareda-1.pdf, id=69, 361.35pt x 325.215pt>
+<bookdown_report_files/figure-latex/bareda-1.pdf, id=69, 289.08pt x 289.08pt>
 File: bookdown_report_files/figure-latex/bareda-1.pdf Graphic file (type pdf)
 <use bookdown_report_files/figure-latex/bareda-1.pdf>
 Package pdftex.def Info: bookdown_report_files/figure-latex/bareda-1.pdf  used on input line 170.
-(pdftex.def)             Requested size: 361.34912pt x 325.2142pt.
+(pdftex.def)             Requested size: 289.07928pt x 289.07928pt.
 
 LaTeX Warning: Reference `fig:bareda' on page 3 undefined on input line 171.
-
-
-Overfull \hbox (16.73903pt too wide) in paragraph at lines 170--172
-[] \OT1/cmr/m/n/12 Ex-ploratory data anal-
- []
 
 [3
 pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
@@ -491,11 +486,11 @@ l.172
 
 LaTeX Warning: Reference `fig:lineeda' on page 4 undefined on input line 173.
 
-<bookdown_report_files/figure-latex/lineeda-1.pdf, id=77, 361.35pt x 325.215pt>
+<bookdown_report_files/figure-latex/lineeda-1.pdf, id=77, 289.08pt x 289.08pt>
 File: bookdown_report_files/figure-latex/lineeda-1.pdf Graphic file (type pdf)
 <use bookdown_report_files/figure-latex/lineeda-1.pdf>
 Package pdftex.def Info: bookdown_report_files/figure-latex/lineeda-1.pdf  used on input line 174.
-(pdftex.def)             Requested size: 361.34912pt x 325.2142pt.
+(pdftex.def)             Requested size: 289.07928pt x 289.07928pt.
 [4 <./bookdown_report_files/figure-latex/bareda-1.pdf>]
 
 LaTeX Warning: Reference `fig:bareda' on page 5 undefined on input line 179.
@@ -513,227 +508,236 @@ Underfull \hbox (badness 10000) in paragraph at lines 246--247
 
  []
 
+<bookdown_report_files/figure-latex/contr-1.pdf, id=123, 289.08pt x 289.08pt>
+File: bookdown_report_files/figure-latex/contr-1.pdf Graphic file (type pdf)
+<use bookdown_report_files/figure-latex/contr-1.pdf>
+Package pdftex.def Info: bookdown_report_files/figure-latex/contr-1.pdf  used on input line 259.
+(pdftex.def)             Requested size: 289.07928pt x 289.07928pt.
 [7
 pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.256 
-      ]
-<bookdown_report_files/figure-latex/contr-1.pdf, id=135, 361.35pt x 325.215pt>
-File: bookdown_report_files/figure-latex/contr-1.pdf Graphic file (type pdf)
-<use bookdown_report_files/figure-latex/contr-1.pdf>
-Package pdftex.def Info: bookdown_report_files/figure-latex/contr-1.pdf  used on input line 259.
-(pdftex.def)             Requested size: 361.34912pt x 325.2142pt.
-
+l.264 \end{figure}
+                  ]
 Underfull \hbox (badness 10000) in paragraph at lines 266--267
 
  []
 
-<bookdown_report_files/figure-latex/RR-1.pdf, id=136, 361.35pt x 325.215pt>
+<bookdown_report_files/figure-latex/RR-1.pdf, id=136, 289.08pt x 289.08pt>
 File: bookdown_report_files/figure-latex/RR-1.pdf Graphic file (type pdf)
 <use bookdown_report_files/figure-latex/RR-1.pdf>
-Package pdftex.def Info: bookdown_report_files/figure-latex/RR-1.pdf  used on input line 270.
-(pdftex.def)             Requested size: 361.34912pt x 325.2142pt.
+Package pdftex.def Info: bookdown_report_files/figure-latex/RR-1.pdf  used on input line 269.
+(pdftex.def)             Requested size: 231.135pt x 231.13197pt.
+<bookdown_report_files/figure-latex/RR-2.pdf, id=137, 289.08pt x 289.08pt>
+File: bookdown_report_files/figure-latex/RR-2.pdf Graphic file (type pdf)
+<use bookdown_report_files/figure-latex/RR-2.pdf>
+Package pdftex.def Info: bookdown_report_files/figure-latex/RR-2.pdf  used on input line 269.
+(pdftex.def)             Requested size: 231.135pt x 231.13197pt.
+
+Overfull \hbox (2.61108pt too wide) in paragraph at lines 269--269
+[][] []
+ []
+
 [8
 pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.276 
+l.271 
        <./bookdown_report_files/figure-latex/contr-1.pdf>]
-<bookdown_report_files/figure-latex/re-1.pdf, id=146, 361.35pt x 325.215pt>
+<bookdown_report_files/figure-latex/re-1.pdf, id=147, 289.08pt x 289.08pt>
 File: bookdown_report_files/figure-latex/re-1.pdf Graphic file (type pdf)
 <use bookdown_report_files/figure-latex/re-1.pdf>
-Package pdftex.def Info: bookdown_report_files/figure-latex/re-1.pdf  used on input line 279.
-(pdftex.def)             Requested size: 361.34912pt x 325.2142pt.
+Package pdftex.def Info: bookdown_report_files/figure-latex/re-1.pdf  used on input line 276.
+(pdftex.def)             Requested size: 289.07928pt x 289.07928pt.
 [9
 pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.285 
-       <./bookdown_report_files/figure-latex/RR-1.pdf>] [10
+l.282 
+       <./bookdown_report_files/figure-latex/RR-1.pdf> <./bookdown_report_files/figure-latex/RR-2.pdf>] [10
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.294 
+l.291 
        <./bookdown_report_files/figure-latex/re-1.pdf>]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 304.
+(hyperref)                than one, level fixed on input line 301.
 
 
-Package xcolor Warning: Incompatible color definition on input line 333.
+Package xcolor Warning: Incompatible color definition on input line 330.
 
 [11
 pdfTeX warning (ext4): destination with the same identifier (name{table.3}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.333 \begin{Shaded}
+l.330 \begin{Shaded}
                     ]
-LaTeX Font Info:    Trying to load font information for TS1+cmtt on input line 335.
+LaTeX Font Info:    Trying to load font information for TS1+cmtt on input line 332.
 (/Users/amiraburns/Library/TinyTeX/texmf-dist/tex/latex/base/ts1cmtt.fd
 File: ts1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-LaTeX Font Info:    Trying to load font information for OML+cmtt on input line 354.
-LaTeX Font Info:    No file OMLcmtt.fd. on input line 354.
+LaTeX Font Info:    Trying to load font information for OML+cmtt on input line 351.
+LaTeX Font Info:    No file OMLcmtt.fd. on input line 351.
 
 LaTeX Font Warning: Font shape `OML/cmtt/m/n' undefined
 (Font)              using `OML/cmm/m/it' instead
-(Font)              for symbol `textless' on input line 354.
+(Font)              for symbol `textless' on input line 351.
 
-LaTeX Font Info:    Trying to load font information for OMS+cmtt on input line 429.
+LaTeX Font Info:    Trying to load font information for OMS+cmtt on input line 426.
 (/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/omscmtt.fd
 File: omscmtt.fd 
 )
 LaTeX Font Info:    Font shape `OMS/cmtt/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 429.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 426.
 
 LaTeX Font Warning: Font shape `OML/cmtt/m/it' undefined
 (Font)              using `OML/cmm/m/it' instead
-(Font)              for symbol `textless' on input line 490.
+(Font)              for symbol `textless' on input line 487.
 
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <12> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 497.
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 494.
 
-Package xcolor Warning: Incompatible color definition on input line 598.
-
-
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
+
+
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 [12]
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Underfull \vbox (badness 10000) detected at line 598
+Underfull \vbox (badness 10000) detected at line 597
  []
 
 
-Underfull \vbox (badness 10000) detected at line 598
+Underfull \vbox (badness 10000) detected at line 597
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 [13]
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Underfull \vbox (badness 10000) detected at line 598
+Underfull \vbox (badness 10000) detected at line 597
  []
 
 
-Underfull \vbox (badness 10000) detected at line 598
+Underfull \vbox (badness 10000) detected at line 597
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 [14]
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Underfull \vbox (badness 10000) detected at line 598
+Underfull \vbox (badness 10000) detected at line 597
  []
 
 
-Underfull \vbox (badness 10000) detected at line 598
+Underfull \vbox (badness 10000) detected at line 597
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 [15]
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Underfull \vbox (badness 10000) detected at line 598
+Underfull \vbox (badness 10000) detected at line 597
  []
 
 
-Underfull \vbox (badness 10000) detected at line 598
+Underfull \vbox (badness 10000) detected at line 597
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 [16]
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Underfull \vbox (badness 10000) detected at line 598
+Underfull \vbox (badness 10000) detected at line 597
  []
 
 
-Underfull \vbox (badness 10000) detected at line 598
+Underfull \vbox (badness 10000) detected at line 597
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 [17]
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Underfull \vbox (badness 10000) detected at line 598
+Underfull \vbox (badness 10000) detected at line 597
  []
 
 
-Underfull \vbox (badness 10000) detected at line 598
+Underfull \vbox (badness 10000) detected at line 597
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 [18]
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Underfull \vbox (badness 10000) detected at line 598
+Underfull \vbox (badness 10000) detected at line 597
  []
 
 
-Underfull \vbox (badness 10000) detected at line 598
+Underfull \vbox (badness 10000) detected at line 597
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 [19]
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 
-Package xcolor Warning: Incompatible color definition on input line 598.
+Package xcolor Warning: Incompatible color definition on input line 597.
 
 (./bookdown_report.bbl [20]) [21] (./bookdown_report.aux)
 
@@ -746,18 +750,18 @@ Package rerunfilecheck Info: File `bookdown_report.out' has not changed.
 (rerunfilecheck)             Checksum: 77AF2C171060E66729738F90ECC95E8F;1711.
  ) 
 Here is how much of TeX's memory you used:
- 12499 strings out of 479997
- 200268 string characters out of 5887188
- 550758 words of memory out of 5000000
- 30408 multiletter control sequences out of 15000+600000
+ 12508 strings out of 479997
+ 200679 string characters out of 5887188
+ 551298 words of memory out of 5000000
+ 30416 multiletter control sequences out of 15000+600000
  477247 words of font info for 57 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 72i,9n,77p,1372b,552s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,9n,77p,1372b,550s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </Users/amiraburns/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tctt1200.600pk></Users/amiraburns/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></Users/amiraburns/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></Users/amiraburns/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmitt10.pfb></Users/amiraburns/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></Users/amiraburns/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></Users/amiraburns/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/amiraburns/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></Users/amiraburns/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></Users/amiraburns/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/amiraburns/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></Users/amiraburns/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></Users/amiraburns/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on bookdown_report.pdf (21 pages, 225885 bytes).
+Output written on bookdown_report.pdf (21 pages, 230077 bytes).
 PDF statistics:
- 296 PDF objects out of 1000 (max. 8388607)
- 234 compressed objects within 3 object streams
+ 302 PDF objects out of 1000 (max. 8388607)
+ 238 compressed objects within 3 object streams
  54 named destinations out of 1000 (max. 500000)
- 122 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 127 words of extra memory for PDF output out of 10000 (max. 10000000)
 

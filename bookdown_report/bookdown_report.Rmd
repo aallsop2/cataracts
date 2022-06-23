@@ -27,7 +27,7 @@ output:
 \label{sec:intro}
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(fig.width=5, fig.pos = 'H',
+knitr::opts_chunk$set(fig.width=4, fig.height = 4, fig.pos = 'H',
                       echo=FALSE, warning=FALSE, message=FALSE) 
 
 ```
@@ -324,7 +324,7 @@ emmip(cats_emms, Treatment ~ Sex) +
  
   
 Assessing relative risk for cataracts between groups:  
-```{r RR, fig.show='hold', fig.cap='Relative risk of cataract development by all predictor combinations', fig.align='center'}
+```{r RR, fig.show='hold', fig.cap='Relative risk of cataract development by all predictor combinations', out.width='50%', fig.fullwidth=TRUE}
 em1 <- emmeans(mod, ~ Treatment|Sex)
 em1log <- regrid(em1, "log")
 rrs1 <- contrast(em1log, interaction = "revpairwise", type = "response")
@@ -339,9 +339,10 @@ rrplot1 <- ggplot(rrs1, aes(x = ratio, y = Contrast, xmin = Lower, xmax = Upper)
             position = position_dodge(0.7)) +
   theme_light() +
   geom_vline(aes(xintercept = 1), color = "#84BD00FF", lty = 2) +
+  theme(axis.text.y = element_text(angle=50)) +
   scale_color_startrek() +
   labs(x = "Relative Risk",
-       title = "Within Sex, Across Treatment Group")
+       title = "Within Sex, Across Treatment")
 
 em2 <- emmeans(mod, ~ Sex|Treatment)
 em2log <- regrid(em2, "log")
@@ -359,8 +360,9 @@ rrplot2 <- ggplot(rrs2, aes(x = ratio, y = Contrast, xmin = Lower, xmax = Upper)
   geom_vline(aes(xintercept = 1), color = "#FFCD00FF", lty = 2) +
   scale_color_startrek() +
   labs(x = "Relative Risk", title = "Within Treatment, across Sex")
-
-grid.arrange(rrplot1, rrplot2, ncol = 2)
+par(mar = c(4, 4, .1, .2));
+rrplot1
+rrplot2
 ``` 
 Fix this plot!  
   

@@ -266,13 +266,10 @@ Comparisons of different groups across Sex and Treatment were assessed on Model 
 Assessing relative risk for cataracts between groups:\\
 
 \begin{figure}[H]
-
-{\centering \includegraphics{bookdown_report_files/figure-latex/RR-1} 
-
-}
-
-\caption{Relative risk of cataract development by all predictor combinations}\label{fig:RR}
+\includegraphics[width=0.5\linewidth]{bookdown_report_files/figure-latex/RR-1} \includegraphics[width=0.5\linewidth]{bookdown_report_files/figure-latex/RR-2} \caption{Relative risk of cataract development by all predictor combinations}\label{fig:RR}
 \end{figure}
+
+Fix this plot!
 
 \begin{figure}[H]
 
@@ -332,7 +329,7 @@ Full Mixed Model & 1017.98 \\
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{knitr}\SpecialCharTok{::}\NormalTok{opts\_chunk}\SpecialCharTok{$}\FunctionTok{set}\NormalTok{(}\AttributeTok{fig.width=}\DecValTok{5}\NormalTok{, }\AttributeTok{fig.pos =} \StringTok{\textquotesingle{}H\textquotesingle{}}\NormalTok{,}
+\NormalTok{knitr}\SpecialCharTok{::}\NormalTok{opts\_chunk}\SpecialCharTok{$}\FunctionTok{set}\NormalTok{(}\AttributeTok{fig.width=}\DecValTok{4}\NormalTok{, }\AttributeTok{fig.height =} \DecValTok{4}\NormalTok{, }\AttributeTok{fig.pos =} \StringTok{\textquotesingle{}H\textquotesingle{}}\NormalTok{,}
                       \AttributeTok{echo=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{warning=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{message=}\ConstantTok{FALSE}\NormalTok{) }
 
 \FunctionTok{library}\NormalTok{(readxl)}
@@ -527,9 +524,10 @@ Full Mixed Model & 1017.98 \\
             \AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.7}\NormalTok{)) }\SpecialCharTok{+}
   \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
   \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{1}\NormalTok{), }\AttributeTok{color =} \StringTok{"\#84BD00FF"}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle=}\DecValTok{60}\NormalTok{)) }\SpecialCharTok{+}
   \FunctionTok{scale\_color\_startrek}\NormalTok{() }\SpecialCharTok{+}
   \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Relative Risk"}\NormalTok{,}
-       \AttributeTok{title =} \StringTok{"Within Sex, Across Treatment Group"}\NormalTok{)}
+       \AttributeTok{title =} \StringTok{"Within Sex, Across Treatment"}\NormalTok{)}
 
 \NormalTok{em2 }\OtherTok{\textless{}{-}} \FunctionTok{emmeans}\NormalTok{(mod, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Sex}\SpecialCharTok{|}\NormalTok{Treatment)}
 \NormalTok{em2log }\OtherTok{\textless{}{-}} \FunctionTok{regrid}\NormalTok{(em2, }\StringTok{"log"}\NormalTok{)}
@@ -547,8 +545,9 @@ Full Mixed Model & 1017.98 \\
   \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{1}\NormalTok{), }\AttributeTok{color =} \StringTok{"\#FFCD00FF"}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{scale\_color\_startrek}\NormalTok{() }\SpecialCharTok{+}
   \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Relative Risk"}\NormalTok{, }\AttributeTok{title =} \StringTok{"Within Treatment, across Sex"}\NormalTok{)}
-
-\FunctionTok{grid.arrange}\NormalTok{(rrplot1, rrplot2, }\AttributeTok{ncol =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, .}\DecValTok{1}\NormalTok{, .}\DecValTok{2}\NormalTok{));}
+\NormalTok{rrplot1}
+\NormalTok{rrplot2}
 \NormalTok{p\_sigs }\OtherTok{\textless{}{-}}\NormalTok{ est\_tab[}\DecValTok{7}\NormalTok{,]}
 \NormalTok{est }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(p\_sigs[}\DecValTok{1}\NormalTok{])}
 \NormalTok{est }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(est) }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(est))}
