@@ -305,16 +305,9 @@ p_{ij} = &0.063 + v_j + 0.55*Gamma_i + 0.623*HZE_i + \\
 (\#eq:probs)
 \end{equation}  
 
-Comparisons of different groups across Sex and Treatment were assessed on Model \@ref(eq:glmm) using the `emmeans` package [@R-emmeans]. Figure \@ref(fig:contr) shows of the probability of developing cataracts for each combination of sex by treatment group. Differences between both sex and treatment group were clearly visible, notably the differences between treatment group within gender.
-  
-```{r contr, fig.cap="Predicted probability of cataracts by sex, treatment group", fig.align='center'}
-cats_emms <- emmeans(mod, ~ Treatment | Sex, infer = TRUE, type = "response")
-emmip(cats_emms, Treatment ~ Sex) + 
-  theme_light() + scale_color_startrek()
-```  
-Figure \@ref(fig:RR) shows the relative risk of cataract development for all group comparisons in Model \@ref(eq:glmm). Within females, all relative risks between treatment groups resulted in confidence intervals containing the possibility of no increased risk from exposure.  Within males, conversely, all three comparisons between treatment groups showed strong evidence for increased risk with exposure. The largest difference was observed among Males between the HZE group and the control group.  
+Comparisons of different groups across Sex and Treatment were assessed on Model \@ref(eq:glmm) using the `emmeans` package [@R-emmeans]. Figure \@ref(fig:RR) shows the relative risk of cataract development for all group comparisons in Model \@ref(eq:glmm). Within females, all relative risks between treatment groups resulted in confidence intervals containing the possibility of no increased risk from exposure.  Within males, conversely, all three comparisons between treatment groups showed strong evidence for increased risk with exposure. The largest difference was observed among Males between the HZE group and the control group.  
 
-```{r RR, fig.show='hold', fig.cap='Relative risk of cataract development between all group combinations', out.width='50%', fig.fullwidth=TRUE}
+```{r RR, fig.show='hold', fig.cap='Relative risk of cataract development between all group combinations', out.width='60%', fig.fullwidth=TRUE}
 em1 <- emmeans(mod, ~ Treatment|Sex)
 em1log <- regrid(em1, "log")
 rrs1 <- contrast(em1log, interaction = "revpairwise", type = "response")
@@ -385,6 +378,7 @@ ggplot(REs, aes(x = Prob, y = Family, xmin = Lower, xmax = Upper)) +
   scale_color_manual(values = colors) +
   labs(color = "")
 ```
+
 Figure \@ref(fig:re) visualizes the estimated variability of developing cataracts by family on the probability scale, along with confidence intervals. The vertical lines plot the GLMM estimated variance from Model \@ref(eq:glmm) and the MCMC mode and HPD interval for $\sigma^2$ from Model \@ref(eq:bayes). The dispersion on the tails of the probability scale indicate plausible genetic predisposition or resistance to cataract development.  
 
 \section{Conclusions}
