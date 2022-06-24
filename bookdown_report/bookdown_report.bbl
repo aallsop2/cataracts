@@ -1,0 +1,39 @@
+\begin{thebibliography}{xx}
+
+\harvarditem{Agresti}{2013}{CDA}
+Agresti, A.  \harvardyearleft 2013\harvardyearright , {\em Categorical Data
+  Analysis}, third ed. edn, John Wiley \& Sons.
+
+\harvarditem[Chernyavskiy et~al.]{Chernyavskiy, Edmondson, Weil \harvardand\
+  Little}{2017}{mice2017}
+Chernyavskiy, P., Edmondson, E.~F., Weil, M.~M. \harvardand\ Little, M.~P.
+  \harvardyearleft 2017\harvardyearright , `High-energy particle beam and gamma
+  radiation exposure, familial relatedness and cancer in mice', {\em British
+  journal of cancer} {\bf 117}(1),~41--50.
+\newline\harvardurl{https://www.nature.com/articles/bjc2017141}
+
+\harvarditem[Gelman et~al.]{Gelman, Carlin, Stern, Dunson, Vehtari \harvardand\
+  Rubin}{2014}{BDA}
+Gelman, A., Carlin, J., Stern, H., Dunson, D., Vehtari, A. \harvardand\ Rubin,
+  D.  \harvardyearleft 2014\harvardyearright , {\em Bayesian Data Analysis},
+  third ed. edn, CRC Press.
+
+\harvarditem{Lenth}{2022}{R-emmeans}
+Lenth, R.~V.  \harvardyearleft 2022\harvardyearright , {\em emmeans: Estimated
+  Marginal Means, aka Least-Squares Means}.
+\newblock R package version 1.7.4-1.
+\newline\harvardurl{https://github.com/rvlenth/emmeans}
+
+\harvarditem{Plummer}{2022}{R-rjags}
+Plummer, M.  \harvardyearleft 2022\harvardyearright , {\em rjags: Bayesian
+  Graphical Models using MCMC}.
+\newblock R package version 4-13.
+\newline\harvardurl{https://mcmc-jags.sourceforge.io}
+
+\harvarditem{Roback \harvardand\ Legler}{2021}{BMLR2021}
+Roback, P. \harvardand\ Legler, J.  \harvardyearleft 2021\harvardyearright ,
+  {\em Beyond Multiple Linear Regression. Applied Generalized Linear Models and
+  Multilevel Models in R}, second ed. edn, CRC Press.
+\newline\harvardurl{https://bookdown.org/roback/bookdown-BeyondMLR/}
+
+\end{thebibliography}

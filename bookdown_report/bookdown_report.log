@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.21)  23 JUN 2022 21:53
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.6.21)  23 JUN 2022 23:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -324,15 +324,11 @@ Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
 Package: footnote 1997/01/28 1.13 Save footnotes around boxes
 \fn@notes=\box62
 \fn@width=\dimen184
-)
-\cslhangindent=\skip65
-\csllabelwidth=\skip66
-\cslentryspacingunit=\skip67
-(/Users/amiraburns/Library/TinyTeX/texmf-dist/tex/latex/multirow/multirow.sty
+) (/Users/amiraburns/Library/TinyTeX/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
-\multirow@colwidth=\skip68
+\multirow@colwidth=\skip65
 \multirow@cntb=\count299
-\multirow@dima=\skip69
+\multirow@dima=\skip66
 \bigstrutjot=\dimen185
 ) (/Users/amiraburns/Library/TinyTeX/texmf-dist/tex/latex/wrapfig/wrapfig.sty
 \wrapoverhang=\dimen186
@@ -351,7 +347,7 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 ) (/Users/amiraburns/Library/TinyTeX/texmf-dist/tex/latex/colortbl/colortbl.sty
 Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
 \everycr=\toks28
-\minrowclearance=\skip70
+\minrowclearance=\skip67
 ) (/Users/amiraburns/Library/TinyTeX/texmf-dist/tex/latex/pdflscape/pdflscape.sty
 Package: pdflscape 2019/12/05 v0.12 Display of landscape pages in PDF (HO)
 (/Users/amiraburns/Library/TinyTeX/texmf-dist/tex/latex/graphics/lscape.sty
@@ -388,7 +384,7 @@ Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \tabu@arstrutbox=\box68
 \tabu@hleads=\box69
 \tabu@vleads=\box70
-\tabu@cellskip=\skip71
+\tabu@cellskip=\skip68
 ) (/Users/amiraburns/Library/TinyTeX/texmf-dist/tex/latex/threeparttable/threeparttable.sty
 Package: threeparttable 2003/06/13  v 3.0
 \@tempboxb=\box71
@@ -399,11 +395,11 @@ Package: environ 2014/05/04 v0.3 A new way to define environments
 (/Users/amiraburns/Library/TinyTeX/texmf-dist/tex/latex/trimspaces/trimspaces.sty
 Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 ))
-\TPTL@width=\skip72
+\TPTL@width=\skip69
 ) (/Users/amiraburns/Library/TinyTeX/texmf-dist/tex/generic/ulem/ulem.sty
 \UL@box=\box72
 \UL@hyphenbox=\box73
-\UL@skip=\skip73
+\UL@skip=\skip70
 \UL@hook=\toks31
 \UL@height=\dimen199
 \UL@pe=\count309
@@ -442,31 +438,31 @@ File: l3backend-xetex.def 2022-04-20 L3 backend support: XeTeX
 ) (./bookdown_report.aux)
 \openout1 = `bookdown_report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 128.
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 128.
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 128.
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 128.
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 128.
-LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 128.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 99.
+LaTeX Font Info:    ... okay on input line 99.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 99.
+LaTeX Font Info:    ... okay on input line 99.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 99.
+LaTeX Font Info:    ... okay on input line 99.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 99.
+LaTeX Font Info:    ... okay on input line 99.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 99.
+LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 99.
 (/Users/amiraburns/Library/TinyTeX/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 128.
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 128.
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 128.
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 128.
-LaTeX Font Info:    ... okay on input line 128.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 128.
-LaTeX Font Info:    ... okay on input line 128.
-Package hyperref Info: Link coloring OFF on input line 128.
+LaTeX Font Info:    ... okay on input line 99.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 99.
+LaTeX Font Info:    ... okay on input line 99.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 99.
+LaTeX Font Info:    ... okay on input line 99.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 99.
+LaTeX Font Info:    ... okay on input line 99.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 99.
+LaTeX Font Info:    ... okay on input line 99.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 99.
+LaTeX Font Info:    ... okay on input line 99.
+Package hyperref Info: Link coloring OFF on input line 99.
 (./bookdown_report.out) (./bookdown_report.out)
 \@outlinefile=\write5
 \openout5 = `bookdown_report.out'.
@@ -474,12 +470,12 @@ Package hyperref Info: Link coloring OFF on input line 128.
 [1
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 174--176
+Underfull \hbox (badness 10000) in paragraph at lines 145--147
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 199--200
+Underfull \hbox (badness 10000) in paragraph at lines 170--171
 
  []
 
@@ -487,285 +483,368 @@ Underfull \hbox (badness 10000) in paragraph at lines 199--200
 File: bookdown_report_files/figure-latex/bareda-1.pdf Graphic file (type pdf)
 <use bookdown_report_files/figure-latex/bareda-1.pdf>
 
-Overfull \hbox (7.48387pt too wide) in paragraph at lines 203--204
+Overfull \hbox (7.48387pt too wide) in paragraph at lines 174--175
  [][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 210--211
+Underfull \hbox (badness 10000) in paragraph at lines 181--182
 
  []
 
 File: bookdown_report_files/figure-latex/lineeda-1.pdf Graphic file (type pdf)
 <use bookdown_report_files/figure-latex/lineeda-1.pdf>
-
-Overfull \hbox (7.48387pt too wide) in paragraph at lines 214--215
- [][] 
- []
-
 [3]
-Underfull \hbox (badness 10000) in paragraph at lines 224--225
+Underfull \hbox (badness 10000) in paragraph at lines 195--196
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 235--236
+Underfull \hbox (badness 10000) in paragraph at lines 206--207
 
  []
 
-[4]
-Overfull \hbox (17.02286pt too wide) in paragraph at lines 274--275
-[]\TU/lmr/m/n/12 Results from Model [] and Model [] were congruent, as shown in Table @ref(tab:est_tab).
- []
-
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 286--287
+[4] [5]
+Underfull \hbox (badness 10000) in paragraph at lines 257--258
 
  []
 
 File: bookdown_report_files/figure-latex/contr-1.pdf Graphic file (type pdf)
 <use bookdown_report_files/figure-latex/contr-1.pdf>
-
-Overfull \hbox (7.48387pt too wide) in paragraph at lines 299--300
- [][] 
- []
-
 [6]
 File: bookdown_report_files/figure-latex/RR-1.pdf Graphic file (type pdf)
 <use bookdown_report_files/figure-latex/RR-1.pdf>
-File: bookdown_report_files/figure-latex/RR-2.pdf Graphic file (type pdf)
-<use bookdown_report_files/figure-latex/RR-2.pdf>
-[7]
+
+Overfull \hbox (7.48387pt too wide) in paragraph at lines 281--282
+ [][] 
+ []
+
 File: bookdown_report_files/figure-latex/re-1.pdf Graphic file (type pdf)
 <use bookdown_report_files/figure-latex/re-1.pdf>
 
-Overfull \hbox (7.48387pt too wide) in paragraph at lines 321--322
+Overfull \hbox (7.48387pt too wide) in paragraph at lines 292--293
  [][] 
  []
 
-[8] [9]
+[7] [8] [9]
 File: bookdown_report_files/figure-latex/eda-1.pdf Graphic file (type pdf)
 <use bookdown_report_files/figure-latex/eda-1.pdf>
-File: bookdown_report_files/figure-latex/eda-2.pdf Graphic file (type pdf)
-<use bookdown_report_files/figure-latex/eda-2.pdf>
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
+Overfull \hbox (7.48387pt too wide) in paragraph at lines 324--325
+ [][] 
+ []
 
 File: bookdown_report_files/figure-latex/scage-1.pdf Graphic file (type pdf)
 <use bookdown_report_files/figure-latex/scage-1.pdf>
-File: bookdown_report_files/figure-latex/scage-2.pdf Graphic file (type pdf)
-<use bookdown_report_files/figure-latex/scage-2.pdf>
-[10]
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-File: bookdown_report_files/figure-latex/qq-1.pdf Graphic file (type pdf)
-<use bookdown_report_files/figure-latex/qq-1.pdf>
-
-Overfull \hbox (7.48387pt too wide) in paragraph at lines 441--442
+Overfull \hbox (7.48387pt too wide) in paragraph at lines 352--353
  [][] 
  []
 
-[11]
+[10]
+Overfull \hbox (1458.2534pt too wide) detected at line 373
+[][][][]
+ []
 
-Package xcolor Warning: Incompatible color definition on input line 458.
+
+Overfull \hbox (266.70906pt too wide) detected at line 395
+[][][] [] \OT1/cmr/m/n/12 = \OML/cmm/m/it/12 ^^K \OT1/cmr/m/n/12 + \OML/cmm/m/it/12 ^^L[]\OT1/cmr/m/n/12 ([][]) + \OML/cmm/m/it/12 ^^L[]\OT1/cmr/m/n/12 ([][]) + \OML/cmm/m/it/12 ^^L[]\OT1/cmr/m/n/12 ([][]) + \OML/cmm/m/it/12 ^^L[]\OT1/cmr/m/n/12 ([][] \OMS/cmsy/m/n/12 ^^B [][]\OT1/cmr/m/n/12 ) + \OML/cmm/m/it/12 ^^L[]\OT1/cmr/m/n/12 ([][] \OMS/cmsy/m/n/12 ^^B [][]\OT1/cmr/m/n/12 )
+ []
+
+[11]
+File: bookdown_report_files/figure-latex/qq-1.pdf Graphic file (type pdf)
+<use bookdown_report_files/figure-latex/qq-1.pdf>
+
+Overfull \hbox (7.48387pt too wide) in paragraph at lines 422--423
+ [][] 
+ []
 
 [12]
-LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 619.
+File: bookdown_report_files/figure-latex/trace-1.pdf Graphic file (type pdf)
+<use bookdown_report_files/figure-latex/trace-1.pdf>
 
-LaTeX Font Warning: Font shape `TU/lmtt/bx/it' in size <12> not available
-(Font)              Font shape `TU/lmtt/b/sl' tried instead on input line 753.
-
-
-Package xcolor Warning: Incompatible color definition on input line 766.
-
-
-Package xcolor Warning: Incompatible color definition on input line 766.
-
-
-Package xcolor Warning: Incompatible color definition on input line 766.
+Overfull \hbox (7.48387pt too wide) in paragraph at lines 459--459
+ [] 
+ []
 
 [13]
+File: bookdown_report_files/figure-latex/postdens-1.pdf Graphic file (type pdf)
+<use bookdown_report_files/figure-latex/postdens-1.pdf>
 
-Package xcolor Warning: Incompatible color definition on input line 766.
-
-
-Package xcolor Warning: Incompatible color definition on input line 766.
-
-
-Underfull \vbox (badness 10000) detected at line 766
+Overfull \hbox (31.48387pt too wide) in paragraph at lines 467--468
+ []\TU/lmr/m/n/12 {[] 
  []
 
 
-Underfull \vbox (badness 10000) detected at line 766
- []
+Package xcolor Warning: Incompatible color definition on input line 477.
+
+LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <12> not available
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 638.
+
+LaTeX Font Warning: Font shape `TU/lmtt/bx/it' in size <12> not available
+(Font)              Font shape `TU/lmtt/b/sl' tried instead on input line 777.
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 [14]
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 [15]
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 [16]
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 [17]
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 [18]
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 [19]
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 [20]
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 [21]
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Underfull \vbox (badness 10000) detected at line 766
+Underfull \vbox (badness 10000) detected at line 877
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 [22]
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
 
-Package xcolor Warning: Incompatible color definition on input line 766.
+Package xcolor Warning: Incompatible color definition on input line 877.
 
-(./bookdown_report.bbl) [23] (./bookdown_report.aux)
+
+Underfull \vbox (badness 10000) detected at line 877
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 877
+ []
+
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+[23]
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+
+Underfull \vbox (badness 10000) detected at line 877
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 877
+ []
+
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+[24]
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+
+Underfull \vbox (badness 10000) detected at line 877
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 877
+ []
+
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+[25]
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+
+Underfull \vbox (badness 10000) detected at line 877
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 877
+ []
+
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+[26]
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+
+Underfull \vbox (badness 10000) detected at line 877
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 877
+ []
+
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+[27]
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+
+Package xcolor Warning: Incompatible color definition on input line 877.
+
+(./bookdown_report.bbl) [28] (./bookdown_report.aux)
 Package rerunfilecheck Info: File `bookdown_report.out' has not changed.
-(rerunfilecheck)             Checksum: D5A3A227063DE7CA97040FF6BF17AC25;1930.
+(rerunfilecheck)             Checksum: 2485E74D78F263328E77D13D7A64ED9F;1836.
  ) 
 Here is how much of TeX's memory you used:
- 12587 strings out of 477881
- 204597 string characters out of 5846244
- 576978 words of memory out of 5000000
- 33268 multiletter control sequences out of 15000+600000
- 474619 words of font info for 62 fonts, out of 8000000 for 9000
+ 12589 strings out of 477881
+ 204486 string characters out of 5846244
+ 611507 words of memory out of 5000000
+ 33256 multiletter control sequences out of 15000+600000
+ 476031 words of font info for 73 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 72i,10n,76p,1049b,363s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,11n,76p,1135b,399s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on bookdown_report.pdf (23 pages).
+Output written on bookdown_report.pdf (28 pages).

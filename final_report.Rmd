@@ -632,7 +632,7 @@ dt %>%
 Traceplots:
 ```{r trace}
 params = c("b0", "b1", "b2", "b3", "b4", "b5", "sigma^2")
-traplot(mcmc.model, parms = params )
+traplot(mcmc.model, parms = params)
 ```  
   
 ACF plots:  
@@ -666,9 +666,5 @@ tab_model(final_mod, show.re.var = TRUE,
           dv.labels = "Final Model: Odds Ratios of Cataracts by Sex, Treatment Group")
 ```
 
-### Full Code  
-```{r code, include=FALSE, echo = TRUE}
 
-
-```
 
