@@ -263,16 +263,7 @@ p_{ij} = &0.063 + v_j + 0.55*Gamma_i + 0.623*HZE_i + \\
 \label{eq:probs}
 \end{equation}
 
-Comparisons of different groups across Sex and Treatment were assessed on Model \eqref{eq:glmm} using the \texttt{emmeans} package \citep{R-emmeans}. Figure \ref{fig:contr} shows of the probability of developing cataracts for each combination of sex by treatment group. Differences between both sex and treatment group were clearly visible, notably the differences between treatment group within gender.
-
-\begin{figure}[H]
-
-{\centering \includegraphics{bookdown_report_files/figure-latex/contr-1} 
-
-}
-
-\caption{Predicted probability of cataracts by sex, treatment group}\label{fig:contr}
-\end{figure}
+Comparisons of different groups across Sex and Treatment were assessed on Model \eqref{eq:glmm} using the \texttt{emmeans} package \citep{R-emmeans}. Differences between both sex and treatment group were clearly visible, notably the differences between treatment group within gender.
 
 Figure \ref{fig:RR} shows the relative risk of cataract development for all group comparisons in Model \eqref{eq:glmm}. Within females, all relative risks between treatment groups resulted in confidence intervals containing the possibility of no increased risk from exposure. Within males, conversely, all three comparisons between treatment groups showed strong evidence for increased risk with exposure. The largest difference was observed among Males between the HZE group and the control group.
 
@@ -458,7 +449,64 @@ Diagnostic assessments revealed no issues with convergence or parameterization. 
 
 \begin{center}\includegraphics{bookdown_report_files/figure-latex/trace-1} \end{center}
 
-ACF plots:
+ACF plots:\\
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.5\linewidth]{bookdown_report_files/figure-latex/acf-1} 
+
+}
+
+\caption{ACF plots for MCMC estimates}\label{fig:acf-1}
+\end{figure}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.5\linewidth]{bookdown_report_files/figure-latex/acf-2} 
+
+}
+
+\caption{ACF plots for MCMC estimates}\label{fig:acf-2}
+\end{figure}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.5\linewidth]{bookdown_report_files/figure-latex/acf-3} 
+
+}
+
+\caption{ACF plots for MCMC estimates}\label{fig:acf-3}
+\end{figure}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.5\linewidth]{bookdown_report_files/figure-latex/acf-4} 
+
+}
+
+\caption{ACF plots for MCMC estimates}\label{fig:acf-4}
+\end{figure}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.5\linewidth]{bookdown_report_files/figure-latex/acf-5} 
+
+}
+
+\caption{ACF plots for MCMC estimates}\label{fig:acf-5}
+\end{figure}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.5\linewidth]{bookdown_report_files/figure-latex/acf-6} 
+
+}
+
+\caption{ACF plots for MCMC estimates}\label{fig:acf-6}
+\end{figure}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.5\linewidth]{bookdown_report_files/figure-latex/acf-7} 
+
+}
+
+\caption{ACF plots for MCMC estimates}\label{fig:acf-7}
+\end{figure}
 
 Gelman-Rubin Diagnostics:
 
@@ -471,12 +519,62 @@ Gelman-Rubin Diagnostics:
 \textbackslash caption\{Bayes posterior densities with 95\% HPD intervals\}\label{fig:postdens}
 \textbackslash end\{figure\}
 
+\hypertarget{additional-post-hoc-plots}{%
+\subsection{Additional post-hoc plots}\label{additional-post-hoc-plots}}
+
+\label{sec:phs}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{bookdown_report_files/figure-latex/contr-1} 
+
+}
+
+\caption{Predicted probability of cataracts by sex, treatment group}\label{fig:contr}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{bookdown_report_files/figure-latex/oddsr-1} 
+
+}
+
+\caption{Odds Ratios of Developing Cataracts 
+by Treatment Group within Sex}\label{fig:oddsr}
+\end{figure}
+
+\begin{verbatim}
+## Treatment = Unirradiated:
+##  contrast odds.ratio    SE  df null z.ratio p.value
+##  M / F          2.43 0.724 Inf    1   2.977  0.0029
+## 
+## Treatment = Gamma:
+##  contrast odds.ratio    SE  df null z.ratio p.value
+##  M / F          6.44 2.231 Inf    1   5.374  <.0001
+## 
+## Treatment = HZE:
+##  contrast odds.ratio    SE  df null z.ratio p.value
+##  M / F          8.12 2.220 Inf    1   7.658  <.0001
+## 
+## Tests are performed on the log odds ratio scale
+\end{verbatim}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{bookdown_report_files/figure-latex/oddsr2-1} 
+
+}
+
+\caption{Odds Ratio of Developing 
+Cataracts by Sex within Treatment}\label{fig:oddsr2}
+\end{figure}
+
 \hypertarget{source-code}{%
 \subsection{Source Code}\label{source-code}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{knitr}\SpecialCharTok{::}\NormalTok{opts\_chunk}\SpecialCharTok{$}\FunctionTok{set}\NormalTok{(}\AttributeTok{fig.height=}\FloatTok{2.4}\NormalTok{, }\AttributeTok{fig.pos =} \StringTok{\textquotesingle{}H\textquotesingle{}}\NormalTok{, }\AttributeTok{fig.align =} \StringTok{\textquotesingle{}center\textquotesingle{}}\NormalTok{,}
+\NormalTok{knitr}\SpecialCharTok{::}\NormalTok{opts\_chunk}\SpecialCharTok{$}\FunctionTok{set}\NormalTok{(}\AttributeTok{fig.height=}\FloatTok{2.8}\NormalTok{, }\AttributeTok{fig.pos =} \StringTok{\textquotesingle{}H\textquotesingle{}}\NormalTok{, }\AttributeTok{fig.align =} \StringTok{\textquotesingle{}center\textquotesingle{}}\NormalTok{,}
                       \AttributeTok{echo=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{warning=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{message=}\ConstantTok{FALSE}\NormalTok{) }
 
 \FunctionTok{library}\NormalTok{(readxl)}
@@ -655,9 +753,6 @@ Gelman-Rubin Diagnostics:
   \FunctionTok{xtable2kable}\NormalTok{(}\AttributeTok{booktabs =}\NormalTok{ T, }\AttributeTok{include.rownames =} \ConstantTok{TRUE}\NormalTok{,}
                \AttributeTok{table.placement =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{size=}\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{fontsize\{9pt\}\{10pt\}}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{selectfont"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ F, }\AttributeTok{latex\_options =} \StringTok{"HOLD\_position"}\NormalTok{) }
-\NormalTok{cats\_emms }\OtherTok{\textless{}{-}} \FunctionTok{emmeans}\NormalTok{(mod, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{|}\NormalTok{ Sex, }\AttributeTok{infer =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)}
-\FunctionTok{emmip}\NormalTok{(cats\_emms, Treatment }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Sex) }\SpecialCharTok{+} 
-  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{scale\_color\_startrek}\NormalTok{()}
 \NormalTok{em1 }\OtherTok{\textless{}{-}} \FunctionTok{emmeans}\NormalTok{(mod, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment}\SpecialCharTok{|}\NormalTok{Sex)}
 \NormalTok{em1log }\OtherTok{\textless{}{-}} \FunctionTok{regrid}\NormalTok{(em1, }\StringTok{"log"}\NormalTok{)}
 \NormalTok{rrs1 }\OtherTok{\textless{}{-}} \FunctionTok{contrast}\NormalTok{(em1log, }\AttributeTok{interaction =} \StringTok{"revpairwise"}\NormalTok{, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)}
@@ -791,6 +886,13 @@ Gelman-Rubin Diagnostics:
   \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ F, }\AttributeTok{latex\_options =} \StringTok{"hold\_position"}\NormalTok{) }
 \NormalTok{params }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"b0"}\NormalTok{, }\StringTok{"b1"}\NormalTok{, }\StringTok{"b2"}\NormalTok{, }\StringTok{"b3"}\NormalTok{, }\StringTok{"b4"}\NormalTok{, }\StringTok{"b5"}\NormalTok{, }\StringTok{"sigma\^{}2"}\NormalTok{)}
 \FunctionTok{traplot}\NormalTok{(mcmc.model, }\AttributeTok{parms =}\NormalTok{ params)}
+\FunctionTok{acf}\NormalTok{(mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\DecValTok{1}\NormalTok{], }\AttributeTok{main =} \StringTok{"b0"}\NormalTok{)}
+\FunctionTok{acf}\NormalTok{(mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\DecValTok{2}\NormalTok{], }\AttributeTok{main =} \StringTok{"b1"}\NormalTok{)}
+\FunctionTok{acf}\NormalTok{(mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\DecValTok{3}\NormalTok{], }\AttributeTok{main =} \StringTok{"b2"}\NormalTok{)}
+\FunctionTok{acf}\NormalTok{(mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\DecValTok{4}\NormalTok{], }\AttributeTok{main =} \StringTok{"b3"}\NormalTok{)}
+\FunctionTok{acf}\NormalTok{(mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\DecValTok{5}\NormalTok{], }\AttributeTok{main =} \StringTok{"b4"}\NormalTok{)}
+\FunctionTok{acf}\NormalTok{(mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\DecValTok{6}\NormalTok{], }\AttributeTok{main =} \StringTok{"b5"}\NormalTok{)}
+\FunctionTok{acf}\NormalTok{(mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\DecValTok{8}\NormalTok{], }\AttributeTok{main =} \StringTok{"sigma2"}\NormalTok{)}
 \FunctionTok{gelman.diag}\NormalTok{(mcmc.model)}
 \CommentTok{\#gelman.plot(mcmc.model)}
 \NormalTok{colors }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Density"} \OtherTok{=} \StringTok{"\#5C88DAFF"}\NormalTok{, }\StringTok{"Mode"} \OtherTok{=} \StringTok{"\#84BD00FF"}\NormalTok{, }\StringTok{"HPD"} \OtherTok{=} \StringTok{"\#CC0C00FF"}\NormalTok{)}
@@ -872,6 +974,44 @@ Gelman-Rubin Diagnostics:
        \AttributeTok{title =} \StringTok{"sigma\^{}2"}\NormalTok{)}
 
 \FunctionTok{grid.arrange}\NormalTok{(p0, p1, p2, p3, p4, p5, p6, }\AttributeTok{ncol =} \DecValTok{2}\NormalTok{)}
+\NormalTok{cats\_emms }\OtherTok{\textless{}{-}} \FunctionTok{emmeans}\NormalTok{(mod, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{|}\NormalTok{ Sex, }\AttributeTok{infer =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)}
+\FunctionTok{emmip}\NormalTok{(cats\_emms, Treatment }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Sex) }\SpecialCharTok{+} 
+  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{scale\_color\_startrek}\NormalTok{()}
+\NormalTok{cats\_emms }\OtherTok{\textless{}{-}} \FunctionTok{emmeans}\NormalTok{(final\_mod, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{|}\NormalTok{ Sex, }\AttributeTok{infer =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)}
+\NormalTok{podds }\OtherTok{\textless{}{-}} \FunctionTok{pairs}\NormalTok{(cats\_emms, }\AttributeTok{reverse =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{podds }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{confint}\NormalTok{(podds)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename}\NormalTok{(}\AttributeTok{Contrast =}\NormalTok{ contrast, }\AttributeTok{Lower =}\NormalTok{ asymp.LCL, }\AttributeTok{Upper =}\NormalTok{ asymp.UCL)}
+
+\NormalTok{or1\_plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(podds, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ odds.ratio, }\AttributeTok{y =}\NormalTok{ Contrast, }\AttributeTok{xmin =}\NormalTok{ Lower, }\AttributeTok{xmax =}\NormalTok{ Upper)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_errorbarh}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{height =} \FloatTok{0.2}\NormalTok{, }\AttributeTok{color =}\NormalTok{ Sex),}
+                 \AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.3}\NormalTok{), }\AttributeTok{lwd =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ Sex), }\AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.3}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =} \FunctionTok{round}\NormalTok{(odds.ratio, }\DecValTok{2}\NormalTok{), }\AttributeTok{color =}\NormalTok{ Sex), }\AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.7}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{1}\NormalTok{), }\AttributeTok{color =} \StringTok{"\#84BD00FF"}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{vjust =} \DecValTok{1}\NormalTok{, }\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_startrek}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Odds Ratio"}\NormalTok{)}
+
+\NormalTok{or1\_plot}
+\NormalTok{cats\_emms1 }\OtherTok{\textless{}{-}} \FunctionTok{emmeans}\NormalTok{(final\_mod, }\SpecialCharTok{\textasciitilde{}}\NormalTok{Sex }\SpecialCharTok{|}\NormalTok{ Treatment, }\AttributeTok{infer =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)}
+\NormalTok{podds1 }\OtherTok{\textless{}{-}} \FunctionTok{pairs}\NormalTok{(cats\_emms1, }\AttributeTok{reverse =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{podds1}
+\NormalTok{podds1 }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{confint}\NormalTok{(podds1)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename}\NormalTok{(}\AttributeTok{Contrast =}\NormalTok{ contrast, }\AttributeTok{Lower =}\NormalTok{ asymp.LCL, }\AttributeTok{Upper =}\NormalTok{ asymp.UCL)}
+
+\NormalTok{or2\_plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(podds1, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ odds.ratio, }\AttributeTok{y =}\NormalTok{ Contrast, }\AttributeTok{xmin =}\NormalTok{ Lower, }\AttributeTok{xmax =}\NormalTok{ Upper)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_errorbarh}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{height =} \FloatTok{0.2}\NormalTok{, }\AttributeTok{color =}\NormalTok{ Treatment),}
+                 \AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.3}\NormalTok{), }\AttributeTok{lwd =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ Treatment), }\AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.3}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =} \FunctionTok{round}\NormalTok{(odds.ratio, }\DecValTok{2}\NormalTok{), }\AttributeTok{color =}\NormalTok{ Treatment), }
+            \AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.3}\NormalTok{), }\AttributeTok{vjust =} \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{1}\NormalTok{), }\AttributeTok{color =} \StringTok{"\#FFCD00FF"}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_startrek}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Odds Ratio"}\NormalTok{)}
+
+\NormalTok{or2\_plot}
 \FunctionTok{options}\NormalTok{(}\AttributeTok{width=}\DecValTok{100}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
