@@ -129,11 +129,11 @@
 
 \bigskip
 \begin{abstract}
-As astronauts travel farther into space, outside of the earth's protective magnetic field, they are exposed to radiation that could have serious effects. One of those side effects is cataract development. It has also been thought that there might be a genetic predisposition to develop cataracts that is passed down in families. The goal of this study was to use mice in families exposed to radiation to determine if there is cataract clustering in families. A mixed effects model was created to account for the family effect on cataract development. The model included terms for sex, treatment group, sex by treatment group interaction, and a random intercept for family. Family was shown to be an important source of variation in predicting cataract development. Males had big differences in cataract development among treatment groups whereas females had only small differences. Males were also more likely to develop severe cataracts than females in all three treatment groups. Other risks involved in radiation exposure could cause death before cataracts have time to develop. This complicates the inferences made about cataract development from this dataset; however, the conclusions indicate the necessity of further research to better understand how humans might react to radiation as they leave the earth's magnetic field.
+Astronauts traveling outside Earth's protective magnetic field are exposed to radiation with potentially serious side effects - one such effect is development of cataracts. Studying cataracts caused by radiation is complicated by genetic predisposition or resistance to cataract development. This study exposed mice bred in genetic families to specific types of radiation to examine familial clustering of cataracts. A mixed effects logistic regression model was fit to the data; the final model included parameters for sex, treatment group, sex by treatment group interaction, and a random intercept for family. Family was shown to be an important source of variation in predicting cataract development. Male sex was associated with differences in cataract development among treatment groups, while evidence showed little association between female sex and cataract development across among treatment groups. Males were more likely to develop severe cataracts than females across all three treatment groups.
 \end{abstract}
 
 \noindent%
-{\it Keywords:} Hierarchical modeling, Logistic Regression, Bayesian analysis
+{\it Keywords:} Hierarchical modeling, Logistic regression, Bayesian analysis
 \vfill
 
 \newpage
@@ -142,9 +142,8 @@ As astronauts travel farther into space, outside of the earth's protective magne
 \section{Introduction}
 \label{sec:intro}
 
-Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth's magnetic field. In contrast, extensive research shows exposure to high doses of gamma radiation leads to acute radiation sickness. Effects include damage to the blood forming system, GI system, immune system, increased risk for cancer, cardiovascular disease, neurodegenerative disease, death, and cataracts. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families \citep{mice2017}. Accounting for potential family clustering allows for thorough examination of the primary research questions.\\
-Is there a genetic susceptibility to cataracts caused by radiation? Accounting for potential genetic susceptibility, is there a difference in cataract presentation between HZE radiation, gamma radiation and unirradiation? 1820 individual mice from 48 unique families, were randomly assigned with equal family weight to each of three treatment groups. The mice were bred over several generations to create a genetically heterogeneous sample to better represent biological diversity within the human population. The treatments are HZE irradiation, gamma irradiation, and non-irradiated control. The HZE group is irradiated with either silicon or iron nuclei HZE ions, which are considered as a single treatment group. The second group is subjected to 137 Cs gamma irradiation. Mice in both irradiated groups are exposed to radiation at 7-12 weeks of age. The third group is unirradiated control. All mice are monitored until 800 days of age --effectively a survival study. Mice are checked weekly for symptoms of cataracts, cataract risk factors, and other symptoms of radiation exposure such as tumors and carcinomas. Resources do not allow for weekly measurement of every mouse; previous measurements are carried forward if a mouse is not assessed on a particular week.\\
-This analysis uses a simplified version of the data set - a snapshot of the 1169 mice that are alive at 552 days. This cutoff is chosen because it is the median survival time for the group with the shortest median survival. There are 47 unique families with n = 396 in the HZE group, n = 277 in the gamma radiation group, and n = 496 in the unirradiated control group. There are up to two generations of mice pups from each family in the dataset, but generation is not distinguished in the simplified data. Family size ranges from n = 11 to n = 48, with median family size of 24.
+Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth's magnetic field. In contrast, extensive research has shown that exposure to high doses of gamma radiation leads to acute radiation sickness. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families \citep{mice2017}. This analysis examines potential genetic susceptibility to cataract development in the presence of radiation treatment.\\
+The experiment included 1820 unique mice from 48 unique families, bred over several generations to create a genetically heterogeneous sample. Individuals were randomly assigned, with equal family weight, to one of three radiation treatment groups: HZE irradiation, gamma irradiation, and non-irradiated control. Mice in both irradiated groups were exposed to radiation at 7-12 weeks of age, and all mice were monitored weekly until 800 days of age. This analysis used a simplified version of the data set containing observations at death for the 1169 mice from 47 unique families that survived at least 552 days. Family size ranged \([11, 48]\), with median family size \(= 24\).\\
 
 \begin{wraptable}{r}{0pt}
 \centering
@@ -160,44 +159,57 @@ Unirradiated & 438 &  45 &  11 &   2 & 496 \\
    \bottomrule
 \end{tabular}
 \caption{Counts of score by treatment group} 
+\label{tab:gtab}
 \end{wraptable}
 
-The response is a discrete ordinal variable corresponding to radiation-associated ocular changes in the eye. A score of 0 is associated with a completely clear lens, while a score of 5 is associated with a completely occluded lens. This dataset contains cataract score levels = {[}1, 2, 3, 4{]}. A score \(\ge\) 2 indicates presence of cataracts, and the small sample sizes for score \(>\) 2 across all treatment groups raise concerns about making inference on an ordinal analysis; consequently, the response is converted to binary \emph{Cataracts} with score = 1 converted to 0, and score \(\ge\) 2 converted to 1. The main experimental factor is \emph{Treatment}, a categorical variable with three levels = {[}HZE radiation, gamma radiation, non-irradiated control{]}. A single random effect, genetic \emph{Family}, is a categorical factor with 47 levels. Both Treatment and Family are central to the experimental design and will serve as the basis for all models considered. Additional covariates under consideration were Sex, coat color, weight in grams, body condition score (BCS) age in days, and presence three cancers: myeloid leukemia, harderian tumors, and PreT lymphoma. The experimental design prescribed the inclusion of Treatment and Family in the analysis.
+Due to small group sizes (Table \ref{tab:gtab}), the response was converted from a discrete ordinal variable (levels = {[}1, 2, 3, 4{]}) matching ocular changes in the eye to a binary variable where score \(\ge\) 2 indicated presence of cataracts. Both the main experimental factor, Treatment, and the single random effect, genetic Family, were central to the experimental design and of primary research interest; consequently, both variables were included in all models considered. Additional covariates under consideration were sex, coat color, weight in grams, body condition score (BCS), age in days, and presence of three cancers: myeloid leukemia, harderian tumors, and pre-T lymphoma.
 
 \section{Summary Statistics}
 \label{sec:sumstats}
 
-\includegraphics{bookdown_report_files/figure-latex/bareda-1.pdf}
-Exploratory data analysis focused on assessing binary Cataracts status in terms of Treatment. Tables and graphs were produced to investigate any potential associations between covariates and the response, and correlations between coviarates and either Treatment or the response. Further examination of potential covariates show distinct patterns of cataracts status between male and female mice. Figure \ref{fig:bareda} highlights the differences between males and females across all treatment groups.
+Exploratory data analysis focused on assessing cataracts status in terms of treatment group, and potential associations between covariates and the response. Tables and graphs (available in Appendix \ref{sec:appeda}) were created to investigate any empirical associations between coviarates and either treatment group or cataract status. Further examination of potential covariates revealed distinct patterns of cataracts status between male and female mice, as shown in Figure \ref{fig:bareda}.\\
 
-Figure \ref{fig:lineeda} allows us to visualize any patterns between families within other predictors of interest. Different patterns are displayed across families, but distinct clustering is not apparent.\\
-\includegraphics{bookdown_report_files/figure-latex/lineeda-1.pdf}
+\begin{figure}[H]
+
+{\centering \includegraphics{bookdown_report_files/figure-latex/bareda-1} 
+
+}
+
+\caption{Sample proportions with cataracts by sex, treatment group}\label{fig:bareda}
+\end{figure}
+
+Empirical assessment of the effect of family across treatment group did not display apparent clustering where scores were higher across treatment groups in some families. Figure \ref{fig:lineeda} did reveal some distinct patterns across families and treatment groups; for example, the Gamma treatment group appeared to have either the highest group score per family, or the lowest group score per family.\\
+
+\begin{figure}[H]
+
+{\centering \includegraphics{bookdown_report_files/figure-latex/lineeda-1} 
+
+}
+
+\caption{Mean family cataract score by treatment group}\label{fig:lineeda}
+\end{figure}
 
 \section{Statistical Methods}
 \label{sec:methods}
 
-Hierarchical logistic regression was selected as the primary analysis method, due to the binary response and random effect of interest to the research question. Figure \ref{fig:bareda} indicated potential interaction between Sex and Treatment group; therefore, an interaction term was included in the model. Various models were fit and assessed using Aikike's Information Criterion (AIC); the full list of models fit can be viewed in Appendix Table \ref{glmms}.The final model, Model \eqref{eq:glmm}, can be written as:
-
+Hierarchical logistic regression was selected as the primary analytic method, due to the binary response and random effect of interest to the research question. Various models were fit and assessed using Aikike's Information Criterion (AIC); see Appendix \ref{sec:glmms} for the full list of models examined. The final model can be written as:\\
 \begin{equation}
 \begin{aligned}
 Y_{ij} \sim &Bernoulli(p) \\
 log(\frac{p}{1-p}) = &\ \beta_0\ +\beta_1*Gamma_i\ + \beta_2*HZE_i\ + \beta_3*M_i\ + \\ &\beta_4*Gamma_i*M_i\ + \beta_5*HZE_i*M_i\ +\ [v_{j} + \epsilon_{ij}] \\
-&i = 1, ..., 1169\ \mbox{ mice} \\
-&j = 1,...,47\ \ \mbox{ families}
+&i = 1, ..., 1169\ \mbox{ mice}\ \ \ \ j = 1,...,47\ \ \mbox{ families}
 \end{aligned}
 \label{eq:glmm}
-\end{equation}
+\end{equation}\\
+where \(M_i\) is an indicator for males, \(v_{j}\) is the variance of the random intercept for Family \(j\), and \(\epsilon_{ij}\) is the residual variance. Model assumptions of Normally-distributed random effects and lack of overdispersion were verified in Appendix \ref{sec:glmmd}.
 
-where \(M_i\) is an indicator for males, \(v_{j}\) is the variance of the random intercept for Family \(j\), and \(\epsilon_{ij}\) is the residual variance.
-
-A complementary Bayesian model with non-informative priors was fit to examine the distribution of the estimates from the final model, as well as test its robustness to alternative approaches \citep{BDA}. The Bayes model is parameterized as:\\
+A complementary Bayesian model with non-informative priors was fit to obtain probability distributions of the parameters from the final model, as well as test the estimates' robustness to alternative approaches \citep{BDA}. This model can be written as:\\
 \begin{equation}
 \begin{aligned}
 Y_{ij} \sim &Bernoulli(p)\\
 log(\frac{p}{1-p}) = &\ \beta_0*Control_i*F_i\ +\beta_1*Gamma_i*F_i\ + \beta_2*HZE_i*F_i\ + \\ &\beta_3*Control_i*M_i\ +\beta_4*Gamma*M\ + \beta_5*HZE*M\ + \\
 &v_{j} + \epsilon_{ij}\\
-&i = 1, ..., 1169\ \mbox{ mice} \\
-&j = 1,...,47\ \ \mbox{ families, and} \\
+&i = 1, ..., 1169\ \mbox{ mice}\ \ \ \ j = 1,...,47\ \ \mbox{ families, and} \\
 v_j \sim\ &N(0, \tau)
 \\
 &\mbox{ with non-informative priors:}\\
@@ -209,29 +221,28 @@ v_i &\sim N(0, \sigma^2)\\
 \label{eq:bayes}
 \end{equation}
 
-Model \eqref{eq:bayes}, was run through a Gibbs sampler Markov Chain Monte Carlo (MCMC) algorithm in the \texttt{rjags} package \citep{R-rjags} to approximate the posterior distributions of the estimates of all fixed effects and the variance of the random effect. 3 chains of 60000 total iterations with a 10000-iteration burn-in period; starting values were obtained from the estimates generated by Model \eqref{eq:glmm}, with random noise added to avoid false convergence.
-
-Estimates for the final analysis:
+Model \eqref{eq:bayes} was run through a Gibbs sampler Markov Chain Monte Carlo (MCMC) algorithm in the `rjags' package \citep{R-rjags} to approximate the posterior distributions of the estimates of all fixed effects and the variance of the random effect. 3 chains of 60000 total iterations with a 10000-iteration burn-in period; starting values were obtained from the estimates generated by Model \eqref{eq:glmm}, with noise added to avoid false convergence. Full model diagnostics may be accessed in Appendix \ref{sec:bayesd}.
 
 \begin{table}[H]
 \centering
-\begin{tabular}{rrrrr}
+\begin{tabular}{rrrrrr}
   \toprule
-GLMM Est & MCMC Mode & MCMC SD & HPD Lower & HPD Upper \\ 
+ & GLMM Est & MCMC Mode & MCMC SD & HPD Lower & HPD Upper \\ 
   \midrule
--2.70 & -2.68 & 0.27 & -3.25 & -2.20 \\ 
-  0.21 & 0.09 & 0.38 & -0.53 & 0.95 \\ 
-  0.50 & 0.49 & 0.33 & -0.14 & 1.15 \\ 
-  0.89 & 0.90 & 0.30 & 0.31 & 1.50 \\ 
-  0.97 & 1.09 & 0.46 & 0.08 & 1.88 \\ 
-  1.21 & 1.27 & 0.41 & 0.40 & 2.00 \\ 
-  0.40 & 0.32 & 0.18 & 0.15 & 0.81 \\ 
+b\_0 & -2.70 & -2.68 & 0.27 & -3.25 & -2.20 \\ 
+  b\_1 & 0.21 & 0.09 & 0.38 & -0.53 & 0.95 \\ 
+  b\_2 & 0.50 & 0.49 & 0.33 & -0.14 & 1.15 \\ 
+  b\_3 & 0.89 & 0.90 & 0.30 & 0.31 & 1.50 \\ 
+  b\_4 & 0.97 & 1.09 & 0.46 & 0.08 & 1.88 \\ 
+  b\_5 & 1.21 & 1.27 & 0.41 & 0.40 & 2.00 \\ 
+  sigma\verb|^|2 & 0.40 & 0.32 & 0.18 & 0.15 & 0.81 \\ 
    \bottomrule
 \end{tabular}
 \caption{Final model parameter estimates} 
+\label{tab:est_tab}
 \end{table}
 
-The 95\% highest posterior density (HPD) credible intervals from Model \eqref{eq:bayes}
+Results from Model \eqref{eq:glmm} and Model \eqref{eq:bayes} were congruent, as shown in Table @ref(tab:est\_tab). The 95\% highest posterior density (HPD) credible intervals from Model \eqref{eq:bayes} offer the advantage of concluding 95\% confidence that estimates for each parameter lie within those bounds.
 
 \section{Limitations and Alternatives}
 \label{sec:limits}
@@ -246,7 +257,7 @@ Presence of competing risks in the experimental design obscure the presence of f
 The final probability for developing cataracts can be written as:\\
 \begin{equation}
 \begin{aligned}
-p_i = &0.063 + 0.55*Gamma_i + 0.623*HZE_i + \\
+p_{ij} = &0.063 + v_j + 0.55*Gamma_i + 0.623*HZE_i + \\
 &0.708*Male_i + 0.726*Gamma_i*Male_i + 0.770*HZE_i*Male_i
 \end{aligned}
 \label{eq:probs}
@@ -266,10 +277,19 @@ Comparisons of different groups across Sex and Treatment were assessed on Model 
 Assessing relative risk for cataracts between groups:\\
 
 \begin{figure}[H]
-\includegraphics[width=0.5\linewidth]{bookdown_report_files/figure-latex/RR-1} \includegraphics[width=0.5\linewidth]{bookdown_report_files/figure-latex/RR-2} \caption{Relative risk of cataract development by all predictor combinations}\label{fig:RR}
+
+{\centering \includegraphics[width=0.5\linewidth]{bookdown_report_files/figure-latex/RR-1} \includegraphics[width=0.5\linewidth]{bookdown_report_files/figure-latex/RR-2} 
+
+}
+
+\caption{Relative risk of cataract development between all group combinations}\label{fig:RR}
 \end{figure}
 
+Figure \ref{fig:RR} shows the relative risk of cataract development for all groups in Model \eqref{eq:glmm}. From the plot on the left we see that mice in the HZE group had a higher risk of developing severe cataracts than both the gamma and control groups. Males in the HZE group had 1.36 times greater risk than males in the gamma group. The biggest difference is seen in the HZE group compared to the unirradiated control group for males. Males in HZE had 3.37 times greater risk than males in the control group. On the right, it is made clear that males have a much higher risk of developing cataracts than females. In the HZE group, males have a 4.74 times higher risk of developing severe cataracts than females and in the gamma group it is a 4.54 times higher risk.
+
 Fix this plot!
+
+Visualizing random effect by family:\\
 
 \begin{figure}[H]
 
@@ -280,12 +300,13 @@ Fix this plot!
 \caption{Estimated random probability of developing cataracts by family}\label{fig:re}
 \end{figure}
 
-Figure \ref{fig:re} visualizes the estimated probability of developing cataracts for each family in the dataset, along with their confidence intervals. The vertical lines plot the GLMM estimated variance from Model \eqref{eq:glmm} and the MCMC mode and HPD interval for \(\sigma^2\) from Model \eqref{eq:bayes}. Many of the probabilities shown are close to 0.5, with small numbers of families at the top and bottom of the graph that indicate some respective genetic predisposition or resistance to cataract development.
+Figure \ref{fig:re} visualizes the estimated probability of developing cataracts for each family in the dataset, along with their confidence intervals. The vertical lines plot the GLMM estimated variance from Model \eqref{eq:glmm} and the MCMC mode and HPD interval for \(\sigma^2\) from Model \eqref{eq:bayes}. Many of the probabilities shown are close to 0.5, with small numbers of families at the top and bottom of the graph that indicate some respective genetic predisposition or resistance to cataract development. \textbf{from the comments on our presentation it seemed like Ann thought we shouldn't compare these to 0.5. Not sure how to interpret it otherwise though}
 
 \section{Conclusions}
 \label{sec:conc}
 
 \textbf{Turn this into a nice paragraph or two; add quantitative info from results to back these up, or keep it general?}
+**alyssa's thoughts: I think a table would be nice comparing males and females probabilities, but would it fit? and would it be redundant of the line chart showing probabilities among groups and sexes? I don't know if listing out all the numbers of probabilities would be good in sentence form.*
 
 Females in general face less probability of developing cataracts than males, across all treatment groups. We could argue that the effect of treatment group is not of clinical significance for female mice in this dataset. As you can see, the probability of developing cataracts is quite low for all 3 treatment groups. Males, on the other hand, have a higher probability of developing cataracts than females across all treatment groups. For males, the differences of development of cataracts across treatment groups is of clinical importance.
 
@@ -294,16 +315,85 @@ Females in general face less probability of developing cataracts than males, acr
 
 Both authors contributed to statistical analysis and writing for this report. Both authors read and approved the final report. Both authors contributed equally to introduction, exploratory data analysis, summary statistics, and results. Alyssa Allsop served as the primary statistician on fitting Frequentist models; Amira Burns served as the primary statistician on fitting the Bayesian model.
 
+\newpage
+
+\appendix
+
 \section{Appendix}
-\label{sec:appendix}
 
 \hypertarget{additional-exploratory-data-analysis}{%
-\subsubsection{Additional Exploratory Data Analysis}\label{additional-exploratory-data-analysis}}
+\subsection{Additional Exploratory Data Analysis}\label{additional-exploratory-data-analysis}}
+
+\label{sec:appeda}
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.42\linewidth]{bookdown_report_files/figure-latex/eda-1} 
+
+}
+
+\caption{Histograms of contiguous covariates by treatment group}\label{fig:eda-1}
+\end{figure}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.42\linewidth]{bookdown_report_files/figure-latex/eda-2} 
+
+}
+
+\caption{Histograms of contiguous covariates by treatment group}\label{fig:eda-2}
+\end{figure}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{lllr}
+  \toprule
+MyeloidLeukemia & HarderianTumor & PreTLymphoma & n \\ 
+  \midrule
+0 & bilateral & 0 &  39 \\ 
+  0 & none & 0 & 954 \\ 
+  0 & none & 1 &   6 \\ 
+  0 & unilateral & 0 & 134 \\ 
+  0 & unilateral & 1 &   1 \\ 
+  1 & none & 0 &  30 \\ 
+  1 & none & 1 &   1 \\ 
+  1 & unilateral & 0 &   4 \\ 
+   \bottomrule
+\end{tabular}
+\caption{Counts of cancer status} 
+\end{table}
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.5\linewidth]{bookdown_report_files/figure-latex/scage-1} 
+
+}
+
+\caption{Boxplot of Age, cataracts status by sex and treatment}\label{fig:scage-1}
+\end{figure}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.5\linewidth]{bookdown_report_files/figure-latex/scage-2} 
+
+}
+
+\caption{Boxplot of Age, cataracts status by sex and treatment}\label{fig:scage-2}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.5\linewidth]{ct_prop} 
+
+}
+
+\caption{Table of counts and proportions by sex, treatment group, cataracts status}\label{fig:ctprop}
+\end{figure}
 
 \hypertarget{model-selection}{%
-\subsubsection{Model Selection}\label{model-selection}}
+\subsection{Model Selection}\label{model-selection}}
 
-AIC was used as the primary model selection criteria because it accurately compares non-nested models. This feature was of particular importance when assessing models with a random effect against a model with only fixed effects.
+\label{sec:glmms}
+
+AIC was used as the primary model selection criteria because it can be used to compare non-nested models. This feature was of particular importance when assessing models with a random effect against a model with only fixed effects.
 
 \begin{table}[!h]
 \centering
@@ -311,8 +401,8 @@ AIC was used as the primary model selection criteria because it accurately compa
   \toprule
 Model & AIC \\ 
   \midrule
-Full Mixed Model & 1017.98 \\ 
-  Final Model & 1038.9 \\ 
+Final Model & 1017.98 \\ 
+  Full Mixed Model & 1038.9 \\ 
   Fixed Effects Model & 1040.3 \\ 
   Mixed Model with no Interaction & 1023.19 \\ 
   Base Model & 1123.57 \\ 
@@ -321,19 +411,38 @@ Full Mixed Model & 1017.98 \\
 \caption{Model selection via AIC comparision} 
 \end{table}
 
+\hypertarget{glm-model-diagnostics}{%
+\subsection{GLM Model Diagnostics}\label{glm-model-diagnostics}}
+
+\label{sec:glmmd}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{bookdown_report_files/figure-latex/qq-1} 
+
+}
+
+\caption{QQ-plot of random effect on intercept}\label{fig:qq}
+\end{figure}
+
+Assumptions for fitting this model were: the random effects came from a normal distribution; the chosen link function was appropriate; and estimation of variance was not over-dispersed. These assumptions were verified. Quantiles of the random effect were compared with the quantiles of a normal distribution and looked approximately normal in Figure \ref{fig:qq}. The chosen logit link function was appropriate because the response used was binary. The ratio of the chi square statistic to the residual degrees of freedom was 0.89; a value \(\le\) 1 indicates no over-dispersion.
+
 \hypertarget{bayesian-model-diagnostics}{%
-\subsubsection{Bayesian Model Diagnostics}\label{bayesian-model-diagnostics}}
+\subsection{Bayesian Model Diagnostics}\label{bayesian-model-diagnostics}}
+
+\label{sec:bayesd}
 
 \hypertarget{source-code}{%
-\subsubsection{Source Code}\label{source-code}}
+\subsection{Source Code}\label{source-code}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{knitr}\SpecialCharTok{::}\NormalTok{opts\_chunk}\SpecialCharTok{$}\FunctionTok{set}\NormalTok{(}\AttributeTok{fig.width=}\DecValTok{4}\NormalTok{, }\AttributeTok{fig.height =} \DecValTok{4}\NormalTok{, }\AttributeTok{fig.pos =} \StringTok{\textquotesingle{}H\textquotesingle{}}\NormalTok{,}
+\NormalTok{knitr}\SpecialCharTok{::}\NormalTok{opts\_chunk}\SpecialCharTok{$}\FunctionTok{set}\NormalTok{(}\AttributeTok{fig.height=}\FloatTok{2.5}\NormalTok{, }\AttributeTok{fig.pos =} \StringTok{\textquotesingle{}H\textquotesingle{}}\NormalTok{, }\AttributeTok{fig.align =} \StringTok{\textquotesingle{}center\textquotesingle{}}\NormalTok{,}
                       \AttributeTok{echo=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{warning=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{message=}\ConstantTok{FALSE}\NormalTok{) }
 
 \FunctionTok{library}\NormalTok{(readxl)}
 \FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(DescTools)}
 \FunctionTok{library}\NormalTok{(lme4)}
 \FunctionTok{library}\NormalTok{(broom.mixed)}
 \FunctionTok{library}\NormalTok{(kableExtra)}
@@ -383,8 +492,8 @@ Full Mixed Model & 1017.98 \\
   \FunctionTok{group\_by}\NormalTok{(Treatment) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Total =} \FunctionTok{sum}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{1}\StringTok{\textasciigrave{}}\NormalTok{, }\StringTok{\textasciigrave{}}\AttributeTok{2}\StringTok{\textasciigrave{}}\NormalTok{, }\StringTok{\textasciigrave{}}\AttributeTok{3}\StringTok{\textasciigrave{}}\NormalTok{, }\StringTok{\textasciigrave{}}\AttributeTok{4}\StringTok{\textasciigrave{}}\NormalTok{)))}
 
-\FunctionTok{xtable}\NormalTok{(gsc, }\AttributeTok{caption =} \StringTok{"Counts of score by treatment group"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{xtable2kable}\NormalTok{(}\AttributeTok{booktabs =}\NormalTok{ T,}
+\FunctionTok{xtable}\NormalTok{(gsc, }\AttributeTok{label =} \StringTok{"tab:gtab"}\NormalTok{, }\AttributeTok{caption =} \StringTok{"Counts of score by treatment group"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{xtable2kable}\NormalTok{(}\AttributeTok{booktabs =}\NormalTok{ T, }
                \AttributeTok{include.rownames =} \ConstantTok{FALSE}\NormalTok{,}
                \AttributeTok{table.placement =} \ConstantTok{NULL}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{add\_header\_above}\NormalTok{(}\FunctionTok{c}\NormalTok{( }\StringTok{" "} \OtherTok{=} \DecValTok{1}\NormalTok{, }\StringTok{"Cataract Score"} \OtherTok{=} \DecValTok{4}\NormalTok{, }\StringTok{" "} \OtherTok{=} \DecValTok{1}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
@@ -407,19 +516,16 @@ Full Mixed Model & 1017.98 \\
 
 \NormalTok{b1}
 \CommentTok{\# Plot of average score of sex{-}group{-}family}
-\NormalTok{grsex\_score }\OtherTok{\textless{}{-}}\NormalTok{ cats }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{group\_by}\NormalTok{(Sex, Treatment, Family) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{gr\_score }\OtherTok{\textless{}{-}}\NormalTok{ cats }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(Treatment, Family) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{summarize}\NormalTok{(}\AttributeTok{mean\_score =} \FunctionTok{mean}\NormalTok{(Cataracts))}
 
-\CommentTok{\# choose facet direction and just show one}
-\NormalTok{l1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(grsex\_score, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Treatment, }\AttributeTok{y =}\NormalTok{ mean\_score, }\AttributeTok{color =}\NormalTok{ Sex)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{group =}\NormalTok{ Family)) }\SpecialCharTok{+} \FunctionTok{facet\_grid}\NormalTok{(}\FunctionTok{vars}\NormalTok{(Sex)) }\SpecialCharTok{+}
-  \FunctionTok{scale\_color\_startrek}\NormalTok{() }\SpecialCharTok{+}
+\NormalTok{l1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(gr\_score, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Treatment, }\AttributeTok{y =}\NormalTok{ mean\_score, }\AttributeTok{color =}\NormalTok{ Family)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{group =}\NormalTok{ Family)) }\SpecialCharTok{+} 
   \FunctionTok{scale\_x\_discrete}\NormalTok{(}\AttributeTok{expand =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, .}\DecValTok{2}\NormalTok{)) }\SpecialCharTok{+}
   \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"mean score"}\NormalTok{,}
-       \AttributeTok{title =} \StringTok{"Cataracts by Family, Sex, Treatment Group"}\NormalTok{)}
-
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position=}\StringTok{"none"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"mean score"}\NormalTok{)}
 \NormalTok{l1}
 \NormalTok{mod }\OtherTok{\textless{}{-}} \FunctionTok{glmer}\NormalTok{(Cataracts }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment}\SpecialCharTok{*}\NormalTok{Sex }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Family), }\AttributeTok{data =}\NormalTok{ cats, }\AttributeTok{family =}\NormalTok{ binomial)}
 \CommentTok{\# Specify the model}
@@ -482,7 +588,6 @@ Full Mixed Model & 1017.98 \\
 \NormalTok{mcmc.model }\OtherTok{\textless{}{-}} \FunctionTok{as.mcmc}\NormalTok{(model.fit)}
 \CommentTok{\#summary(mcmc.model)}
 
-\CommentTok{\# Convert posterior distributions to probabilities?}
 \NormalTok{posts }\OtherTok{\textless{}{-}}\NormalTok{ mcmc.model[[}\DecValTok{3}\NormalTok{]][,}\SpecialCharTok{{-}}\DecValTok{7}\NormalTok{] }
 \CommentTok{\#posts \textless{}{-} exp(posts)/(1 + exp(posts))}
 \NormalTok{phpds }\OtherTok{\textless{}{-}} \FunctionTok{HPDinterval}\NormalTok{(posts)}
@@ -500,13 +605,17 @@ Full Mixed Model & 1017.98 \\
 \NormalTok{glmm\_probs }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(ests) }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(ests))}
 \NormalTok{p\_var }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(var) }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(var))}
 \NormalTok{est\_tab }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{data.frame}\NormalTok{(}\FunctionTok{c}\NormalTok{(ests, var), means, medians, modes, sds, phpds), }\AttributeTok{digits =} \DecValTok{3}\NormalTok{)}
-\FunctionTok{rownames}\NormalTok{(est\_tab) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{beta\_0$"}\NormalTok{, }\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{beta\_1$"}\NormalTok{, }\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{beta\_2$"}\NormalTok{, }\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{beta\_3$"}\NormalTok{, }\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{beta\_4$"}\NormalTok{, }\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{beta\_5$"}\NormalTok{, }\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{sigma\^{}2$"}\NormalTok{)}
+
+\FunctionTok{rownames}\NormalTok{(est\_tab) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"b\_0"}\NormalTok{, }\StringTok{"b\_1"}\NormalTok{, }\StringTok{"b\_2"}\NormalTok{, }\StringTok{"b\_3"}\NormalTok{, }
+                       \StringTok{"b\_4"}\NormalTok{, }\StringTok{"b\_5"}\NormalTok{, }\StringTok{"sigma\^{}2"}\NormalTok{)}
 \FunctionTok{colnames}\NormalTok{(est\_tab) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"GLMM Est"}\NormalTok{, }\StringTok{"MCMC Mean"}\NormalTok{, }\StringTok{"MCMC Median"}\NormalTok{, }
                        \StringTok{"MCMC Mode"}\NormalTok{, }\StringTok{"MCMC SD"}\NormalTok{, }\StringTok{"HPD Lower"}\NormalTok{, }\StringTok{"HPD Upper"}\NormalTok{)}
 \NormalTok{est\_tab\_show }\OtherTok{\textless{}{-}}\NormalTok{ est\_tab }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\SpecialCharTok{:}\DecValTok{3}\NormalTok{))}
-\FunctionTok{xtable}\NormalTok{(est\_tab\_show, }\AttributeTok{caption =} \StringTok{"Final model parameter estimates"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{xtable2kable}\NormalTok{(}\AttributeTok{booktabs =}\NormalTok{ T, }\AttributeTok{include.rownames =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{table.placement =} \ConstantTok{NULL}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{latex\_options =} \StringTok{"HOLD\_position"}\NormalTok{) }
+\FunctionTok{xtable}\NormalTok{(est\_tab\_show, }\AttributeTok{label =} \StringTok{"tab:est\_tab"}\NormalTok{, }
+       \AttributeTok{caption =} \StringTok{"Final model parameter estimates"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{xtable2kable}\NormalTok{(}\AttributeTok{booktabs =}\NormalTok{ T, }\AttributeTok{include.rownames =} \ConstantTok{TRUE}\NormalTok{,}
+               \AttributeTok{table.placement =} \ConstantTok{NULL}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ F, }\AttributeTok{latex\_options =} \StringTok{"HOLD\_position"}\NormalTok{) }
 \NormalTok{cats\_emms }\OtherTok{\textless{}{-}} \FunctionTok{emmeans}\NormalTok{(mod, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{|}\NormalTok{ Sex, }\AttributeTok{infer =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{type =} \StringTok{"response"}\NormalTok{)}
 \FunctionTok{emmip}\NormalTok{(cats\_emms, Treatment }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Sex) }\SpecialCharTok{+} 
   \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{scale\_color\_startrek}\NormalTok{()}
@@ -524,7 +633,7 @@ Full Mixed Model & 1017.98 \\
             \AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\FloatTok{0.7}\NormalTok{)) }\SpecialCharTok{+}
   \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
   \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{1}\NormalTok{), }\AttributeTok{color =} \StringTok{"\#84BD00FF"}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle=}\DecValTok{60}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle=}\DecValTok{50}\NormalTok{)) }\SpecialCharTok{+}
   \FunctionTok{scale\_color\_startrek}\NormalTok{() }\SpecialCharTok{+}
   \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Relative Risk"}\NormalTok{,}
        \AttributeTok{title =} \StringTok{"Within Sex, Across Treatment"}\NormalTok{)}
@@ -545,18 +654,17 @@ Full Mixed Model & 1017.98 \\
   \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{1}\NormalTok{), }\AttributeTok{color =} \StringTok{"\#FFCD00FF"}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{scale\_color\_startrek}\NormalTok{() }\SpecialCharTok{+}
   \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Relative Risk"}\NormalTok{, }\AttributeTok{title =} \StringTok{"Within Treatment, across Sex"}\NormalTok{)}
-\FunctionTok{par}\NormalTok{(}\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, .}\DecValTok{1}\NormalTok{, .}\DecValTok{2}\NormalTok{));}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, .}\DecValTok{2}\NormalTok{, .}\DecValTok{2}\NormalTok{));}
 \NormalTok{rrplot1}
 \NormalTok{rrplot2}
 \NormalTok{p\_sigs }\OtherTok{\textless{}{-}}\NormalTok{ est\_tab[}\DecValTok{7}\NormalTok{,]}
 \NormalTok{est }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(p\_sigs[}\DecValTok{1}\NormalTok{])}
-\NormalTok{est }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(est) }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(est))}
+\NormalTok{est }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(est) }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(est)) }
 \NormalTok{psig }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(p\_sigs[}\DecValTok{4}\NormalTok{])}
 \NormalTok{psig }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(psig) }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(psig))}
 \NormalTok{hpdl }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(p\_sigs[}\DecValTok{6}\NormalTok{])}
 \NormalTok{hpdl }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(hpdl) }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(hpdl))}
 \NormalTok{hpdu }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(p\_sigs[}\DecValTok{7}\NormalTok{])}
-
 \NormalTok{REs }\OtherTok{\textless{}{-}} \FunctionTok{augment}\NormalTok{(}\FunctionTok{ranef}\NormalTok{(mod,}\AttributeTok{condVar =} \ConstantTok{TRUE}\NormalTok{), }\AttributeTok{ci.level =} \FloatTok{0.95}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{select}\NormalTok{(}\FunctionTok{c}\NormalTok{(level, estimate, lb, ub)) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{rename}\NormalTok{(}\AttributeTok{Family =}\NormalTok{ level) }\SpecialCharTok{\%\textgreater{}\%}
@@ -575,24 +683,65 @@ Full Mixed Model & 1017.98 \\
   \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
   \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ colors) }\SpecialCharTok{+}
   \FunctionTok{labs}\NormalTok{(}\AttributeTok{color =} \StringTok{""}\NormalTok{)}
-\CommentTok{\# mixed model binomial logistic regression }
+\NormalTok{wt }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(cats, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Weight, }\AttributeTok{fill =}\NormalTok{ Treatment)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"none"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Weight (grams)"}\NormalTok{)}
 
+\NormalTok{ag }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(cats, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Age, }\AttributeTok{fill =}\NormalTok{ Treatment)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Age (days)"}\NormalTok{)}
+
+\NormalTok{wt}
+\NormalTok{ag}
+\NormalTok{cancers }\OtherTok{\textless{}{-}}\NormalTok{ cats }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(MyeloidLeukemia, HarderianTumor, PreTLymphoma) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{()}
+
+\FunctionTok{xtable}\NormalTok{(cancers, }\AttributeTok{caption =} \StringTok{"Counts of cancer status"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{xtable2kable}\NormalTok{(}\AttributeTok{booktabs =}\NormalTok{ T, }\AttributeTok{include.rownames =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{table.placement =} \ConstantTok{NULL}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ F, }\AttributeTok{latex\_options =} \StringTok{"hold\_position"}\NormalTok{) }
+\FunctionTok{ggplot}\NormalTok{(cats, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{as.factor}\NormalTok{(Cataracts), }\AttributeTok{y =}\NormalTok{ Age, }\AttributeTok{fill =}\NormalTok{ Sex)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\FunctionTok{vars}\NormalTok{(Sex)) }\SpecialCharTok{+} 
+  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Cataracts Status"}\NormalTok{)}
+
+\FunctionTok{ggplot}\NormalTok{(cats, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{as.factor}\NormalTok{(Cataracts), }\AttributeTok{y =}\NormalTok{ Age, }\AttributeTok{fill =} \FunctionTok{as.factor}\NormalTok{(Cataracts))) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\FunctionTok{vars}\NormalTok{(Treatment)) }\SpecialCharTok{+}
+  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Cataracts Status"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"Cataracts"}\NormalTok{)}
+
+\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{include\_graphics}\NormalTok{(}\StringTok{"ct\_prop.png"}\NormalTok{)}
+\CommentTok{\# mixed model binomial logistic regression }
 \NormalTok{full\_mod }\OtherTok{\textless{}{-}} \FunctionTok{glmer}\NormalTok{(Cataracts }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{+}\NormalTok{ Sex }\SpecialCharTok{+}\NormalTok{ Weight }\SpecialCharTok{+}\NormalTok{ CoatColor }\SpecialCharTok{+}\NormalTok{ BCS }\SpecialCharTok{+}\NormalTok{ HarderianTumor }\SpecialCharTok{+}
-\NormalTok{                    MyeloidLeukemia }\SpecialCharTok{+}\NormalTok{ PreTLymphoma }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Family), }\AttributeTok{data =}\NormalTok{ cats, }\AttributeTok{family =}\NormalTok{ binomial)}
+\NormalTok{                    MyeloidLeukemia }\SpecialCharTok{+}\NormalTok{ PreTLymphoma }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Family), }\AttributeTok{data =}\NormalTok{ cats, }\AttributeTok{family =}\NormalTok{ binomial,}
+                  \AttributeTok{control=}\FunctionTok{glmerControl}\NormalTok{(}\AttributeTok{optimizer=}\StringTok{"bobyqa"}\NormalTok{,}\AttributeTok{optCtrl=}\FunctionTok{list}\NormalTok{(}\AttributeTok{maxfun=}\FloatTok{2e5}\NormalTok{)))}
 \NormalTok{no\_interaction }\OtherTok{\textless{}{-}} \FunctionTok{glmer}\NormalTok{(Cataracts }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{+}\NormalTok{ Sex }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Family), }\AttributeTok{data =}\NormalTok{ cats, }\AttributeTok{family =}\NormalTok{ binomial)}
-\NormalTok{final\_mod }\OtherTok{\textless{}{-}} \FunctionTok{glmer}\NormalTok{(Cataracts }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment}\SpecialCharTok{*}\NormalTok{Sex }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Family), }\AttributeTok{data =}\NormalTok{ cats, }\AttributeTok{family =}\NormalTok{ binomial)}
+\NormalTok{final\_mod }\OtherTok{\textless{}{-}}\NormalTok{ mod}
 \NormalTok{simple\_mod }\OtherTok{\textless{}{-}} \FunctionTok{glmer}\NormalTok{(Cataracts }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Family), }\AttributeTok{data =}\NormalTok{ cats, }\AttributeTok{family =}\NormalTok{ binomial)}
 \NormalTok{fixed\_mod }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(Cataracts }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment}\SpecialCharTok{*}\NormalTok{Sex, }\AttributeTok{data =}\NormalTok{ cats, }\AttributeTok{family =}\NormalTok{ binomial)}
-
 \NormalTok{aics }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FunctionTok{round}\NormalTok{(}\FunctionTok{AIC}\NormalTok{(final\_mod),}\DecValTok{2}\NormalTok{), }\FunctionTok{round}\NormalTok{(}\FunctionTok{AIC}\NormalTok{(full\_mod),}\DecValTok{2}\NormalTok{), }\FunctionTok{round}\NormalTok{(}\FunctionTok{AIC}\NormalTok{(fixed\_mod),}\DecValTok{2}\NormalTok{), }\FunctionTok{round}\NormalTok{(}\FunctionTok{AIC}\NormalTok{(no\_interaction),}\DecValTok{2}\NormalTok{), }\FunctionTok{round}\NormalTok{(}\FunctionTok{AIC}\NormalTok{(simple\_mod),}\DecValTok{2}\NormalTok{))}
-\NormalTok{devs }\OtherTok{\textless{}{-}} 
-\NormalTok{models }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Full Mixed Model"}\NormalTok{, }\StringTok{"Final Model"}\NormalTok{,}
+\NormalTok{models }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Final Model"}\NormalTok{, }\StringTok{"Full Mixed Model"}\NormalTok{,}
             \StringTok{"Fixed Effects Model"}\NormalTok{, }\StringTok{"Mixed Model with no Interaction"}\NormalTok{, }\StringTok{"Base Model"}\NormalTok{)}
 \NormalTok{dt }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(models,aics)}
 \FunctionTok{colnames}\NormalTok{(dt) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Model"}\NormalTok{, }\StringTok{"AIC"}\NormalTok{)}
 \FunctionTok{xtable}\NormalTok{(dt, }\AttributeTok{caption =} \StringTok{"Model selection via AIC comparision"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{xtable2kable}\NormalTok{(}\AttributeTok{booktabs =}\NormalTok{ T, }\AttributeTok{include.rownames =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{table.placement =} \ConstantTok{NULL}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ F, }\AttributeTok{latex\_options =} \StringTok{"hold\_position"}\NormalTok{) }
+\DocumentationTok{\#\# assumption of normally distributed random effect}
+\NormalTok{reff }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{ranef}\NormalTok{(mod)}\SpecialCharTok{$}\NormalTok{Family) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{rename}\NormalTok{(}\AttributeTok{re =} \StringTok{\textasciigrave{}}\AttributeTok{(Intercept)}\StringTok{\textasciigrave{}}\NormalTok{)}
+
+\FunctionTok{ggplot}\NormalTok{(reff, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{sample =}\NormalTok{ re)) }\SpecialCharTok{+} 
+  \FunctionTok{stat\_qq}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{stat\_qq\_line}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"qnorm"}\NormalTok{, }\AttributeTok{y =} \StringTok{"random intercept"}\NormalTok{)}
+\DocumentationTok{\#\# assumption of no over{-}dispersion}
+\NormalTok{rp }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(final\_mod, }\AttributeTok{type =} \StringTok{"pearson"}\NormalTok{)}
+\NormalTok{rat }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(rp}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}\SpecialCharTok{/}\FunctionTok{df.residual}\NormalTok{(final\_mod)}
+\NormalTok{baysum }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(mcmc.model)}
+\FunctionTok{options}\NormalTok{(}\AttributeTok{width=}\DecValTok{100}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 

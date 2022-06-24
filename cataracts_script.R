@@ -92,7 +92,8 @@ cats %>% group_by(Treatment) %>% summarise(mean_age = mean(Age),
 cats %>% count(MyeloidLeukemia)
 cats %>% count(HarderianTumor)
 cats %>% count(PreTLymphoma)
-
+cats %>% group_by(MyeloidLeukemia, HarderianTumor, PreTLymphoma) %>%
+  count()
 #-- Review Response
 cats %>% count(Score)
 cats %>% group_by(Sex) %>% count(Score)
@@ -111,8 +112,9 @@ ggplot(cats, aes(x = Score, y = Age, fill = Score)) + geom_boxplot()
 # Point plot with jitter
 ggplot(cats, aes(x = Score, y = Age, color = Sex)) + geom_jitter(width = 0.2)
 # Faceted boxplots
-ggplot(cats, aes(x = Score, y = Age, fill = Sex)) + geom_boxplot() + facet_wrap(vars(Sex))
-ggplot(cats, aes(x = Sex, y = Age, fill = Score)) + geom_boxplot() + facet_wrap(vars(Score))
+ggplot(cats, aes(x = as.factor(Cataracts), y = Age, fill = Sex)) + geom_boxplot() + facet_wrap(vars(Sex))
+ggplot(cats, aes(x = Sex, y = Age, fill = as.factor(Cataracts))) +
+  geom_boxplot() + facet_wrap(vars(as.factor(Cataracts)))
 
 # Score by treatment group
 # distribution looks similar across groups
@@ -120,7 +122,7 @@ ggplot(cats, aes(x = as.numeric(Score))) + geom_histogram(bins = 4) + facet_grid
 
 # Score by age and treatment group
 ggplot(cats, aes(x = Score, y = Age, color = Treatment)) + geom_jitter(width = 0.2)
-ggplot(cats, aes(x = Score, y = Age, fill = Treatment)) + geom_boxplot() + facet_wrap(vars(Treatment))
+ggplot(cats, aes(x = as.factor(Cataracts), y = Age, fill = as.factor(Cataracts))) + geom_boxplot() + facet_wrap(vars(Treatment))
 ggplot(cats, aes(x = Treatment, y = Age, fill = Score)) + geom_boxplot() + facet_wrap(vars(Score))
 # unirradiated mice tend to be older in all groups except score = 2;
 # especially note score = 4 ; cataracts due to age?
