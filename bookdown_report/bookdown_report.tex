@@ -172,11 +172,7 @@ Astronauts traveling outside Earth's protective magnetic field are exposed to ra
 \label{sec:intro}
 
 Little is known about the effects of high atomic number and energy (HZE) radiation, a main component of space radiation to which exposure is unavoidable beyond Earth's magnetic field. In contrast, extensive research has shown that exposure to high doses of gamma radiation leads to acute radiation sickness. Adverse effects from radiation may also be attributable to other factors, including genetics; several different cancers have been observed to cluster in mice families \citep{mice2017}. This analysis examines potential genetic susceptibility to cataract development in the presence of radiation treatment.\\
-<<<<<<< HEAD
 The experiment included 1820 unique mice from 48 unique families, bred over several generations to create a genetically heterogeneous sample. Individuals were randomly assigned, with equal family weight, to one of three radiation treatment groups: HZE irradiation, gamma irradiation, and non-irradiated control. Mice in both irradiated groups were exposed to radiation at 7-12 weeks of age, and all mice were monitored weekly until 800 days of age. This analysis used a simplified version of the data that contained final observations for the 1169 mice from 47 unique families that survived at least 552 days. Family size ranged \([11, 48]\), with median family size \(= 24\).\\
-=======
-The experiment included 1820 unique mice from 48 unique families, bred over several generations to create a genetically heterogeneous sample. Individuals were randomly assigned, with equal family weight, to one of three radiation treatment groups: HZE irradiation, gamma irradiation, and non-irradiated control. Mice in both irradiated groups were exposed to radiation at 7-12 weeks of age, and all mice were monitored weekly until 800 days of age. This analysis used a simplified version of the data set containing observations at death for the 1169 mice from 47 unique families that survived at least 552 days. Family size ranged \([11, 48]\), with median family size \(= 24\).\\
->>>>>>> b3193c3af4ca0cb4ddc5be2138ed7ebea9613211
 
 \begin{wraptable}{r}{0pt}
 \centering
@@ -195,11 +191,7 @@ Unirradiated & 438 &  45 &  11 &   2 & 496 \\
 \label{tab:gtab}
 \end{wraptable}
 
-<<<<<<< HEAD
 Due to small group sizes (Table \ref{tab:gtab}), the response was converted from a discrete ordinal variable (levels = \([1, 2, 3, 4]\)) matching ocular changes in the eye to a binary variable where score \(\ge 2\) indicated presence of cataracts. Both the main experimental factor, Treatment, and the single random effect, genetic Family, were central to the experimental design and of primary research interest; consequently, both variables were included in all models considered. Additional covariates under consideration were sex, coat color, weight in grams, body condition score (BCS), age in days, and presence of three cancers: myeloid leukemia, harderian tumors, and pre-T lymphoma.
-=======
-Due to small group sizes (Table \ref{tab:gtab}), the response was converted from a discrete ordinal variable (levels = {[}1, 2, 3, 4{]}) matching ocular changes in the eye to a binary variable where score \(\ge\) 2 indicated presence of cataracts. Both the main experimental factor, Treatment, and the single random effect, genetic Family, were central to the experimental design and of primary research interest; consequently, both variables were included in all models considered. Additional covariates under consideration were sex, coat color, weight in grams, body condition score (BCS), age in days, and presence of three cancers: myeloid leukemia, harderian tumors, and pre-T lymphoma.
->>>>>>> b3193c3af4ca0cb4ddc5be2138ed7ebea9613211
 
 \section{Summary Statistics}
 \label{sec:sumstats}
@@ -275,11 +267,11 @@ b\_0 & -2.70 & -2.68 & 0.27 & -3.25 & -2.20 \\
   sigma\verb|^|2 & 0.40 & 0.32 & 0.18 & 0.15 & 0.81 \\ 
    \bottomrule
 \end{tabular}
-\caption{Final model parameter estimates} 
+\caption{Final model parameter estimates on the log odds scale} 
 \label{tab:est_tab}
 \end{table}
 
-Results from Model \eqref{eq:glmm} and Model \eqref{eq:bayes} were congruent, as shown in Table @ref(tab:est\_tab). The 95\% highest posterior density (HPD) credible intervals from Model \eqref{eq:bayes} offer the advantage of concluding 95\% confidence that estimates for each parameter lie within those bounds.
+Results from Model \eqref{eq:glmm} and Model \eqref{eq:bayes} were congruent, as shown in Table @ref(tab:est\_tab). The 95\% highest posterior density (HPD) credible intervals from Model \eqref{eq:bayes} offered the advantage of concluding 95\% confidence that estimates for each parameter lay within those bounds.
 
 \section{Limitations and Alternatives}
 \label{sec:limits}
@@ -311,7 +303,7 @@ Comparisons of different groups across Sex and Treatment were assessed on Model 
 \caption{Predicted probability of cataracts by sex, treatment group}\label{fig:contr}
 \end{figure}
 
-Figure \ref{fig:RR} shows the relative risk of cataract development for all group comparisons in Model \eqref{eq:glmm}. Within females, all relative risks between treatment groups resulted in confidence intervals containing the possibility of no increased risk from exposure. Within males, conversely, all three comparisons between treatment groups showed strong evidence for increased risk with exposure. The largest difference was observed among Males between the HZE group and the control group.\\
+Figure \ref{fig:RR} shows the relative risk of cataract development for all group comparisons in Model \eqref{eq:glmm}. Within females, all relative risks between treatment groups resulted in confidence intervals containing the possibility of no increased risk from exposure. Within males, conversely, all three comparisons between treatment groups showed strong evidence for increased risk with exposure. The largest difference was observed among Males between the HZE group and the control group.
 
 \begin{figure}[H]
 
@@ -322,15 +314,7 @@ Figure \ref{fig:RR} shows the relative risk of cataract development for all grou
 \caption{Relative risk of cataract development between all group combinations}\label{fig:RR}
 \end{figure}
 
-<<<<<<< HEAD
 Between sex, a greater relative risk of cataract development was observed for males than females within all treatment groups, although variability between treatment group remained salient. Males had a 4.74 and 4.54 times greater risk of developing severe cataracts than females in the HZE and Gamma groups respectively, compared to only 2.23 times greater risk within the control group.
-=======
-Figure \ref{fig:RR} shows the relative risk of cataract development for all groups in Model \eqref{eq:glmm}. From the plot on the left we see that mice in the HZE group had a higher risk of developing severe cataracts than both the gamma and control groups. Males in the HZE group had 1.36 times greater risk than males in the gamma group. The biggest difference is seen in the HZE group compared to the unirradiated control group for males. Males in HZE had 3.37 times greater risk than males in the control group. On the right, it is made clear that males have a much higher risk of developing cataracts than females. In the HZE group, males have a 4.74 times higher risk of developing severe cataracts than females and in the gamma group it is a 4.54 times higher risk.
-
-Fix this plot!
->>>>>>> b3193c3af4ca0cb4ddc5be2138ed7ebea9613211
-
-Visualizing random effect by family:\\
 
 \begin{figure}[H]
 
@@ -341,23 +325,12 @@ Visualizing random effect by family:\\
 \caption{Estimated random probability of developing cataracts by family}\label{fig:re}
 \end{figure}
 
-<<<<<<< HEAD
 Figure \ref{fig:re} visualizes the estimated variability of developing cataracts by family on the probability scale, along with confidence intervals. The vertical lines plot the GLMM estimated variance from Model \eqref{eq:glmm} and the MCMC mode and HPD interval for \(\sigma^2\) from Model \eqref{eq:bayes}. The dispersion on the tails of the probability scale indicate plausible genetic predisposition or resistance to cataract development.
-=======
-Figure \ref{fig:re} visualizes the estimated probability of developing cataracts for each family in the dataset, along with their confidence intervals. The vertical lines plot the GLMM estimated variance from Model \eqref{eq:glmm} and the MCMC mode and HPD interval for \(\sigma^2\) from Model \eqref{eq:bayes}. Many of the probabilities shown are close to 0.5, with small numbers of families at the top and bottom of the graph that indicate some respective genetic predisposition or resistance to cataract development. \textbf{from the comments on our presentation it seemed like Ann thought we shouldn't compare these to 0.5. Not sure how to interpret it otherwise though}
->>>>>>> b3193c3af4ca0cb4ddc5be2138ed7ebea9613211
 
 \section{Conclusions}
 \label{sec:conc}
 
-<<<<<<< HEAD
-Females faced lower probability of developing cataracts than males across all treatment groups, and the association of treatment group with cataract status was not apparent for female mice in this data set. Males, on the other hand, had a higher probability of developing cataracts than females across all treatment groups, and the differences of cataract development between treatment groups was of clinical importance.
-=======
-\textbf{Turn this into a nice paragraph or two; add quantitative info from results to back these up, or keep it general?}
-**alyssa's thoughts: I think a table would be nice comparing males and females probabilities, but would it fit? and would it be redundant of the line chart showing probabilities among groups and sexes? I don't know if listing out all the numbers of probabilities would be good in sentence form.*
-
-Females in general face less probability of developing cataracts than males, across all treatment groups. We could argue that the effect of treatment group is not of clinical significance for female mice in this dataset. As you can see, the probability of developing cataracts is quite low for all 3 treatment groups. Males, on the other hand, have a higher probability of developing cataracts than females across all treatment groups. For males, the differences of development of cataracts across treatment groups is of clinical importance.
->>>>>>> b3193c3af4ca0cb4ddc5be2138ed7ebea9613211
+Females faced lower probability of developing cataracts than males across all treatment groups, and the association of treatment group with cataract status was not apparent for female mice in this data set. Males, on the other hand, had a higher probability of developing cataracts than females across all treatment groups, and the differences of cataract development between treatment groups was of clinical importance. After accounting for sex and treatment group, additional random variability in the probability of cataract development can be attributed to Family; on the probability scale, 95\% of the distribution of the variation due to family lies within the HPD interval (0.537, 0.692). Calculated random effects for the 47 families in the data showed variability above and below this range, providing strong evidence for genetic predisposition or resistance to cataract development.
 
 \section{Author's Statements}
 \label{sec:auth}
@@ -366,7 +339,6 @@ Both authors contributed to statistical analysis and writing for this report. Bo
 
 \newpage
 
-<<<<<<< HEAD
 \hypertarget{references}{%
 \section{References}\label{references}}
 
@@ -374,8 +346,6 @@ Both authors contributed to statistical analysis and writing for this report. Bo
 \begin{CSLReferences}{0}{0}
 \end{CSLReferences}
 
-=======
->>>>>>> b3193c3af4ca0cb4ddc5be2138ed7ebea9613211
 \appendix
 
 \section{Appendix}
@@ -438,15 +408,6 @@ MyeloidLeukemia & HarderianTumor & PreTLymphoma & n \\
 \caption{Boxplot of Age, cataracts status by sex and treatment}\label{fig:scage-2}
 \end{figure}
 
-\begin{figure}[H]
-
-{\centering \includegraphics[width=0.5\linewidth]{ct_prop} 
-
-}
-
-\caption{Table of counts and proportions by sex, treatment group, cataracts status}\label{fig:ctprop}
-\end{figure}
-
 \hypertarget{model-selection}{%
 \subsection{Model Selection}\label{model-selection}}
 
@@ -484,7 +445,7 @@ Final Model & 1017.98 \\
 \caption{QQ-plot of random effect on intercept}\label{fig:qq}
 \end{figure}
 
-Assumptions for fitting this model were: the random effects came from a normal distribution; the chosen link function was appropriate; and estimation of variance was not over-dispersed. These assumptions were verified. Quantiles of the random effect were compared with the quantiles of a normal distribution and looked approximately normal in Figure \ref{fig:qq}. The chosen logit link function was appropriate because the response used was binary. The ratio of the chi square statistic to the residual degrees of freedom was 0.89; a value \(\le\) 1 indicates no over-dispersion.
+Assumptions for fitting this model were: the random effects came from a normal distribution; the chosen link function was appropriate; and estimation of variance was not over-dispersed. These assumptions were verified. Quantiles of the random effect were compared with the quantiles of a normal distribution and looked approximately normal in Figure \ref{fig:qq}. The chosen logit link function was appropriate because the response used was binary. The ratio of the chi square statistic to the residual degrees of freedom was 0.89; a value \(\le\) 1 indicated no over-dispersion.
 
 \hypertarget{bayesian-model-diagnostics}{%
 \subsection{Bayesian Model Diagnostics}\label{bayesian-model-diagnostics}}
@@ -496,11 +457,7 @@ Assumptions for fitting this model were: the random effects came from a normal d
 
 \begin{Shaded}
 \begin{Highlighting}[]
-<<<<<<< HEAD
 \NormalTok{knitr}\SpecialCharTok{::}\NormalTok{opts\_chunk}\SpecialCharTok{$}\FunctionTok{set}\NormalTok{(}\AttributeTok{fig.height=}\DecValTok{3}\NormalTok{, }\AttributeTok{fig.pos =} \StringTok{\textquotesingle{}H\textquotesingle{}}\NormalTok{, }\AttributeTok{fig.align =} \StringTok{\textquotesingle{}center\textquotesingle{}}\NormalTok{,}
-=======
-\NormalTok{knitr}\SpecialCharTok{::}\NormalTok{opts\_chunk}\SpecialCharTok{$}\FunctionTok{set}\NormalTok{(}\AttributeTok{fig.height=}\FloatTok{2.5}\NormalTok{, }\AttributeTok{fig.pos =} \StringTok{\textquotesingle{}H\textquotesingle{}}\NormalTok{, }\AttributeTok{fig.align =} \StringTok{\textquotesingle{}center\textquotesingle{}}\NormalTok{,}
->>>>>>> b3193c3af4ca0cb4ddc5be2138ed7ebea9613211
                       \AttributeTok{echo=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{warning=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{message=}\ConstantTok{FALSE}\NormalTok{) }
 
 \FunctionTok{library}\NormalTok{(readxl)}
@@ -675,7 +632,7 @@ Assumptions for fitting this model were: the random effects came from a normal d
                        \StringTok{"MCMC Mode"}\NormalTok{, }\StringTok{"MCMC SD"}\NormalTok{, }\StringTok{"HPD Lower"}\NormalTok{, }\StringTok{"HPD Upper"}\NormalTok{)}
 \NormalTok{est\_tab\_show }\OtherTok{\textless{}{-}}\NormalTok{ est\_tab }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\SpecialCharTok{:}\DecValTok{3}\NormalTok{))}
 \FunctionTok{xtable}\NormalTok{(est\_tab\_show, }\AttributeTok{label =} \StringTok{"tab:est\_tab"}\NormalTok{, }
-       \AttributeTok{caption =} \StringTok{"Final model parameter estimates"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+       \AttributeTok{caption =} \StringTok{"Final model parameter estimates on the log odds scale"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{xtable2kable}\NormalTok{(}\AttributeTok{booktabs =}\NormalTok{ T, }\AttributeTok{include.rownames =} \ConstantTok{TRUE}\NormalTok{,}
                \AttributeTok{table.placement =} \ConstantTok{NULL}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ F, }\AttributeTok{latex\_options =} \StringTok{"HOLD\_position"}\NormalTok{) }
@@ -716,11 +673,7 @@ Assumptions for fitting this model were: the random effects came from a normal d
   \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+}
   \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{1}\NormalTok{), }\AttributeTok{color =} \StringTok{"\#FFCD00FF"}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{scale\_color\_startrek}\NormalTok{() }\SpecialCharTok{+}
-<<<<<<< HEAD
   \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Relative Risk"}\NormalTok{, }\AttributeTok{title =} \StringTok{"Within Treatment, Between Sex"}\NormalTok{)}
-=======
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Relative Risk"}\NormalTok{, }\AttributeTok{title =} \StringTok{"Within Treatment, across Sex"}\NormalTok{)}
->>>>>>> b3193c3af4ca0cb4ddc5be2138ed7ebea9613211
 \FunctionTok{par}\NormalTok{(}\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, .}\DecValTok{2}\NormalTok{, .}\DecValTok{2}\NormalTok{));}
 \NormalTok{rrplot1}
 \NormalTok{rrplot2}
@@ -732,10 +685,7 @@ Assumptions for fitting this model were: the random effects came from a normal d
 \NormalTok{hpdl }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(p\_sigs[}\DecValTok{6}\NormalTok{])}
 \NormalTok{hpdl }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(hpdl) }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(hpdl))}
 \NormalTok{hpdu }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(p\_sigs[}\DecValTok{7}\NormalTok{])}
-<<<<<<< HEAD
 \NormalTok{hpdu }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(hpdu) }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(hpdu))}
-=======
->>>>>>> b3193c3af4ca0cb4ddc5be2138ed7ebea9613211
 \NormalTok{REs }\OtherTok{\textless{}{-}} \FunctionTok{augment}\NormalTok{(}\FunctionTok{ranef}\NormalTok{(mod,}\AttributeTok{condVar =} \ConstantTok{TRUE}\NormalTok{), }\AttributeTok{ci.level =} \FloatTok{0.95}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{select}\NormalTok{(}\FunctionTok{c}\NormalTok{(level, estimate, lb, ub)) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{rename}\NormalTok{(}\AttributeTok{Family =}\NormalTok{ level) }\SpecialCharTok{\%\textgreater{}\%}
@@ -784,7 +734,6 @@ Assumptions for fitting this model were: the random effects came from a normal d
   \FunctionTok{theme\_light}\NormalTok{() }\SpecialCharTok{+} 
   \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Cataracts Status"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"Cataracts"}\NormalTok{)}
 
-\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{include\_graphics}\NormalTok{(}\StringTok{"ct\_prop.png"}\NormalTok{)}
 \CommentTok{\# mixed model binomial logistic regression }
 \NormalTok{full\_mod }\OtherTok{\textless{}{-}} \FunctionTok{glmer}\NormalTok{(Cataracts }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Treatment }\SpecialCharTok{+}\NormalTok{ Sex }\SpecialCharTok{+}\NormalTok{ Weight }\SpecialCharTok{+}\NormalTok{ CoatColor }\SpecialCharTok{+}\NormalTok{ BCS }\SpecialCharTok{+}\NormalTok{ HarderianTumor }\SpecialCharTok{+}
 \NormalTok{                    MyeloidLeukemia }\SpecialCharTok{+}\NormalTok{ PreTLymphoma }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{|}\NormalTok{Family), }\AttributeTok{data =}\NormalTok{ cats, }\AttributeTok{family =}\NormalTok{ binomial,}
