@@ -282,7 +282,9 @@ xtable(est_tab_show, label = "tab:est_tab",
                table.placement = NULL) %>%
   kable_styling(full_width = F, latex_options = "HOLD_position") 
 ```
- Results from Model \@ref(eq:glmm) and Model \@ref(eq:bayes) were congruent, as shown in Table \@ref(tab:est_tab). The 95% highest posterior density (HPD) credible intervals from Model \@ref(eq:bayes) offer the advantage of concluding 95% confidence that estimates for each parameter lie within the HPD interval.  
+
+ Results from Model \@ref(eq:glmm) and Model \@ref(eq:bayes) were congruent, as shown in Table \@ref(tab:est_tab). The 95% highest posterior density (HPD) credible intervals from Model \@ref(eq:bayes) offered the advantage of concluding 95% confidence that estimates for each parameter lay within those bounds.  
+
 
 \section{Limitations and Alternatives}
 \label{sec:limits}
@@ -311,6 +313,7 @@ emmip(cats_emms, Treatment ~ Sex) +
   theme_light() + scale_color_startrek()
 ```  
 Figure \@ref(fig:RR) shows the relative risk of cataract development for all group comparisons in Model \@ref(eq:glmm). Within females, all relative risks between treatment groups resulted in confidence intervals containing the possibility of no increased risk from exposure.  Within males, conversely, all three comparisons between treatment groups showed strong evidence for increased risk with exposure. The largest difference was observed among Males between the HZE group and the control group.  
+
 ```{r RR, fig.show='hold', fig.cap='Relative risk of cataract development between all group combinations', out.width='50%', fig.fullwidth=TRUE}
 em1 <- emmeans(mod, ~ Treatment|Sex)
 em1log <- regrid(em1, "log")
@@ -353,7 +356,6 @@ rrplot2
 ```  
 Between sex, a greater relative risk of cataract development was observed for males than females within all treatment groups, although variability between treatment group remained salient. Males had a 4.74 and 4.54 times greater risk of developing severe cataracts than females in the HZE and Gamma groups respectively, compared to only 2.23 times greater risk within the control group.  
 
- 
 ```{r re, fig.cap="Estimated random probability of developing cataracts by family", fig.align = 'center'}
 p_sigs <- est_tab[7,]
 est <- as.numeric(p_sigs[1])
@@ -446,10 +448,6 @@ ggplot(cats, aes(x = as.factor(Cataracts), y = Age, fill = as.factor(Cataracts))
 
 ```  
   
-```{r ctprop, fig.cap = "Table of counts and proportions by sex, treatment group, cataracts status", out.width='50%'}
-knitr::include_graphics("ct_prop.png")
-```
-  
 ## Model Selection  
 \label{sec:glmms}  
 
@@ -492,8 +490,8 @@ rp <- residuals(final_mod, type = "pearson")
 rat <- sum(rp^2)/df.residual(final_mod)
 ```  
 
-Assumptions for fitting this model were: the random effects came from a normal distribution; the chosen link function was appropriate; and estimation of variance was not over-dispersed. These assumptions were verified. Quantiles of the random effect were compared with the quantiles of a normal distribution and looked approximately normal in Figure \@ref(fig:qq). The chosen logit link function was appropriate because the response used was binary. The ratio of the chi square statistic to the residual degrees of freedom was `r round(rat, 2)`; a value $\le$ 1 indicates no over-dispersion.
-
+Assumptions for fitting this model were: the random effects came from a normal distribution; the chosen link function was appropriate; and estimation of variance was not over-dispersed. These assumptions were verified. Quantiles of the random effect were compared with the quantiles of a normal distribution and looked approximately normal in Figure \@ref(fig:qq). The chosen logit link function was appropriate because the response used was binary. The ratio of the chi square statistic to the residual degrees of freedom was `r round(rat, 2)`; a value $\le$ 1 indicated no over-dispersion.  
+  
 ## Bayesian Model Diagnostics  
 \label{sec:bayesd}  
 
